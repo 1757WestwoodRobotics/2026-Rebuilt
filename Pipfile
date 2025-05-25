@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+black = "*"
+pylint = "*"
+robotpy-pathplannerlib = "==2025.2.7"
+robotpy-cli = "2024.0.0"
+dill = "*"
+exceptiongroup = "*"
+tomli = "*"
+wpilib = "==2025.3.2.2"
+phoenix6 = "==25.4.0"
+robotpy = {extras = ["rev", "apriltag"], version = "==2025.3.2.2"}
+limelightlib-python = "0.9.6"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

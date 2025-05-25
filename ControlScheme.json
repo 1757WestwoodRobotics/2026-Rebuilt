@@ -1,0 +1,307 @@
+{
+  "alignAngle": [
+    1,
+    {
+      "Button": 3
+    },
+    "left button on top of 2nd T16000M"
+  ],
+  "autoWaypoint": [
+    1,
+    {
+      "Button": 4
+    },
+    "right button on top of 2nd T16000M"
+  ],
+  "chassisForwardsBackwards": [
+    0,
+    {
+      "Axis": 1
+    },
+    "Joystick Vertical (ThrustmasterT16000M)"
+  ],
+  "chassisSideToSide": [
+    0,
+    {
+      "Axis": 0
+    },
+    "Joystick Horizontal (ThrustmasterT16000M)"
+  ],
+  "chassisXRotation": [
+    1,
+    {
+      "Axis": 0
+    },
+    "Joystick Horizontal (ThrustmasterT16000M)"
+  ],
+  "chassisYRotation": [
+    1,
+    {
+      "Axis": 1
+    },
+    "Joystick Vertical (ThrustmasterT16000M)"
+  ],
+  "defenseStateControl": [
+    2,
+    {
+      "Button": 24
+    },
+    "left button on top of joystick (ThrustmasterT16000M)"
+  ],
+  "algaeHigh": [
+    0,
+    {
+      "POV": [
+        0,
+        0
+      ]
+    },
+    "POV up"
+  ],
+  "algaeHigh2": [
+    0,
+    {
+      "POV": [
+        0,
+        315
+      ]
+    },
+    "POV up"
+  ],
+  "algaeHigh3": [
+    0,
+    {
+      "POV": [
+        0,
+        45
+      ]
+    },
+    "POV up"
+  ],
+  "algaeLow": [
+    0,
+    {
+      "POV": [
+        0,
+        180
+      ]
+    },
+    "POV down"
+  ],
+  "algaeLow2": [
+    0,
+    {
+      "POV": [
+        0,
+        135
+      ]
+    },
+    "POV down"
+  ],
+  "algaeLow3": [
+    0,
+    {
+      "POV": [
+        0,
+        225
+      ]
+    },
+    "POV down"
+  ],
+  "elevatorL1": [
+    0,
+    {
+      "Button": 3
+    },
+    "left button on top of joystick (ThrustmasterT16000M)"
+  ],
+  "elevatorL2": [
+    0,
+    {
+      "Button": 2
+    },
+    "bottom button on top of joystick (ThrustmasterT16000M)"
+  ],
+  "elevatorL3": [
+    0,
+    {
+      "Button": 4
+    },
+    "right button on top of joystick (ThrustmasterT16000M)"
+  ],
+  "elevatorL4": [
+    0,
+    {
+      "Button": 1
+    },
+    "trigger (ThrustmasterT16000M"
+  ],
+  "elevatorIntakePositionToggleOn": [
+    2,
+    {
+      "Button": 1
+    },
+    "button box"
+  ],
+  "elevatorIntakePositionToggleOff": [
+    2,
+    {
+      "Button": 6
+    },
+    "button box"
+  ],
+  "fieldRelativeCoordinateModeControl": [
+    0,
+    {
+      "Button": 6
+    },
+    "right button set, middle top (ThrustmasterT16000M)"
+  ],
+  "intakeCoral": [
+    1,
+    {
+      "Button": 2
+    },
+    "bottom button on top of joystick (ThrustmasterT16000M)"
+  ],
+  "intakeScoring": [
+    2,
+    {
+      "Button": 21
+    },
+    "trigger (ThrustmasterT16000M)"
+  ],
+  "pullClimberDown": [
+    2,
+    {
+      "Button": 9
+    },
+    "bottom left orange button (button box)"
+  ],
+  "pullClimberUp": [
+    2,
+    {
+      "Button": 4
+    },
+    "top left orange button (button box)"
+  ],
+  "resetGyro": [
+    0,
+    {
+      "Button": 16
+    },
+    "left button set, left bottom (ThrustmasterT16000M)"
+  ],
+  "turboSpeed": [
+    1,
+    {
+      "Button": 13
+    },
+    "bottom button on top of joystick (ThrustmasterT16000M)"
+  ],
+  "elevatorManualUp": [
+    2,
+    {
+      "Button": 2
+    },
+    "placeholder"
+  ],
+  "elevatorManualDown": [
+    2,
+    {
+      "Button": 7
+    },
+    "placeholder"
+  ],
+  "climberManualUp": [
+    2,
+    {
+      "Button": 5
+    },
+    "placeholder"
+  ],
+  "climberManualDown": [
+    2,
+    {
+      "Button": 10
+    },
+    "placeholder"
+  ],
+  "elevatorFudgeUp": [
+    2,
+    {
+      "Button": 3
+    },
+    "placeholder"
+  ],
+  "elevatorFudgeDown": [
+    2,
+    {
+      "Button": 8
+    },
+    "placeholder"
+  ],
+  "intakeFudgeCoralUp": [
+    2,
+    {
+      "Button": 17
+    },
+    "placeholder"
+  ],
+  "intakeFudgeCoralDown": [
+    2,
+    {
+      "Button": 19
+    },
+    "placeholder"
+  ],
+  "intakeFudgeScoreForward": [
+    2,
+    {
+      "Button": 18
+    },
+    "placeholder"
+  ],
+  "intakeFudgeScoreBackward": [
+    2,
+    {
+      "Button": 20
+    },
+    "placeholder"
+  ],
+  "setLeftReef": [
+    2,
+    {
+      "Button": 22
+    },
+    "placeholder"
+  ],
+  "setRightReef": [
+    2,
+    {
+      "Button": 23
+    },
+    "placeholder"
+  ],
+  "setNoSpace": [
+    2,
+    {
+      "Button": 11
+    },
+    "placeholder"
+  ],
+  "setCoralSpace": [
+    2,
+    {
+      "Button": 12
+    },
+    "placeholder"
+  ],
+  "elevatorDefaultL1": [
+    2,
+    {
+      "Button": 15
+    },
+    "placeholder"
+  ]
+}
