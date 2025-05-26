@@ -1,11 +1,14 @@
 from typing import Optional
 from ntcore import NetworkTableInstance
 from wpimath.geometry import Pose3d, Rotation2d, Rotation3d, Transform3d, Pose2d
-from subsystems.drivesubsystem import VisionObservation
+from subsystems.drive.robotposeestimator import VisionObservation
 from subsystems.vision.visionio import VisionSubsystemIO
 
 from util.convenientmath import clamp
-import constants
+
+from constants.math import kRadiansPerDegree
+from constants.field import kFieldWidth, kFieldLength
+from constants.drive import kRobotPoseArrayKeys
 
 
 class VisionSubsystemIOLimelight(VisionSubsystemIO):
@@ -30,7 +33,7 @@ class VisionSubsystemIOLimelight(VisionSubsystemIO):
         ).publish()
         self.robotPoseGetter = (
             NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kRobotPoseArrayKeys.valueKey, Pose2d)
+            .getStructTopic(kRobotPoseArrayKeys.valueKey, Pose2d)
             .subscribe(Pose2d())
         )
 
@@ -41,8 +44,8 @@ class VisionSubsystemIOLimelight(VisionSubsystemIO):
         poseX, poseY, poseZ = botPose[0:3]
         rotation = self.robotPoseGetter.get().rotation().radians()
         pose = Pose3d(
-            clamp(poseX, 0, constants.kFieldLength),
-            clamp(poseY, 0, constants.kFieldWidth),
+            clamp(poseX, 0, kFieldLength),
+            clamp(poseY, 0, kFieldWidth),
             poseZ,
             Rotation3d(0, 0, rotation),
         )
@@ -66,9 +69,9 @@ class VisionSubsystemIOLimelight(VisionSubsystemIO):
                 transform.X(),
                 -transform.Y(),
                 transform.Z(),
-                transform.rotation().X() / constants.kRadiansPerDegree,
-                -transform.rotation().Y() / constants.kRadiansPerDegree,
-                transform.rotation().Z() / constants.kRadiansPerDegree,
+                transform.rotation().X() / kRadiansPerDegree,
+                -transform.rotation().Y() / kRadiansPerDegree,
+                transform.rotation().Z() / kRadiansPerDegree,
             ]
         )
 

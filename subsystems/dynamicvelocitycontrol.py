@@ -2,8 +2,19 @@ from enum import Enum, auto
 from ntcore import NetworkTableInstance
 from commands2.subsystem import Subsystem
 
-import constants
 from util.simtalon import Talon
+
+from constants.velcontrol import (
+    kVelocityControlkV,
+    kVelocityControlCANId,
+    kVelocityControlPGain,
+    kVelocityControlIGain,
+    kVelocityControlDGain,
+    kVelocityControlGearRatio,
+    kVelocitySetpoint1ControlKey,
+    kVelocitySetpoint2ControlKey,
+)
+from constants.drive import kCANivoreName
 
 
 class VelocityControl(Subsystem):
@@ -17,13 +28,13 @@ class VelocityControl(Subsystem):
         self.setName(__class__.__name__)
 
         self.setpoint1 = NetworkTableInstance.getDefault().getDoubleTopic(
-            constants.kVelocitySetpoint1ControlKey
+            kVelocitySetpoint1ControlKey
         )
         self.setpoint2 = NetworkTableInstance.getDefault().getDoubleTopic(
-            constants.kVelocitySetpoint2ControlKey
+            kVelocitySetpoint2ControlKey
         )
         self.gearratio = NetworkTableInstance.getDefault().getDoubleTopic(
-            constants.kVelocityControlGearRatio
+            kVelocityControlGearRatio
         )
 
         self.setpoint1.publish().set(0)
@@ -35,14 +46,14 @@ class VelocityControl(Subsystem):
         self.gearratiogetter = self.gearratio.subscribe(1)
 
         self.motor = Talon(
-            constants.kVelocityControlCANId,
+            kVelocityControlCANId,
             "Velocity Control",
-            constants.kVelocityControlPGain,
-            constants.kVelocityControlIGain,
-            constants.kVelocityControlDGain,
+            kVelocityControlPGain,
+            kVelocityControlIGain,
+            kVelocityControlDGain,
             False,
-            constants.kCANivoreName,
-            constants.kVelocityControlkV,
+            kCANivoreName,
+            kVelocityControlkV,
         )
 
         self.state = VelocityControl.ControlState.Off

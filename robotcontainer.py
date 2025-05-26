@@ -10,14 +10,18 @@ from commands.resetdrive import ResetDrive
 from commands.drivedistance import DriveDistance
 from commands.defensestate import DefenseState
 
-# from commands.drive.drivewaypoint import DriveWaypoint
-from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.loggingsubsystem import LoggingSubsystem
 from subsystems.vision.visionsubsystem import VisionSubsystem
 
 from operatorinterface import OperatorInterface
 
-import constants
+from constants.auto import kAutoDuration
+from constants.drive import (
+    kWheelCircumference,
+    kTurboSpeedMultiplier,
+    kNormalSpeedMultiplier,
+)
 
 
 class RobotContainer:
@@ -43,13 +47,13 @@ class RobotContainer:
         self.simpleAuto = commands2.SequentialCommandGroup(
             ResetDrive(self.drive),
             DriveDistance(
-                -4 * constants.kWheelCircumference,
+                -4 * kWheelCircumference,
                 0.2,
                 DriveDistance.Axis.X,
                 self.drive,
             ),
         )
-        self.nothingAuto = commands2.WaitCommand(constants.kAutoDuration)
+        self.nothingAuto = commands2.WaitCommand(kAutoDuration)
 
         # Chooser
         self.chooser = wpilib.SendableChooser()
@@ -76,9 +80,9 @@ class RobotContainer:
             AbsoluteRelativeDrive(
                 self.drive,
                 lambda: OperatorInterface.Drive.ChassisControls.Translation.y()
-                * constants.kTurboSpeedMultiplier,
+                * kTurboSpeedMultiplier,
                 lambda: OperatorInterface.Drive.ChassisControls.Translation.x()
-                * constants.kTurboSpeedMultiplier,
+                * kTurboSpeedMultiplier,
                 OperatorInterface.Drive.ChassisControls.Rotation.x,
                 OperatorInterface.Drive.ChassisControls.Rotation.y,
             )
@@ -100,9 +104,9 @@ class RobotContainer:
             AngleAlignDrive(
                 self.drive,
                 lambda: OperatorInterface.Drive.ChassisControls.Translation.y()
-                * constants.kNormalSpeedMultiplier,
+                * kNormalSpeedMultiplier,
                 lambda: OperatorInterface.Drive.ChassisControls.Translation.x()
-                * constants.kNormalSpeedMultiplier,
+                * kNormalSpeedMultiplier,
             ).repeatedly()
         )
 

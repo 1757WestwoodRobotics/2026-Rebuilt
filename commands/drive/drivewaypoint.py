@@ -8,9 +8,35 @@ from wpimath.geometry import Pose2d
 from wpilib import DataLogManager, RobotState, SmartDashboard
 from ntcore import NetworkTableInstance
 
-from subsystems.drivesubsystem import DriveSubsystem
-import constants
+from subsystems.drive.drivesubsystem import DriveSubsystem
+
 from util.controltype import AnalogInput
+
+from constants.drive import (
+    kDriveVelocityKeys,
+)
+
+from constants.trajectory import (
+    kWaypointAtTargetKey,
+    kWaypointJoystickVariation,
+    kTrajectoryAnglePGain,
+    kTrajectoryAngleIGain,
+    kTrajectoryAngleDGain,
+    kTrajectoryPositionPGainVision,
+    kTrajectoryPositionIGain,
+    kTrajectoryPositionDGain,
+    kTargetWaypointXControllerKey,
+    kTargetWaypointYControllerKey,
+    kTargetWaypointThetaControllerKey,
+)
+
+from constants.drive import (
+    kMaxForwardLinearVelocity,
+    kMaxForwardLinearAccelerationWaypoint,
+    kMaxRotationAngularVelocity,
+    kMaxRotationAngularAcceleration,
+)
+from constants.math import kMetersPerInch
 
 
 class DriveWaypoint(Command):
@@ -33,51 +59,45 @@ class DriveWaypoint(Command):
 
         self.driveVelocity = (
             NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kDriveVelocityKeys, ChassisSpeeds)
+            .getStructTopic(kDriveVelocityKeys, ChassisSpeeds)
             .subscribe(ChassisSpeeds())
         )
         self.waypointAtTarget = (
             NetworkTableInstance.getDefault()
-            .getBooleanTopic(constants.kWaypointAtTargetKey)
+            .getBooleanTopic(kWaypointAtTargetKey)
             .publish()
         )
 
         self.xController = ProfiledPIDController(
-            constants.kTrajectoryPositionPGainVision,
-            constants.kTrajectoryPositionIGain,
-            constants.kTrajectoryPositionDGain,
+            kTrajectoryPositionPGainVision,
+            kTrajectoryPositionIGain,
+            kTrajectoryPositionDGain,
             TrapezoidProfile.Constraints(
-                constants.kMaxForwardLinearVelocity,
-                constants.kMaxForwardLinearAccelerationWaypoint,
+                kMaxForwardLinearVelocity,
+                kMaxForwardLinearAccelerationWaypoint,
             ),
         )
         self.yController = ProfiledPIDController(
-            constants.kTrajectoryPositionPGainVision,
-            constants.kTrajectoryPositionIGain,
-            constants.kTrajectoryPositionDGain,
+            kTrajectoryPositionPGainVision,
+            kTrajectoryPositionIGain,
+            kTrajectoryPositionDGain,
             TrapezoidProfile.Constraints(
-                constants.kMaxForwardLinearVelocity,
-                constants.kMaxForwardLinearAccelerationWaypoint,
+                kMaxForwardLinearVelocity,
+                kMaxForwardLinearAccelerationWaypoint,
             ),
         )
         self.thetaController = ProfiledPIDControllerRadians(
-            constants.kTrajectoryAnglePGain,
-            constants.kTrajectoryAngleIGain,
-            constants.kTrajectoryAngleDGain,
+            kTrajectoryAnglePGain,
+            kTrajectoryAngleIGain,
+            kTrajectoryAngleDGain,
             TrapezoidProfileRadians.Constraints(
-                constants.kMaxRotationAngularVelocity,
-                constants.kMaxRotationAngularAcceleration,
+                kMaxRotationAngularVelocity,
+                kMaxRotationAngularAcceleration,
             ),
         )
-        SmartDashboard.putData(
-            constants.kTargetWaypointXControllerKey, self.xController
-        )
-        SmartDashboard.putData(
-            constants.kTargetWaypointYControllerKey, self.yController
-        )
-        SmartDashboard.putData(
-            constants.kTargetWaypointThetaControllerKey, self.thetaController
-        )
+        SmartDashboard.putData(kTargetWaypointXControllerKey, self.xController)
+        SmartDashboard.putData(kTargetWaypointYControllerKey, self.yController)
+        SmartDashboard.putData(kTargetWaypointThetaControllerKey, self.thetaController)
 
         self.thetaController.enableContinuousInput(-pi, pi)
 
@@ -97,13 +117,11 @@ class DriveWaypoint(Command):
         absoluteOutput = ChassisSpeeds(
             self.xController.calculate(
                 currentPose.X(),
-                self.targetPose.X()
-                + self.xoff() * constants.kWaypointJoystickVariation,
+                self.targetPose.X() + self.xoff() * kWaypointJoystickVariation,
             ),
             self.yController.calculate(
                 currentPose.Y(),
-                self.targetPose.Y()
-                + self.yoff() * constants.kWaypointJoystickVariation,
+                self.targetPose.Y() + self.yoff() * kWaypointJoystickVariation,
             ),
             self.thetaController.calculate(
                 self.drive.getRotation().radians(), self.targetPose.rotation().radians()
@@ -118,7 +136,7 @@ class DriveWaypoint(Command):
     def atPosition(self) -> bool:
         return (
             self.targetPose.translation().distance(self.drive.getPose().translation())
-            < (1 if RobotState.isAutonomous() else 2) * constants.kMetersPerInch
+            < (1 if RobotState.isAutonomous() else 2) * kMetersPerInch
         )
 
     def isFinished(self) -> bool:

@@ -1,9 +1,11 @@
+import math
+
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
 from wpimath.geometry import Translation2d
 
-import math
-
 from wpimath.system.plant import DCMotor
+
+from util.keyorganization import OptionalValueKeys
 
 from .math import (
     kMetersPerInch,
@@ -11,6 +13,7 @@ from .math import (
     kSecondsPerMinute,
     k100MillisecondsPerSecond,
     kRPMPerAngularVelocity,
+    kMillisecondsPerSecond,
 )
 from .motors import kTalonEncoderPulsesPerRevolution
 
@@ -118,6 +121,9 @@ kMaxSidewaysLinearAcceleration = kMaxWheelLinearAcceleration
 
 kMaxRotationAngularAcceleration = kMaxRotationAngularVelocity / 0.5
 """radians / second^2"""
+
+kDriveAccelLimit = 7
+"""for slew rate limiter"""
 
 kFrontLeftModuleName = "front_left"
 kFrontRightModuleName = "front_right"
@@ -250,3 +256,12 @@ kBackLeftAbsoluteEncoderOffset = 0.452637
 
 kBackRightAbsoluteEncoderOffset = 0.105225
 """rotations"""
+
+
+kRobotPoseArrayKeys = OptionalValueKeys("RobotOdometryPose")
+
+kDriveVelocityKeys = "robotVelocity"
+
+
+kNormalSpeedMultiplier = 0.50  # half full on normal
+kTurboSpeedMultiplier = 0.95  # full speed!!!

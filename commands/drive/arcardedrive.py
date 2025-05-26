@@ -1,7 +1,8 @@
 import typing
 from commands2 import Command
 from wpilib import Preferences
-from subsystems.drivesubsystem import DriveSubsystem
+
+from subsystems.drive.drivesubsystem import DriveSubsystem
 
 
 class ArcadeDrive(Command):  # Arcade drive is just robot relative, but no sideways

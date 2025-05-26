@@ -6,7 +6,8 @@ from wpilib.simulation import DCMotorSim
 from util.simtalon import Talon
 from util.convenientmath import clamp
 
-import constants
+from constants.math import kRadiansPerRevolution
+from constants.sim import kSimMotorResistance
 
 
 class SimTalon:
@@ -60,14 +61,10 @@ class MotorSimulator:
             talon.sim.update(tm_diff)
 
             position_rot = (
-                talon.sim.getAngularPosition()
-                / constants.kRadiansPerRevolution
-                * talon.gearing
+                talon.sim.getAngularPosition() / kRadiansPerRevolution * talon.gearing
             )
             velocity_rps = (
-                talon.sim.getAngularVelocity()
-                / constants.kRadiansPerRevolution
-                * talon.gearing
+                talon.sim.getAngularVelocity() / kRadiansPerRevolution * talon.gearing
             )
 
             talon.simstate.set_raw_rotor_position(position_rot)
@@ -76,7 +73,7 @@ class MotorSimulator:
                 clamp(
                     robotVoltage
                     - talon.simstate.supply_current
-                    * constants.kSimMotorResistance,  # simulate voltage drop due to resistance
+                    * kSimMotorResistance,  # simulate voltage drop due to resistance
                     0,
                     robotVoltage,
                 )

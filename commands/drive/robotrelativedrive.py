@@ -1,7 +1,8 @@
 import typing
 from commands2 import Command
 from wpilib import Preferences
-from subsystems.drivesubsystem import DriveSubsystem
+
+from subsystems.drive.drivesubsystem import DriveSubsystem
 
 
 class RobotRelativeDrive(Command):

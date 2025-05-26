@@ -1,7 +1,7 @@
 from typing import Optional
 from wpimath.geometry import Rotation2d, Transform3d
 
-from subsystems.drivesubsystem import VisionObservation
+from subsystems.drive.robotposeestimator import VisionObservation
 
 
 class VisionSubsystemIO:

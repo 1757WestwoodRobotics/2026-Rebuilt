@@ -1,6 +1,7 @@
 from commands2.command import Command
 from wpilib import DataLogManager
-from subsystems.drivesubsystem import DriveSubsystem
+
+from subsystems.drive.drivesubsystem import DriveSubsystem
 
 
 class DefenseState(Command):

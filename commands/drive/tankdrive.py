@@ -3,8 +3,17 @@ from commands2 import Command
 from wpimath.trajectory import TrapezoidProfile
 from wpimath.controller import ProfiledPIDController
 from wpimath.kinematics import DifferentialDriveKinematics, DifferentialDriveWheelSpeeds
-from subsystems.drivesubsystem import DriveSubsystem
-import constants
+
+from subsystems.drive.drivesubsystem import DriveSubsystem
+
+from constants.drive import (
+    kDrivePGain,
+    kDriveIGain,
+    kDriveDGain,
+    kMaxForwardLinearVelocity,
+    kMaxForwardLinearAcceleration,
+    kSwerveModuleCenterToRobotCenterWidth,
+)
 
 
 class ControlledMotor:
@@ -14,14 +23,14 @@ class ControlledMotor:
     """
 
     def __init__(self, control: typing.Callable[[], float]) -> None:
-        self.control = lambda: control() * constants.kMaxForwardLinearVelocity**2 * 2
+        self.control = lambda: control() * kMaxForwardLinearVelocity**2 * 2
         self.pid = ProfiledPIDController(
-            constants.kDrivePGain,
-            constants.kDriveIGain,
-            constants.kDriveDGain,
+            kDrivePGain,
+            kDriveIGain,
+            kDriveDGain,
             TrapezoidProfile.Constraints(
-                constants.kMaxForwardLinearVelocity,
-                constants.kMaxForwardLinearAcceleration,
+                kMaxForwardLinearVelocity,
+                kMaxForwardLinearAcceleration,
             ),
         )
 
@@ -40,7 +49,7 @@ class TankDrive(Command):
         self.setName(__class__.__name__)
 
         self.drivetrain = DifferentialDriveKinematics(
-            constants.kSwerveModuleCenterToRobotCenterWidth * 2
+            kSwerveModuleCenterToRobotCenterWidth * 2
         )
 
         self.drive = drive

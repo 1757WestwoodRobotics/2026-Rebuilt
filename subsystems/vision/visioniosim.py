@@ -10,10 +10,18 @@ from wpimath.geometry import (
     Transform3d,
     Translation3d,
 )
-import constants
-from subsystems.drivesubsystem import VisionObservation
+from subsystems.drive.robotposeestimator import VisionObservation
 from subsystems.vision.visionio import VisionSubsystemIO
 from util.convenientmath import pose3dFrom2d, clamp
+
+from constants.field import kFieldLength, kFieldWidth
+from constants.sim import kSimRobotPoseArrayKey
+from constants.vision import (
+    kCameraFOVVertical,
+    kCameraFOVHorizontal,
+    kSimulationVariation,
+    kApriltagPositionDict,
+)
 
 
 class VisionSubsystemIOSim(VisionSubsystemIO):
@@ -21,17 +29,17 @@ class VisionSubsystemIOSim(VisionSubsystemIO):
         VisionSubsystemIO.__init__(self)
         self.simBotPoseGetter = (
             NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kSimRobotPoseArrayKey, Pose2d)
+            .getStructTopic(kSimRobotPoseArrayKey, Pose2d)
             .subscribe(Pose2d())
         )
         self.camera = SimCamera(
             name,
             location,
-            constants.kCameraFOVHorizontal,
-            constants.kCameraFOVVertical,
+            kCameraFOVHorizontal,
+            kCameraFOVVertical,
             "ll",
         )
-        self.rng = RNG(constants.kSimulationVariation)
+        self.rng = RNG(kSimulationVariation)
         self.location = location
 
     def getRobotFieldPose(self) -> Optional[VisionObservation]:
@@ -42,7 +50,7 @@ class VisionSubsystemIOSim(VisionSubsystemIO):
         botPose = Pose3d()
         tagPoses: list[Transform3d] = []
 
-        for _tagId, apriltag in constants.kApriltagPositionDict.items():
+        for _tagId, apriltag in kApriltagPositionDict.items():
             if self.camera.canSeeTarget(simPose3d, apriltag):
                 rngOffset = Transform3d(
                     Translation3d(
@@ -69,8 +77,8 @@ class VisionSubsystemIOSim(VisionSubsystemIO):
                 )
 
         pose = Pose3d(
-            clamp(botPose.X(), 0, constants.kFieldLength),
-            clamp(botPose.Y(), 0, constants.kFieldWidth),
+            clamp(botPose.X(), 0, kFieldLength),
+            clamp(botPose.Y(), 0, kFieldWidth),
             botPose.Z(),
             botPose.rotation(),
         )

@@ -1,6 +1,7 @@
-import constants
 from util.controltype import ControlAxis, ControlButton
 from util.helpfultriggerwrappers import Deadband, Invert, SignSquare
+
+from constants.oi import kXboxJoystickDeadband
 
 
 class OperatorInterface:
@@ -20,7 +21,7 @@ class OperatorInterface:
                     Invert(
                         Deadband(
                             ControlAxis(0, 1)(),  # Joystick vertical
-                            constants.kXboxJoystickDeadband,
+                            kXboxJoystickDeadband,
                         )
                     )
                 )
@@ -28,7 +29,7 @@ class OperatorInterface:
                     Invert(
                         Deadband(
                             ControlAxis(0, 0)(),  # Joystick horizontal
-                            constants.kXboxJoystickDeadband,
+                            kXboxJoystickDeadband,
                         )
                     )
                 )
@@ -37,12 +38,12 @@ class OperatorInterface:
                 y = Invert(
                     Deadband(
                         ControlAxis(1, 1)(),  # Joystick vertical
-                        constants.kXboxJoystickDeadband,
+                        kXboxJoystickDeadband,
                     )
                 )
                 x = Invert(
                     Deadband(
                         ControlAxis(1, 0)(),  # Joystick horizontal
-                        constants.kXboxJoystickDeadband,
+                        kXboxJoystickDeadband,
                     )
                 )

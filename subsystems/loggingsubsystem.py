@@ -7,14 +7,12 @@ from wpilib import PowerDistribution, DriverStation, SmartDashboard
 
 from wpimath.geometry import (
     Pose2d,
-    Transform3d,
-    Rotation3d,
-    Pose3d,
 )
 from util.controltype import ControlBase
 from util.convenientmath import pose3dFrom2d
 
-import constants
+from constants.logging import kJoystickKeyLogPrefix
+from constants.drive import kRobotPoseArrayKeys
 
 
 class LoggingSubsystem(Subsystem):
@@ -24,54 +22,16 @@ class LoggingSubsystem(Subsystem):
 
         self.pdh = PowerDistribution(1, PowerDistribution.ModuleType.kRev)
         SmartDashboard.putData("PDH", self.pdh)
-        self.dsTable = NetworkTableInstance.getDefault().getTable(
-            constants.kJoystickKeyLogPrefix
-        )
+        self.dsTable = NetworkTableInstance.getDefault().getTable(kJoystickKeyLogPrefix)
 
         self.robotPoseGetter = (
             NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kRobotPoseArrayKeys.valueKey, Pose2d)
+            .getStructTopic(kRobotPoseArrayKeys.valueKey, Pose2d)
             .subscribe(Pose2d())
-        )
-        self.elevatorPositionGetter = (
-            NetworkTableInstance.getDefault()
-            .getFloatTopic(constants.kElevatorPositionKey)
-            .subscribe(0)
-        )
-        self.elevatorPosePublisher = (
-            NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kElevatorPoseKey, Pose3d)
-            .publish()
-        )
-        self.pivotAngleGetter = (
-            NetworkTableInstance.getDefault()
-            .getFloatTopic(constants.kPivotAngleKey)
-            .subscribe(0)
-        )
-        self.intakePosesPublisher = (
-            NetworkTableInstance.getDefault()
-            .getStructArrayTopic("intake/poses", Pose3d)
-            .publish()
         )
 
     def updateBotPositions(self) -> None:
-        botPose = pose3dFrom2d(self.robotPoseGetter.get(Pose2d()))
-        elevatorHeight = self.elevatorPositionGetter.get(0)
-        elevatorPosition = (
-            botPose
-            + constants.kRobotToElevatorTransform
-            + Transform3d(0, 0, elevatorHeight, Rotation3d())
-        )
-        self.elevatorPosePublisher.set(elevatorPosition)
-        armRotation = -self.pivotAngleGetter.get()
-        armRootPosition = elevatorPosition + Transform3d(
-            0,
-            -constants.kPivotToArmRoot,
-            0,
-            Rotation3d(0, armRotation, 0),
-        )
-        armEndPosition = armRootPosition + constants.kArmRootToArmEndTransform
-        self.intakePosesPublisher.set([armRootPosition, armEndPosition])
+        _botPose = pose3dFrom2d(self.robotPoseGetter.get(Pose2d()))
 
     def periodic(self) -> None:
 

@@ -4,8 +4,9 @@ from enum import Enum, auto
 from commands2.command import Command
 from wpimath.geometry import Transform2d
 
-import constants
-from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.drive.drivesubsystem import DriveSubsystem
+
+from constants.auto import kAutoDistanceThreshold
 
 
 class DriveDistance(Command):
@@ -53,7 +54,7 @@ class DriveDistance(Command):
         )
 
     def isFinished(self) -> bool:
-        return self.distanceToTarget < constants.kAutoDistanceThreshold
+        return self.distanceToTarget < kAutoDistanceThreshold
 
     def updateDistanceToTarget(self) -> None:
         currentPose = self.drive.odometry.getPose()

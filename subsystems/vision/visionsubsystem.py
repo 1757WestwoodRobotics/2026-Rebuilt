@@ -7,15 +7,24 @@ from ntcore import BooleanPublisher, NetworkTableInstance, StructPublisher
 from wpilib import RobotBase
 from wpimath.geometry import Pose2d, Pose3d
 
-import constants
-from subsystems.drivesubsystem import (
+from subsystems.drive.drivesubsystem import (
     DriveSubsystem,
-    RobotPoseEstimator,
 )
+from subsystems.drive.robotposeestimator import RobotPoseEstimator
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visioniosim import VisionSubsystemIOSim
 from util.convenientmath import pose3dFrom2d
+
+from constants.drive import kRobotPoseArrayKeys
+from constants.vision import (
+    kRobotVisionPose1ArrayKeys,
+    kRobotVisionPose2ArrayKeys,
+    kCameraLocationPublisherKey,
+    kRobotToCamera1Transform,
+    kRobotToCamera2Transform,
+)
+from constants.trajectory import kWaypointAtTargetKey
 
 
 class VisionSubsystem(Subsystem):
@@ -29,59 +38,55 @@ class VisionSubsystem(Subsystem):
         self.drive = drive
         self.poseReceiver = (
             NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kRobotPoseArrayKeys.valueKey, Pose2d)
+            .getStructTopic(kRobotPoseArrayKeys.valueKey, Pose2d)
             .subscribe(Pose2d())
         )
 
         self.vision1PosePublisher = (
             NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kRobotVisionPose1ArrayKeys.valueKey, Pose2d)
+            .getStructTopic(kRobotVisionPose1ArrayKeys.valueKey, Pose2d)
             .publish()
         )
         self.vision2PosePublisher = (
             NetworkTableInstance.getDefault()
-            .getStructTopic(constants.kRobotVisionPose2ArrayKeys.valueKey, Pose2d)
+            .getStructTopic(kRobotVisionPose2ArrayKeys.valueKey, Pose2d)
             .publish()
         )
         self.visionPose1ValidPublisher = (
             NetworkTableInstance.getDefault()
-            .getBooleanTopic(constants.kRobotVisionPose2ArrayKeys.validKey)
+            .getBooleanTopic(kRobotVisionPose2ArrayKeys.validKey)
             .publish()
         )
         self.visionPose2ValidPublisher = (
             NetworkTableInstance.getDefault()
-            .getBooleanTopic(constants.kRobotVisionPose2ArrayKeys.validKey)
+            .getBooleanTopic(kRobotVisionPose2ArrayKeys.validKey)
             .publish()
         )
 
         self.cameraPosePublisher = (
             NetworkTableInstance.getDefault()
-            .getStructArrayTopic(constants.kCameraLocationPublisherKey, Pose3d)
+            .getStructArrayTopic(kCameraLocationPublisherKey, Pose3d)
             .publish()
         )
         self.atPositionIndicator = (
             NetworkTableInstance.getDefault()
-            .getBooleanTopic(constants.kWaypointAtTargetKey)
+            .getBooleanTopic(kWaypointAtTargetKey)
             .subscribe(False)
         )
 
         if RobotBase.isReal():
             self.camera1 = VisionSubsystemIOLimelight(
-                "limelight-br", constants.kRobotToCamera1Transform
+                "limelight-br", kRobotToCamera1Transform
             )
             self.camera2 = VisionSubsystemIOLimelight(
-                "limelight-fl", constants.kRobotToCamera2Transform
+                "limelight-fl", kRobotToCamera2Transform
             )
         else:
-            self.camera1 = VisionSubsystemIOSim(
-                "limelight1", constants.kRobotToCamera1Transform
-            )
-            self.camera2 = VisionSubsystemIOSim(
-                "limelight2", constants.kRobotToCamera2Transform
-            )
+            self.camera1 = VisionSubsystemIOSim("limelight1", kRobotToCamera1Transform)
+            self.camera2 = VisionSubsystemIOSim("limelight2", kRobotToCamera2Transform)
 
-        self.camera1.updateCameraPosition(constants.kRobotToCamera1Transform)
-        self.camera2.updateCameraPosition(constants.kRobotToCamera2Transform)
+        self.camera1.updateCameraPosition(kRobotToCamera1Transform)
+        self.camera2.updateCameraPosition(kRobotToCamera2Transform)
 
     def periodic(self) -> None:
         yaw = self.poseReceiver.get().rotation()

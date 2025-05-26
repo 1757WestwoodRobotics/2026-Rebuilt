@@ -5,7 +5,7 @@ from phoenix6.sim.cancoder_sim_state import CANcoderSimState
 from wpilib import DataLogManager
 from wpimath.geometry import Rotation2d
 
-import constants
+from constants.math import kRadiansPerRevolution
 
 
 class CTREEncoder:
@@ -26,9 +26,7 @@ class CTREEncoder:
         return self.encoder.device_id
 
     def getPosition(self) -> Rotation2d:
-        return Rotation2d(
-            self.encoder.get_position().value * constants.kRadiansPerRevolution
-        )
+        return Rotation2d(self.encoder.get_position().value * kRadiansPerRevolution)
 
     def getSim(self) -> CANcoderSimState:
         return self.encoder.sim_state

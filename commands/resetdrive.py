@@ -3,7 +3,7 @@ from wpimath.geometry import Pose2d
 
 from wpilib import DataLogManager
 
-from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.drive.drivesubsystem import DriveSubsystem
 
 
 class ResetDrive(Command):

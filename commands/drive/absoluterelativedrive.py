@@ -4,9 +4,10 @@ from commands2 import Command
 from wpilib import DriverStation
 from wpimath.controller import PIDController
 from wpimath.geometry import Rotation2d
-from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.drive.drivesubsystem import DriveSubsystem
 from util.angleoptimize import optimizeAngle
-import constants
+
+from constants.trajectory import kRotationPGain, kRotationIGain, kRotationDGain
 
 
 class AbsoluteRelativeDrive(Command):
@@ -25,9 +26,7 @@ class AbsoluteRelativeDrive(Command):
         self.drive = drive
         self.forward = forward
         self.sideways = sideways
-        self.rotationPid = PIDController(
-            constants.kRotationPGain, constants.kRotationIGain, constants.kRotationDGain
-        )
+        self.rotationPid = PIDController(kRotationPGain, kRotationIGain, kRotationDGain)
         self.rotationY = rotationY
         self.rotationX = rotationX
 
