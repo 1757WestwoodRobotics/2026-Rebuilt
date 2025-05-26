@@ -16,7 +16,6 @@ from subsystems.loggingsubsystem import LoggingSubsystem
 from subsystems.vision.visionsubsystem import VisionSubsystem
 
 from operatorinterface import OperatorInterface
-from util.helpfultriggerwrappers import ModifiableJoystickButton
 
 import constants
 
@@ -30,13 +29,10 @@ class RobotContainer:
     """
 
     def __init__(self) -> None:
-        # The operator interface (driver controls)
-        self.operatorInterface = OperatorInterface()
-
         # The robot's subsystems
         self.drive = DriveSubsystem()
         self.vision = VisionSubsystem(self.drive)
-        self.log = LoggingSubsystem(self.operatorInterface)
+        self.log = LoggingSubsystem()
 
         # Robot demo subsystems
         # self.velocity = VelocityControl()
@@ -79,12 +75,12 @@ class RobotContainer:
         self.drive.setDefaultCommand(
             AbsoluteRelativeDrive(
                 self.drive,
-                lambda: self.operatorInterface.chassisControls.forwardsBackwards()
+                lambda: OperatorInterface.Drive.ChassisControls.Translation.y()
                 * constants.kTurboSpeedMultiplier,
-                lambda: self.operatorInterface.chassisControls.sideToSide()
+                lambda: OperatorInterface.Drive.ChassisControls.Translation.x()
                 * constants.kTurboSpeedMultiplier,
-                self.operatorInterface.chassisControls.rotationX,
-                self.operatorInterface.chassisControls.rotationY,
+                OperatorInterface.Drive.ChassisControls.Rotation.x,
+                OperatorInterface.Drive.ChassisControls.Rotation.y,
             )
         )
 
@@ -100,26 +96,21 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
 
-        ModifiableJoystickButton(self.operatorInterface.alignAngle).whileTrue(
+        OperatorInterface.Drive.align_angle().whileTrue(
             AngleAlignDrive(
                 self.drive,
-                lambda: self.operatorInterface.chassisControls.forwardsBackwards()
+                lambda: OperatorInterface.Drive.ChassisControls.Translation.y()
                 * constants.kNormalSpeedMultiplier,
-                lambda: self.operatorInterface.chassisControls.sideToSide()
+                lambda: OperatorInterface.Drive.ChassisControls.Translation.x()
                 * constants.kNormalSpeedMultiplier,
             ).repeatedly()
         )
 
-        ModifiableJoystickButton(self.operatorInterface.resetGyro).onTrue(
+        OperatorInterface.Drive.reset_gyro().onTrue(
             ResetDrive(self.drive, Pose2d(0, 0, 0))
         )
 
-        ModifiableJoystickButton(self.operatorInterface.defenseStateControl).whileTrue(
-            DefenseState(self.drive)
-        )
-
-
-
+        OperatorInterface.Drive.defense_state().whileTrue(DefenseState(self.drive))
 
     def getAutonomousCommand(self) -> commands2.Command:
         return self.chooser.getSelected()

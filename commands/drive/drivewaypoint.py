@@ -9,8 +9,8 @@ from wpilib import DataLogManager, RobotState, SmartDashboard
 from ntcore import NetworkTableInstance
 
 from subsystems.drivesubsystem import DriveSubsystem
-from operatorinterface import AnalogInput
 import constants
+from util.controltype import AnalogInput
 
 
 class DriveWaypoint(Command):
@@ -115,7 +115,6 @@ class DriveWaypoint(Command):
         )
         self.waypointAtTarget.set(self.atPosition())
 
-
     def atPosition(self) -> bool:
         return (
             self.targetPose.translation().distance(self.drive.getPose().translation())
@@ -128,5 +127,3 @@ class DriveWaypoint(Command):
     def end(self, _interrupted: bool) -> None:
         # pylint: disable=W0212
         DataLogManager.log("... DONE")
-
-

@@ -11,20 +11,19 @@ from wpimath.geometry import (
     Rotation3d,
     Pose3d,
 )
+from util.controltype import ControlBase
 from util.convenientmath import pose3dFrom2d
-from operatorinterface import OperatorInterface
 
 import constants
 
 
 class LoggingSubsystem(Subsystem):
-    def __init__(self, oi: OperatorInterface) -> None:
+    def __init__(self) -> None:
         Subsystem.__init__(self)
         self.setName(__class__.__name__)
 
         self.pdh = PowerDistribution(1, PowerDistribution.ModuleType.kRev)
         SmartDashboard.putData("PDH", self.pdh)
-        self.oi = oi
         self.dsTable = NetworkTableInstance.getDefault().getTable(
             constants.kJoystickKeyLogPrefix
         )
@@ -76,7 +75,7 @@ class LoggingSubsystem(Subsystem):
 
     def periodic(self) -> None:
 
-        for controller in self.oi.controllers.values():
+        for controller in ControlBase.joysticks.values():
             self.dsTable.putNumber(
                 f"Joystick{controller.getPort()}/ButtonCount",
                 controller.getButtonCount(),

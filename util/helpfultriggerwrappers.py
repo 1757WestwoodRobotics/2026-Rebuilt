@@ -1,9 +1,13 @@
 from enum import Enum, auto
 
+from math import copysign
 from typing import Callable, Tuple
 from commands2.button import Trigger
 from ntcore import NetworkTableInstance
 from wpilib import Joystick
+
+from util.controltype import AnalogInput
+from util.convenientmath import number, map_range
 
 
 Axis = Callable[[], float]
@@ -58,3 +62,43 @@ class DPadButton(Trigger):
 
     def __init__(self, controller: Joystick, POVNumber: int, button: DPad):
         super().__init__(lambda: button.isNum(controller.getPOV(POVNumber)))
+
+
+def Deadband(inputFn: AnalogInput, deadband: float) -> AnalogInput:
+    def withDeadband() -> float:
+        value = inputFn()
+        if abs(value) <= deadband:
+            return 0
+        else:
+            return value
+
+    return withDeadband
+
+
+def Invert(inputFn: AnalogInput) -> AnalogInput:
+    def invert() -> float:
+        return -1 * inputFn()
+
+    return invert
+
+
+def SignSquare(inputFn: AnalogInput) -> AnalogInput:
+    def square() -> float:
+        val = inputFn()
+        return copysign(val * val, val)
+
+    return square
+
+
+def MapRange(
+    inputFn: AnalogInput,
+    inputMin: number,
+    inputMax: number,
+    outputMin: number,
+    outputMax: number,
+) -> AnalogInput:
+    return lambda: map_range(inputFn(), inputMin, inputMax, outputMin, outputMax)
+
+
+def Multiply(a: AnalogInput, b: AnalogInput) -> AnalogInput:
+    return lambda: a() * b()
