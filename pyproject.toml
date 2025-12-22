@@ -2,6 +2,28 @@
 # Use this configuration file to control what RobotPy packages are installed
 # on your RoboRIO
 #
+[project]
+name = "2026-Rebuilt"
+version = "0.1.0"
+description = "2026 Robot Code"
+readme="README.md"
+requires-python=">= 3.10"
+dependencies = [
+    "black>=25.9.0",
+    "mypy>=1.19.1",
+    "phoenix6>=25.4.2",
+    "photonlibpy>=2026.0.1",
+    "pylint>=4.0.2",
+    "robotpy>=2025.3.2.2",
+    "robotpy-apriltag>=2025.3.2.2",
+    "robotpy-cli>=2024.0.0",
+    "robotpy-halsim-gui>=2025.3.2.2",
+    "robotpy-pathplannerlib>=2025.2.7",
+    "robotpy-pykit>=0.2.1",
+    "robotpy-pykit-watch>=0.1.0",
+    "robotpy-rev>=2025.0.3.1",
+    "wpilib>=2025.3.2.2",
+]
 
 [tool.robotpy]
 
@@ -17,15 +39,27 @@ robotpy_extras = [
     # "cscore"
     "navx",
     "pathplannerlib",
-    "phoenix5",
+    # "phoenix5",
     "phoenix6",
     # "playingwithfusion"
-    "rev",
+    # "rev",
     # "romi"
     "sim"
 ]
 
 # Other pip packages to install
 requires = [
-    "limelightlib-python==0.9.6"
+    "limelightlib-python==0.9.6",
+    "robotpy-pykit==0.2.1",
+    "photonlibpy"
 ]
+
+
+[tool.mypy]
+python_version = "3.13"
+warn_unused_configs = true
+explicit_package_bases = true
+mypy_path = "."
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_no_return = true

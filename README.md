@@ -31,89 +31,67 @@
     ```
     MAKE SURE IT IS **3.10** OR ABOVE (if not, use the link above to get it)
 
-1. **Globally install pipenv (for the virual environment)**
-     ```bash
-     py -3 -m pip install -U pipenv
-     ```
-1. **Create virtualenv/sync from pipenv**
+1. **Globally install uv (for the virual environment)**
+[uv installation guide](https://docs.astral.sh/uv/getting-started/installation/)
 
-    Try to install the packages using the following command, which will automatically create a virtual environment:
-    ```bash
-    pipenv sync
-    ```
-    If that does not work, instead manually create the environment by running
-    ```bash
-    cd <path-to-mentorbot-repo>
-    py -3 -m venv ./.venv # wait until this is done and the terminal prompt comes back
-    pipenv sync
-    ```
-    Also, be sure not to upload it when committing to the team github (it should already be blocked in .gitignore)
+```sh
+uv sync
+```
+should deal with all the installation details
 
-1. **Update Dependancies**
-   (must have internet connection)
-   ```bash
-   pipenv update
-   ```
-1. **Activate virtual environment**
-   (must have internet connection)
-   ```bash
-   pipenv shell
-   ```
-   (examples: `robotpy`, `robotpy[ctre,navx]`, `robotpy[all]`) (see: [robotpy on pypi](https://pypi.org/project/robotpy/))
-1. **Deploy robotpy program**
+## Running
 
-    And that's it! On your own machine, open the simulator to see if everything worked!
+To simulate the robot, use the following:
 
-   - To robot
-     (must be connected to roboRIO)
-     ```bash
-     pipenv run robotpy deploy
-     ```
-   - To simulator
-     ```bash
-     pipenv run robotpy sim
+```sh
+uv run -- robotpy --main src sim
+```
+
+To run back a log file in replay mode, set the `LOG_PATH` environment variable and then run in simulation
+
+An example is to run the following:
+
+```sh
+LOG_PATH=/path/to/log/file.wpilog uv run -- robotpy --main src sim
+```
+
+For replay watch, do the following:
+
+```sh
+LOG_PATH=/path/to/log/file.wpilog uv run -- robotpy --main src watch
+```
+
+## On real hardware
+
+On real hardware, to deploy onto a robot use the following
+
+```sh
+uv run -- robotpy --main src deploy
+```
 
 
 ### Steps to take when commiting
 
-1. **Make sure Pylint, Black and Prettier are installed**
-
-- Run Pylint in terminal and check for a help output. It should be autoinstalled with python.
+1. **run black from uv**
 
 ```bash
-pylint
+uv run -- black .
 ```
 
-- Run Black in terminal empty and look for "No path provided". If nothing happens, run the second command
+2. **check pylint from uv**
+
+pylint is used for linting, or checking that code will work as expected
 
 ```bash
-black
-python -m pip install -U black
+uv run -- pylint $(git ls-files '*.py')
 ```
+3. **check mypy from uv**
 
-2. **Make Pylint happy**
-
-- Run Pylint on your files
+mypy is used for type checking, or making sure that types are used correctly
 
 ```bash
-pylint $(git ls-files "*.py")
+uv run -- mypy $(git ls-files '*.py')
 ```
-
-- With the error "Method could be a function" on an isFinished in a command, add this command above it. If necessary, swap out "no-self-use" with whatever error it gives you at the end.
-
-```bash
-# pylint: disable-next=no-self-use
-```
-
-3. **Formatting with Black and Prettier**
-
-- Run black on your files (autoformats). Also note that it can be configured to run on save of a file.
-
-```bash
-black .
-```
-
--You also may need to format json files using Prettier. When opening a json file in VSCode, it should prompt you to download Prettier in a small window in the bottom right. If not, go to the extensions tab on the left and search "Prettier". The top result is it (about 19 million downloads)
 
 4.  **Make sure it starts in sim and works as expected**
 
@@ -130,13 +108,9 @@ black .
 
 [FRC Game Tools](https://www.ni.com/en/support/downloads/drivers/download.frc-game-tools.html#479842)
 
-### FRC Radio Configuration Utility
-
-[FRC Configuration Utility](https://firstfrc.blob.core.windows.net/frc2024/Radio/FRC_Radio_Configuration_24_0_1.zip)
-
 ### CTRE Phoenix
 
-[Phoenix Tuner](https://github.com/CrossTheRoadElec/Phoenix-Releases/releases)
+Download Phoenix Tuner X from the Microsoft Store
 
 ## Setup
 
@@ -149,7 +123,6 @@ black .
    | - | - |
    | Team number | `1757` |
    | Firmware | `6.0.0f1` |
-   | Image | `FRC_roboRIO_2021_v3.0 (note: outdated, just use a new version)` |
    | Static IP | `10.17.57.2` |
    | Subnet Mask | `255.255.255.0` |
 
@@ -185,29 +158,10 @@ black .
 
 | Device                  | IP Address   | Subnet Mask       |
 | ----------------------- | ------------ | ----------------- |
-| OpenMesh radio          | `10.17.57.1` | `???.???.???.???` |
+| VH-109 radio            | `10.17.57.1` | `???.???.???.???` |
 | roboRIO                 | `10.17.57.2` | `255.255.255.000` |
 | Driver Station (laptop) | `10.17.57.5` | `255.000.000.000` |
 1. **Download python for roboRIO**
-   (must have internet connection)
-   ```bash
-   python -m robotpy_installer download-python
-   ```
-1. **Download robotpy modules for roboRIO**
-   (must have internet connection)
-   ```bash
-   python -m robotpy_installer download robotpy
-   ```
-   (examples: `robotpy`, `robotpy[ctre,navx]`, `robotpy[all]`) (see: [robotpy on pypi](https://pypi.org/project/robotpy/))
-1. **Install python on roboRIO**
-   (must be connected to roboRIO)
-   ```bash
-   python -m robotpy_installer install-python
-   ```
-1. **Upload robotpy modules to roboRIO**
-   (must be connected to roboRIO)
-   ```bash
-   python -m robotpy_installer install robotpy
-   ```
-   (examples: `robotpy`, `robotpy[ctre,navx]`, `robotpy[all]`) (see: [robotpy on pypi](https://pypi.org/project/robotpy/))
 
+This is done automatically by robotpy when you deploy the code
+If you do not have the packages downloaded locally for installation, it will prompt you how to download them. For a fresh installation, expect to need to download the packages.

@@ -144,3 +144,4 @@ scripts/verify-simulator-starts.sh
 # Macos
 **/.DS_Store
 pyrightconfig.json
+pyLogs
