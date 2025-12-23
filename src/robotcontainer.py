@@ -324,18 +324,9 @@ class RobotContainer:
         self.chooser.onChange(changeStart)
 
         # Put the chooser on the dashboard
+        self.oi = OperatorInterface()
         self.configureButtonBindings()
 
-        self.drive.setDefaultCommand(
-            FieldRelativeAssistedDrive(
-                self.drive,
-                lambda: OperatorInterface.Drive.ChassisControls.Translation.y()
-                * kTurboSpeedMultiplier,
-                lambda: OperatorInterface.Drive.ChassisControls.Translation.x()
-                * kTurboSpeedMultiplier,
-                OperatorInterface.Drive.ChassisControls.Rotation.x,
-            )
-        )
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
@@ -363,31 +354,45 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
 
-        OperatorInterface.Drive.align_angle().whileTrue(
+        self.drive.setDefaultCommand(
+            FieldRelativeAssistedDrive(
+                self.drive,
+                lambda: self.oi.driverY() * kTurboSpeedMultiplier,
+                lambda: self.oi.driverX() * kTurboSpeedMultiplier,
+                self.oi.driverRotation,
+            )
+        )
+        self.oi.driverController.x().whileTrue(
             AngleAlignDrive(
                 self.drive,
-                lambda: OperatorInterface.Drive.ChassisControls.Translation.y()
-                * kNormalSpeedMultiplier,
-                lambda: OperatorInterface.Drive.ChassisControls.Translation.x()
-                * kNormalSpeedMultiplier,
+                lambda: self.oi.driverY() * kNormalSpeedMultiplier,
+                lambda: self.oi.driverX() * kNormalSpeedMultiplier,
             ).repeatedly()
         )
 
-        OperatorInterface.Drive.reset_gyro().onTrue(
+        self.oi.driverController.y().onTrue(
             ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
-                OperatorInterface.rumbleControllers().withTimeout(0.5)
+                self.oi.rumbleControllersCommand().withTimeout(0.5)
             )
         )
 
-        OperatorInterface.Drive.defense_state().whileTrue(DefenseState(self.drive))
+        self.oi.driverController.x().whileTrue(DefenseState(self.drive))
 
         RobotState.shiftTrigger().onTrue(
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
         ).onFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
 
     def updateAlerts(self):
-        self.driverDisconnected.set(not wpilib.DriverStation.isJoystickConnected(0))
-        self.operatorDisconnected.set(not wpilib.DriverStation.isJoystickConnected(1))
+        self.driverDisconnected.set(
+            not wpilib.DriverStation.isJoystickConnected(
+                self.oi.driverController.getHID().getPort()
+            )
+        )
+        self.operatorDisconnected.set(
+            not wpilib.DriverStation.isJoystickConnected(
+                self.oi.operatorController.getHID().getPort()
+            )
+        )
         self.deadInTheWaterAlert.set(self.chooser.getSelected() == self.nothingAuto)
 
     def getAutonomousCommand(self) -> commands2.Command:

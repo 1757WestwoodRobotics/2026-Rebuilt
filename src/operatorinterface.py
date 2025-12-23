@@ -1,12 +1,9 @@
-from typing import Callable
 from commands2 import Command, cmd
-from commands2.button import Trigger
-from util.controltype import ControlAxis, ControlBase, ControlButton
+from commands2.button import CommandXboxController
+from wpilib.interfaces import GenericHID
 from util.helpfultriggerwrappers import Deadband, Invert, SignSquare
 
 from constants.oi import kXboxJoystickDeadband
-
-button = Callable[[], Trigger]
 
 
 class OperatorInterface:
@@ -14,47 +11,29 @@ class OperatorInterface:
     The controls that the operator(s)/driver(s) interact with
     """
 
-    class Drive:
-        reset_gyro = ControlButton(0, 3)
-        defense_state = ControlButton(0, 2)
-        align_angle = ControlButton(1, 3)
+    driverController: CommandXboxController
+    operatorController: CommandXboxController
 
-        class ChassisControls:
-            class Translation:
-                y = SignSquare(
-                    Invert(
-                        Deadband(
-                            ControlAxis(0, 1)(),  # Joystick vertical
-                            kXboxJoystickDeadband,
-                        )
-                    )
-                )
-                x = SignSquare(
-                    Invert(
-                        Deadband(
-                            ControlAxis(0, 0)(),  # Joystick horizontal
-                            kXboxJoystickDeadband,
-                        )
-                    )
-                )
+    def __init__(self) -> None:
+        self.driverController = CommandXboxController(0)
+        self.operatorController = CommandXboxController(1)
 
-            class Rotation:
-                y = Invert(
-                    Deadband(
-                        ControlAxis(0, 5)(),  # Joystick vertical
-                        kXboxJoystickDeadband,
-                    )
-                )
-                x = Invert(
-                    Deadband(
-                        ControlAxis(0, 4)(),  # Joystick horizontal
-                        kXboxJoystickDeadband,
-                    )
-                )
+        self.driverX = SignSquare(
+            Invert(Deadband(self.driverController.getLeftX, kXboxJoystickDeadband))
+        )
+        self.driverY = SignSquare(
+            Invert(Deadband(self.driverController.getLeftY, kXboxJoystickDeadband))
+        )
+        self.driverRotation = Invert(
+            Deadband(self.driverController.getRightX, kXboxJoystickDeadband)
+        )
 
-    @staticmethod
-    def rumbleControllers(amount: float = 1.0) -> Command:
+    def rumbleControllers(self, amount: float = 1.0) -> None:
+        self.driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount)
+        self.operatorController.setRumble(GenericHID.RumbleType.kBothRumble, amount)
+
+    def rumbleControllersCommand(self, amount: float = 1.0) -> Command:
         return cmd.startEnd(
-            lambda: ControlBase.rumbleControllers(amount),
-            lambda: ControlBase.rumbleControllers(0.0),
+            lambda: self.rumbleControllers(amount),
+            lambda: self.rumbleControllers(0.0),
         )
