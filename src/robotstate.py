@@ -1,6 +1,6 @@
 from typing import Callable
 from pykit.logger import Logger
-from wpilib import DataLogManager, RobotBase
+from wpilib import RobotBase
 from wpimath.geometry import Pose2d, Rotation2d
 from wpimath.kinematics import ChassisSpeeds, SwerveDrive4Odometry, SwerveModulePosition
 
@@ -127,7 +127,7 @@ class RobotState:
             for consumer in cls.simResetPoseConsumers:
                 consumer(pose)
             return
-        DataLogManager.log("This is not supposed to happen")
+        print("This is not supposed to happen")
 
     @classmethod
     def registerSimPoseResetConsumer(cls, consumer: Callable[[Pose2d], None]) -> None:
@@ -137,7 +137,7 @@ class RobotState:
     def getSimPose(cls) -> Pose2d:
         if len(cls.simPoseRecieverConsumers) == 1:
             return cls.simPoseRecieverConsumers[0]()
-        DataLogManager.log("This is not supposed to happen")
+        print("This is not supposed to happen")
         return cls.getPose()
 
     @classmethod
