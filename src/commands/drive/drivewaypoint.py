@@ -1,4 +1,5 @@
 from math import pi
+from typing import Callable
 
 from commands2 import Command
 from pathplannerlib.config import ChassisSpeeds
@@ -13,7 +14,7 @@ from robotstate import RobotState
 from subsystems.drive.drivesubsystem import DriveSubsystem
 
 from util.controltype import AnalogInput
-
+from util.logtunablenumber import LoggedTunableNumber
 
 from constants.trajectory import (
     kWaypointJoystickVariation,
@@ -31,12 +32,43 @@ from constants.drive import (
     kMaxRotationAngularVelocity,
     kMaxRotationAngularAcceleration,
 )
-from constants.math import kMetersPerInch
+from constants.math import kMetersPerInch, kRadiansPerDegree
 
 
 class DriveWaypoint(Command):
+    driveKp = LoggedTunableNumber(
+        "DriveWaypoint/driveKp", kTrajectoryPositionPGainVision
+    )
+    driveKi = LoggedTunableNumber("DriveWaypoint/driveKi", kTrajectoryPositionIGain)
+    driveKd = LoggedTunableNumber("DriveWaypoint/driveKd", kTrajectoryPositionDGain)
+    angleKp = LoggedTunableNumber("DriveWaypoint/angleKp", kTrajectoryAnglePGain)
+    angleKi = LoggedTunableNumber("DriveWaypoint/angleKi", kTrajectoryAngleIGain)
+    angleKd = LoggedTunableNumber("DriveWaypoint/angleKd", kTrajectoryAngleDGain)
+
+    driveMaxVel = LoggedTunableNumber(
+        "DriveWaypoint/driveMaxVel", kMaxForwardLinearVelocity
+    )
+    driveMaxAccel = LoggedTunableNumber(
+        "DriveWaypoint/driveMaxAccel", kMaxForwardLinearAccelerationWaypoint
+    )
+    angleMaxVel = LoggedTunableNumber(
+        "DriveWaypoint/angleMaxVel", kMaxRotationAngularVelocity
+    )
+    angleMaxAccel = LoggedTunableNumber(
+        "DriveWaypoint/angleMaxAccel", kMaxRotationAngularAcceleration
+    )
+
+    driveTolerance = LoggedTunableNumber(
+        "DriveWaypoint/driveTolerance", 2 * kMetersPerInch
+    )
+    angleTolerance = LoggedTunableNumber("DriveWaypoint/angleToleranceDegrees", 3.0)
+
     def __init__(
-        self, drive: DriveSubsystem, xOffset: AnalogInput, yOffset: AnalogInput
+        self,
+        drive: DriveSubsystem,
+        xOffset: AnalogInput,
+        yOffset: AnalogInput,
+        targetSupplier: Callable[[], Pose2d],
     ) -> None:
         Command.__init__(self)
         self.setName(type(self).__name__)
@@ -46,41 +78,92 @@ class DriveWaypoint(Command):
         self.command = Command()
 
         self.running = False
-        self.targetPose = Pose2d()
+        self.targetSupplier = targetSupplier
         self.addRequirements(self.drive)
 
         self.xoff = xOffset
         self.yoff = yOffset
 
         self.xController = ProfiledPIDController(
-            kTrajectoryPositionPGainVision,
-            kTrajectoryPositionIGain,
-            kTrajectoryPositionDGain,
+            self.driveKp.get(),
+            self.driveKi.get(),
+            self.driveKd.get(),
             TrapezoidProfile.Constraints(
-                kMaxForwardLinearVelocity,
-                kMaxForwardLinearAccelerationWaypoint,
+                self.driveMaxVel.get(), self.driveMaxAccel.get()
             ),
         )
         self.yController = ProfiledPIDController(
-            kTrajectoryPositionPGainVision,
-            kTrajectoryPositionIGain,
-            kTrajectoryPositionDGain,
+            self.driveKp.get(),
+            self.driveKi.get(),
+            self.driveKd.get(),
             TrapezoidProfile.Constraints(
-                kMaxForwardLinearVelocity,
-                kMaxForwardLinearAccelerationWaypoint,
+                self.driveMaxVel.get(), self.driveMaxAccel.get()
             ),
         )
         self.thetaController = ProfiledPIDControllerRadians(
-            kTrajectoryAnglePGain,
-            kTrajectoryAngleIGain,
-            kTrajectoryAngleDGain,
+            self.angleKp.get(),
+            self.angleKi.get(),
+            self.angleKd.get(),
             TrapezoidProfileRadians.Constraints(
-                kMaxRotationAngularVelocity,
-                kMaxRotationAngularAcceleration,
+                self.angleMaxVel.get(), self.angleMaxAccel.get()
             ),
         )
 
         self.thetaController.enableContinuousInput(-pi, pi)
+        self.xController.setTolerance(self.driveTolerance.get())
+        self.yController.setTolerance(self.driveTolerance.get())
+        self.thetaController.setTolerance(self.angleTolerance.get() * kRadiansPerDegree)
+
+        self.driveKp.onChange(self.xController.setP)
+        self.driveKi.onChange(self.xController.setI)
+        self.driveKd.onChange(self.xController.setD)
+
+        self.driveKp.onChange(self.yController.setP)
+        self.driveKi.onChange(self.yController.setI)
+        self.driveKd.onChange(self.yController.setD)
+
+        self.angleKp.onChange(self.thetaController.setP)
+        self.angleKi.onChange(self.thetaController.setI)
+        self.angleKd.onChange(self.thetaController.setD)
+
+        self.driveMaxVel.onChange(
+            lambda value: self.xController.setConstraints(
+                TrapezoidProfile.Constraints(value, self.driveMaxAccel.get())
+            )
+        )
+        self.driveMaxAccel.onChange(
+            lambda value: self.xController.setConstraints(
+                TrapezoidProfile.Constraints(self.driveMaxVel.get(), value)
+            )
+        )
+        self.driveMaxVel.onChange(
+            lambda value: self.yController.setConstraints(
+                TrapezoidProfile.Constraints(value, self.driveMaxAccel.get())
+            )
+        )
+        self.driveMaxAccel.onChange(
+            lambda value: self.yController.setConstraints(
+                TrapezoidProfile.Constraints(self.driveMaxVel.get(), value)
+            )
+        )
+
+        self.angleMaxVel.onChange(
+            lambda value: self.thetaController.setConstraints(
+                TrapezoidProfileRadians.Constraints(value, self.angleMaxAccel.get())
+            )
+        )
+        self.angleMaxAccel.onChange(
+            lambda value: self.thetaController.setConstraints(
+                TrapezoidProfileRadians.Constraints(self.angleMaxVel.get(), value)
+            )
+        )
+
+        self.driveTolerance.onChange(self.xController.setTolerance)
+        self.driveTolerance.onChange(self.yController.setTolerance)
+
+        self.angleTolerance.onChange(self.thetaController.setTolerance)
+
+        self.targetPose = self.targetSupplier()
 
     def initialize(self):
         self.running = True
@@ -94,6 +177,7 @@ class DriveWaypoint(Command):
 
     def execute(self) -> None:
         currentPose = RobotState.getPose()
+        self.targetPose = self.targetSupplier()
 
         absoluteOutput = ChassisSpeeds(
             self.xController.calculate(
@@ -117,8 +201,9 @@ class DriveWaypoint(Command):
     @autolog_output("waypoint/atPosition")
     def atPosition(self) -> bool:
         return (
-            self.targetPose.translation().distance(RobotState.getPose().translation())
-            < (1 if DriverStation.isAutonomous() else 2) * kMetersPerInch
+            self.xController.atGoal()
+            and self.yController.atGoal()
+            and self.thetaController.atGoal()
         )
 
     def isFinished(self) -> bool:

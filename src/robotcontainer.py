@@ -71,6 +71,7 @@ from constants.drive import (
 )
 from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
+from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
 
 
 class RobotContainer:
@@ -307,6 +308,8 @@ class RobotContainer:
             self.drive.getFieldRelativeSpeeds(),
             self.drive.getModulePositions(),
         )
+        LoggedTunableNumber.updateAll()
+        AutoUpdateGroup.updateAll()
         self.updateAlerts()
         Logger.recordOutput("Component Poses", RobotMechanism.getPoses())
 
