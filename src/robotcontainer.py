@@ -79,6 +79,7 @@ from constants.drive import (
 )
 from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
+from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
 
 
 class RobotContainer:
@@ -350,6 +351,8 @@ class RobotContainer:
                 wpilib.Timer.getTimestamp() / 20
             ),  # Simulated turret rotation, just go spin
         )
+        LoggedTunableNumber.updateAll()
+        AutoUpdateGroup.updateAll()
         self.updateAlerts()
         Logger.recordOutput("Component Poses", RobotMechanism.getPoses())
 
