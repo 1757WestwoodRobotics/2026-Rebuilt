@@ -46,8 +46,8 @@ requires-dist = [
     { name = "robotpy-cli", specifier = ">=2024.0.0" },
     { name = "robotpy-halsim-gui", specifier = ">=2025.3.2.2" },
     { name = "robotpy-pathplannerlib", specifier = ">=2025.2.7" },
-    { name = "robotpy-pykit", specifier = ">=0.2.1" },
-    { name = "robotpy-pykit-watch", specifier = ">=0.1.0" },
+    { name = "robotpy-pykit", specifier = ">=0.2.3" },
+    { name = "robotpy-pykit-watch", specifier = ">=0.2.0" },
     { name = "robotpy-rev", specifier = ">=2025.0.3.1" },
     { name = "wpilib", specifier = ">=2025.3.2.2" },
 ]
@@ -1367,7 +1367,7 @@ wheels = [
 
 [[package]]
 name = "robotpy-pykit"
-version = "0.2.1"
+version = "0.2.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyfrc" },
@@ -1377,22 +1377,22 @@ dependencies = [
     { name = "robotpy-wpiutil" },
     { name = "wpilib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/34/9b/0e55b0779966f401a64eecba4fef7e3df183eaee6e5d210bd1c26034194e/robotpy_pykit-0.2.1.tar.gz", hash = "sha256:9415ab2b50cb17754a8cb2198649db8024a1877737b56c14c10dae1e0f74bb44", size = 23267, upload-time = "2025-12-22T19:05:34.487Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/90/cfbb9e0f1730981da6c34cc0c6b6c71161dca3da73ec7e924c82e6703fbf/robotpy_pykit-0.2.3.tar.gz", hash = "sha256:8e1c85d32cdf6f9b827260e2d554c1b2d670c9ac7b673c98676bbed89a3a7475", size = 23283, upload-time = "2026-01-09T01:33:25.8Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/57/be/849f6ec43e28c3eb6489c5a2bf92c9d4815421ae096852c5419f60cf6c0f/robotpy_pykit-0.2.1-py3-none-any.whl", hash = "sha256:fb5e45c0251617bcd817383e88732b5a4d6b89c68b6fc33d586c98640aa6ba2c", size = 32702, upload-time = "2025-12-22T19:05:33.355Z" },
+    { url = "https://files.pythonhosted.org/packages/15/a9/54cc5332809f2c9d379e1584958e72398ee71772dcc5f5fc53ea6a773026/robotpy_pykit-0.2.3-py3-none-any.whl", hash = "sha256:0df7ab61adf279d0825106e384a34075b5343283472b01c79eb6709fef8c6a0d", size = 32729, upload-time = "2026-01-09T01:33:24.847Z" },
 ]
 
 [[package]]
 name = "robotpy-pykit-watch"
-version = "0.1.0"
+version = "0.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "robotpy-pykit" },
     { name = "watchdog" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b0/2c/3b9d3a97b5a841fc7fc9c2487229f1698405b589b6264929eaeba5ea9b9c/robotpy_pykit_watch-0.1.0.tar.gz", hash = "sha256:50faf7047c73da625e04a607b7107b6ceb4e6b1c13c79bafa93fce9fc7629f4c", size = 3482, upload-time = "2025-11-11T21:51:41.853Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/0c/330b38b9c0b06884bcfeda64f37dc71d59faee6500098fff277ed6abe303/robotpy_pykit_watch-0.2.0.tar.gz", hash = "sha256:33e92a0bdff10da150d9cce88423e88401d043b9d03e817facf5dda522665af9", size = 3456, upload-time = "2026-01-07T19:44:36.46Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7f/3e/0deb5abe3e80a559cdc4873602ea703a52de4f4dcf252467600696e72b33/robotpy_pykit_watch-0.1.0-py3-none-any.whl", hash = "sha256:a919704641b61a0a3b39b3cefdcb852065b560cb46199ac763de8b955b1b38b9", size = 4054, upload-time = "2025-11-11T21:51:40.585Z" },
+    { url = "https://files.pythonhosted.org/packages/d7/5a/6b6b752d03f3310f51861fc973b7f9ac653b82d0e83b0fc3d169378d7625/robotpy_pykit_watch-0.2.0-py3-none-any.whl", hash = "sha256:3ceeac5c9e1b015cecd4d2471e1ef27e695b302323f0e35384e46be42566cd85", size = 4088, upload-time = "2026-01-07T19:44:35.729Z" },
 ]
 
 [[package]]
