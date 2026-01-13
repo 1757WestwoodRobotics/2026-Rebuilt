@@ -1,5 +1,7 @@
+from os import path
+import wpilib
 from wpimath.geometry import Pose3d, Rotation2d, Rotation3d, Transform3d
-from robotpy_apriltag import AprilTagFieldLayout, AprilTagField
+from robotpy_apriltag import AprilTagFieldLayout
 
 from .math import kRadiansPerDegree, kMetersPerInch
 
@@ -76,7 +78,9 @@ kThetaStdDevCoeff = 0.06  # radians
 
 kTargetName = "Target"
 
-kApriltagFieldLayout = AprilTagFieldLayout.loadField(AprilTagField.k2022RapidReact)
+kApriltagFieldLayout = AprilTagFieldLayout(
+    path.join(wpilib.getDeployDirectory(), "apriltags", "2026-rebuilt-andymark.json")
+)
 kApriltagPositionDict = {
     1: Pose3d(
         (kMetersPerInch * 657.37),

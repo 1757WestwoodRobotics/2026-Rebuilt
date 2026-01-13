@@ -1,5 +1,5 @@
+from phoenix6 import BaseStatusSignal
 from phoenix6.configs.pigeon2_configs import Pigeon2Configuration
-from phoenix6.hardware.core.core_talon_fx import BaseStatusSignal
 from phoenix6.hardware.pigeon2 import Pigeon2
 from subsystems.drive.driveio import DriveIO
 
