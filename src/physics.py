@@ -10,7 +10,7 @@
 #
 
 from phoenix6.unmanaged import feed_enable
-from wpilib import DataLogManager, RobotController
+from wpilib import RobotController
 from wpimath.geometry import Pose2d, Rotation2d, Transform2d
 from pyfrc.physics.core import PhysicsInterface
 from robot import MentorBot
@@ -70,11 +70,11 @@ class PhysicsEngine:
         if not isinstance(driveSubsystem.frontLeftModule.io, SwerveModuleIOCTRE):
             # do not simulation
             self.doSim = False
-            DataLogManager.log("[Physics] WARNING: Not simulating")
+            print("[Physics] WARNING: Not simulating")
             return
 
         self.doSim = True
-        DataLogManager.log("[Physics] beginning simulation")
+        print("[Physics] beginning simulation")
 
         self.driveSim = SwerveDriveSim(driveSubsystem)
 

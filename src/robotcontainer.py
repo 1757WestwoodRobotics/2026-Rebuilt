@@ -80,7 +80,6 @@ class RobotContainer:
         # The robot's subsystems
         match kRobotMode:
             case RobotModes.REAL:
-                wpilib.DataLogManager.log("Starting REAL")
                 self.drive = DriveSubsystem(
                     DriveIOPigeon(),
                     (

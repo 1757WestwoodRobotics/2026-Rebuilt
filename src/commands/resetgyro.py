@@ -1,4 +1,3 @@
-from wpilib import DataLogManager
 from commands2.command import Command
 from wpimath.geometry import Pose2d
 
@@ -15,13 +14,13 @@ class ResetGyro(Command):
         self.addRequirements(self.drive)
 
     def initialize(self) -> None:
-        DataLogManager.log(f"Command: {self.getName()}")
+        print(f"Command: {self.getName()}")
 
     def execute(self) -> None:
         RobotState.resetPose()
 
     def end(self, _interrupted: bool) -> None:
-        DataLogManager.log("... DONE")
+        print("... DONE")
 
     def isFinished(self) -> bool:
         return True

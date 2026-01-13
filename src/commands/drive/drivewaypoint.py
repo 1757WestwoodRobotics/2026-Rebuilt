@@ -7,7 +7,7 @@ from pykit.logger import Logger
 from wpimath.trajectory import TrapezoidProfile, TrapezoidProfileRadians
 from wpimath.controller import ProfiledPIDController, ProfiledPIDControllerRadians
 from wpimath.geometry import Pose2d
-from wpilib import DataLogManager, DriverStation
+from wpilib import DriverStation
 
 from robotstate import RobotState
 from subsystems.drive.drivesubsystem import DriveSubsystem
@@ -126,4 +126,4 @@ class DriveWaypoint(Command):
 
     def end(self, _interrupted: bool) -> None:
         # pylint: disable=W0212
-        DataLogManager.log("... DONE")
+        print("... DONE")

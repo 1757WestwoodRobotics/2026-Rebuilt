@@ -1,5 +1,4 @@
 from commands2.command import Command
-from wpilib import DataLogManager
 
 from subsystems.drive.drivesubsystem import DriveSubsystem
 
@@ -13,7 +12,7 @@ class DefenseState(Command):
         self.addRequirements(self.drive)
 
     def initialize(self) -> None:
-        DataLogManager.log(f"Command: {self.getName()}")
+        print(f"Command: {self.getName()}")
 
     def execute(self) -> None:
         self.drive.defenseState()
@@ -22,4 +21,4 @@ class DefenseState(Command):
         return True
 
     def end(self, _interrupted: bool) -> None:
-        DataLogManager.log("... DONE")
+        print("... DONE")
