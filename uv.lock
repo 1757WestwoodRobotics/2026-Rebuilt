@@ -43,7 +43,7 @@ requires-dist = [
     { name = "robotpy-cli", specifier = ">=2026.0.1" },
     { name = "robotpy-halsim-gui", specifier = ">=2026.1.1" },
     { name = "robotpy-pathplannerlib", specifier = ">=2026.1.1" },
-    { name = "robotpy-pykit", specifier = ">=1.0.0" },
+    { name = "robotpy-pykit", specifier = ">=1.0.1" },
     { name = "robotpy-pykit-watch", specifier = ">=1.0.0" },
     { name = "robotpy-rev", specifier = ">=2026.0.0" },
     { name = "wpilib", specifier = ">=2026.1.1" },
@@ -1210,7 +1210,7 @@ wheels = [
 
 [[package]]
 name = "robotpy-pykit"
-version = "1.0.0"
+version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyfrc" },
@@ -1220,9 +1220,9 @@ dependencies = [
     { name = "robotpy-wpiutil" },
     { name = "wpilib" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0c/3c/cf5964cb1defd7b5cdce4633f33a2e835023e0ef90468938a26dabd1e888/robotpy_pykit-1.0.0.tar.gz", hash = "sha256:f05eb7cc92870e2ac7fb965662549c5bd0d888bbf148b4803f4d7a99d62b84e9", size = 22902, upload-time = "2026-01-13T18:34:30.656Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/7e/39f79e446204647f74d2b82c001176ce2525b6077de7a3fdcf014bd68912/robotpy_pykit-1.0.1.tar.gz", hash = "sha256:8ba19d62cf5b28c8bdee995a19ad01631cbf077fc83fa3f9fb9337b4fb0c92ac", size = 22909, upload-time = "2026-01-13T19:36:25.831Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/ea/dddc325395c5a1da1ed0169a83ccd1bb63841def9d67893440a255ec78e9/robotpy_pykit-1.0.0-py3-none-any.whl", hash = "sha256:a1d8fb50af2e38503070a39516dcf320eba77681db27065c710d68c6a746a5c4", size = 32400, upload-time = "2026-01-13T18:34:31.795Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/48/4198402a8e7107160a7d93bd36d78304ecd4c9022b57380993ae4662a33a/robotpy_pykit-1.0.1-py3-none-any.whl", hash = "sha256:b261a33b56a7aa96568cb0390a9c17aa254827c027d0d4871d584d02664bc41e", size = 32398, upload-time = "2026-01-13T19:36:26.892Z" },
 ]
 
 [[package]]
