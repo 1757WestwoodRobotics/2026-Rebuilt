@@ -5,7 +5,7 @@ from pykit.alertlogger import AlertLogger
 from pykit.networktables.loggeddashboardchooser import LoggedDashboardChooser
 
 import wpilib
-from wpimath.geometry import Pose2d
+from wpimath.geometry import Pose2d, Rotation2d
 import commands2
 from pathplannerlib.auto import PathPlannerAuto
 
@@ -35,7 +35,11 @@ from subsystems.drive.driveio import DriveIO
 from operatorinterface import OperatorInterface
 
 from constants.auto import kAutoDuration
-from constants.vision import kRobotToCamera1Transform, kRobotToCamera2Transform
+from constants.vision import (
+    kRobotToCamera1Transform,
+    kRobotToCamera2Transform,
+    kTurretToCameraTransform,
+)
 from constants.drive import (
     kTurboSpeedMultiplier,
     kNormalSpeedMultiplier,
@@ -140,6 +144,7 @@ class RobotContainer:
                 )
                 self.vision = VisionSubsystem(
                     RobotState.addVisionMeasurement,
+                    RobotState.addTurretedVisionMeasurement,
                     [
                         VisionSubsystemIOLimelight(
                             "limelight-br",
@@ -211,6 +216,7 @@ class RobotContainer:
                 )
                 self.vision = VisionSubsystem(
                     RobotState.addVisionMeasurement,
+                    RobotState.addTurretedVisionMeasurement,
                     [
                         VisionSubsystemIOPhotonSim(
                             "camera-br",
@@ -223,6 +229,12 @@ class RobotContainer:
                             kRobotToCamera2Transform,
                             # pylint: disable-next=unnecessary-lambda
                             lambda: RobotState.getSimPose(),
+                        ),
+                        VisionSubsystemIOPhotonSim(
+                            "camera-turret",
+                            kTurretToCameraTransform,
+                            RobotState.getSimTurretPose,
+                            True,
                         ),
                     ],
                 )
@@ -240,6 +252,7 @@ class RobotContainer:
                 )
                 self.vision = VisionSubsystem(
                     RobotState.addVisionMeasurement,
+                    RobotState.addTurretedVisionMeasurement,
                     [VisionSubsystemIO(), VisionSubsystemIO()],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
@@ -306,6 +319,9 @@ class RobotContainer:
             self.drive.getAngularVelocity(),
             self.drive.getFieldRelativeSpeeds(),
             self.drive.getModulePositions(),
+            Rotation2d(
+                wpilib.Timer.getTimestamp() / 20
+            ),  # Simulated turret rotation, just go spin
         )
         self.updateAlerts()
         Logger.recordOutput("Component Poses", RobotMechanism.getPoses())

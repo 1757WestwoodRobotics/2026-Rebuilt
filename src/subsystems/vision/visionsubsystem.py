@@ -11,17 +11,21 @@ from constants.vision import (
     kXyStdDevCoeff,
     kThetaStdDevCoeff,
 )
+from constants.turret import kTurretLocation
+from util.convenientmath import pose3dFromTransform3d
 from util.logtracer import LogTracer
-from util.robotposeestimator import VisionObservation
+from util.robotposeestimator import TurretedVisionObservation, VisionObservation
 
 
 class VisionSubsystem(Subsystem):
     def __init__(
         self,
         visionConsumer: Callable[[VisionObservation], None],
+        turretedVisionConsumer: Callable[[TurretedVisionObservation], None],
         io: List[VisionSubsystemIO],
     ) -> None:
         self.consumer = visionConsumer
+        self.turretedConsumer = turretedVisionConsumer
         self.io = io
 
         self.inputs: list[VisionSubsystemIO.VisionSubsystemIOInputs] = []
@@ -41,12 +45,20 @@ class VisionSubsystem(Subsystem):
         allRobotPosesAccepted = []
         allRobotPosesRejected = []
 
+        allTurretedTransforms = []
+        allTurretedTransformsRejected = []
+        allTurretedTransformsAccepted = []
+
         LogTracer.reset()
         for idx, camera in enumerate(self.inputs):
             tagPoses = []
             robotPoses = []
             robotPosesAccepted = []
             robotPosesRejected = []
+
+            turretedTransforms = []
+            turretedTransformsAccepted = []
+            turretedTransformsRejected = []
 
             for tagId in camera.tagIds:
                 tagPose = kApriltagFieldLayout.getTagPose(tagId)
@@ -92,6 +104,45 @@ class VisionSubsystem(Subsystem):
                     )
                 )
             LogTracer.record(f"Camera{idx} ProcessObservations")
+            for observation in camera.turretedObservations:
+                rejectPose = (
+                    observation.tagCount == 0
+                    or (
+                        observation.tagCount == 1
+                        and observation.ambiguity > kMaxVisionAmbiguity
+                    )
+                    or abs(observation.fieldToTurret.Z() - kTurretLocation.Z())
+                    > kMaxVisionZError  # work backwards onto what the robot pose would be
+                    or observation.fieldToTurret.X() < 0.0
+                    or observation.fieldToTurret.X()
+                    > kApriltagFieldLayout.getFieldLength()
+                    or observation.fieldToTurret.Y() < 0.0
+                    or observation.fieldToTurret.Y()
+                    > kApriltagFieldLayout.getFieldWidth()
+                )
+                turretPose = pose3dFromTransform3d(observation.fieldToTurret)
+                turretedTransforms.append(turretPose)
+                if rejectPose:
+                    turretedTransformsRejected.append(turretPose)
+                else:
+                    turretedTransformsAccepted.append(turretPose)
+
+                if rejectPose:
+                    continue
+
+                stdDevFactor = (
+                    pow(observation.averageTagDistance, 2.0) / observation.tagCount
+                )
+                linearStdDev = kXyStdDevCoeff * stdDevFactor
+                angularStdDev = kThetaStdDevCoeff * stdDevFactor
+                # here you can also factor in per-camera weighting
+                self.turretedConsumer(
+                    TurretedVisionObservation(
+                        observation.fieldToTurret,
+                        observation.timestamp,
+                        [linearStdDev, linearStdDev, angularStdDev],
+                    )
+                )
 
             Logger.recordOutput(f"Vision/Camera{idx}/TagPose", tagPoses)
             Logger.recordOutput(f"Vision/Camera{idx}/RobotPoses", robotPoses)
@@ -101,13 +152,37 @@ class VisionSubsystem(Subsystem):
             Logger.recordOutput(
                 f"Vision/Camera{idx}/RobotPosesAccepted", robotPosesAccepted
             )
+            Logger.recordOutput(
+                f"Vision/Camera{idx}/TurretedTransforms", turretedTransforms
+            )
+            Logger.recordOutput(
+                f"Vision/Camera{idx}/TurretedTransformsRejected",
+                turretedTransformsRejected,
+            )
+            Logger.recordOutput(
+                f"Vision/Camera{idx}/TurretedTransformsAccepted",
+                turretedTransformsAccepted,
+            )
             allTagPoses.extend(tagPoses)
             allRobotPoses.extend(robotPoses)
             allRobotPosesAccepted.extend(robotPosesAccepted)
             allRobotPosesRejected.extend(robotPosesRejected)
+            allTurretedTransforms.extend(turretedTransforms)
+            allTurretedTransformsAccepted.extend(turretedTransformsAccepted)
+            allTurretedTransformsRejected.extend(turretedTransformsRejected)
+        LogTracer.record("All Cameras ProcessObservations")
 
         Logger.recordOutput("Vision/Summary/TagPose", allTagPoses)
         Logger.recordOutput("Vision/Summary/RobotPoses", allRobotPoses)
         Logger.recordOutput("Vision/Summary/RobotPosesRejected", allRobotPosesRejected)
         Logger.recordOutput("Vision/Summary/RobotPosesAccepted", allRobotPosesAccepted)
+        Logger.recordOutput("Vision/Summary/TurretedTransforms", allTurretedTransforms)
+        Logger.recordOutput(
+            "Vision/Summary/TurretedTransformsRejected",
+            allTurretedTransformsRejected,
+        )
+        Logger.recordOutput(
+            "Vision/Summary/TurretedTransformsAccepted",
+            allTurretedTransformsAccepted,
+        )
         LogTracer.recordTotal()

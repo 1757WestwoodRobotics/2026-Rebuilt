@@ -2,7 +2,14 @@ import functools
 import math
 import operator
 import typing
-from wpimath.geometry import Pose3d, Rotation2d, Rotation3d, Translation2d, Pose2d
+from wpimath.geometry import (
+    Pose3d,
+    Rotation2d,
+    Rotation3d,
+    Transform3d,
+    Translation2d,
+    Pose2d,
+)
 
 number = typing.Union[float, int]
 
@@ -84,6 +91,20 @@ def addPose2d(a: Pose2d, b: Pose2d):
 
 def pose3dFrom2d(pose: Pose2d) -> Pose3d:
     return Pose3d(pose.X(), pose.Y(), 0, Rotation3d(0, 0, pose.rotation().radians()))
+
+
+def pose3dFromTransform3d(transform: Transform3d) -> Pose3d:
+    return Pose3d(
+        transform.translation(),
+        transform.rotation(),
+    )
+
+
+def transform3dFromPose3d(pose: Pose3d) -> Transform3d:
+    return Transform3d(
+        pose.translation(),
+        pose.rotation(),
+    )
 
 
 def translationDotProduct(a: Translation2d, b: Translation2d) -> float:

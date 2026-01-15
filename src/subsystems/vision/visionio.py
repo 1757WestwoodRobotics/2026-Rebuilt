@@ -24,6 +24,18 @@ class VisionSubsystemPoseObservation:
     observationType: int = ObservationType.PHOTONVISION.value
 
 
+@make_wpistruct(name="turretedobservation")
+@autolog
+@dataclass
+class VisionSubsystemTurretedPoseObservation:
+    timestamp: float = 0
+    fieldToTurret: Transform3d = field(default_factory=Transform3d)
+    ambiguity: float = 0
+    tagCount: int = 0
+    averageTagDistance: float = 0
+    observationType: int = ObservationType.PHOTONVISION.value
+
+
 class VisionSubsystemIO:
 
     @autolog
@@ -31,6 +43,9 @@ class VisionSubsystemIO:
     class VisionSubsystemIOInputs:
         connected: bool = False
         poseObservations: list[VisionSubsystemPoseObservation] = field(
+            default_factory=list
+        )
+        turretedObservations: list[VisionSubsystemTurretedPoseObservation] = field(
             default_factory=list
         )
         tagIds: List[int] = field(default_factory=list)
