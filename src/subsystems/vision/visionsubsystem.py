@@ -2,7 +2,6 @@ from typing import Callable, List
 from commands2 import Subsystem
 from pykit.logger import Logger
 
-from subsystems.drive.robotposeestimator import VisionObservation
 from subsystems.vision.visionio import VisionSubsystemIO
 
 from constants.vision import (
@@ -13,6 +12,7 @@ from constants.vision import (
     kThetaStdDevCoeff,
 )
 from util.logtracer import LogTracer
+from util.robotposeestimator import VisionObservation
 
 
 class VisionSubsystem(Subsystem):
