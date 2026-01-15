@@ -71,6 +71,16 @@ kRobotToCamera2Transform = (
     kRobotToCamera2TransformLL3  # NOTE: if/when we swap cameras this needs to change
 )
 
+kTurretToCameraTransform = Transform3d(
+    Pose3d(),
+    Pose3d(
+        0.1,
+        0.0,
+        0.1,
+        Rotation3d.fromDegrees(15, 0.0, 0.0),
+    ),
+)
+
 kMaxVisionAmbiguity = 0.3
 kMaxVisionZError = 0.75  # meters
 kXyStdDevCoeff = 0.02  # meters

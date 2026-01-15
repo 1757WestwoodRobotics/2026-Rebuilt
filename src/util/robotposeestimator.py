@@ -1,7 +1,13 @@
+from dataclasses import dataclass, field
 from math import sqrt
-from wpimath.geometry import Pose2d, Rotation2d, Transform2d
-from wpimath.interpolation import TimeInterpolatablePose2dBuffer
+from wpimath.geometry import Pose2d, Rotation2d, Rotation3d, Transform2d, Transform3d
+from wpimath.interpolation import (
+    TimeInterpolatablePose2dBuffer,
+    TimeInterpolatableRotation2dBuffer,
+)
 from wpimath.kinematics import SwerveDrive4Kinematics, SwerveModulePosition
+
+from constants.turret import kTurretLocation
 
 
 # shamelessly reimplemented from 6328
@@ -28,6 +34,22 @@ class VisionObservation:
         self.visionPose = visionPose
         self.timestamp = timestamp
         self.std = std
+
+
+class TurretedVisionObservation:
+    def __init__(
+        self, fieldToTurretTransform: Transform3d, timestamp: float, std: list[float]
+    ) -> None:
+        assert len(std) == 3
+        self.fieldToTurretTransform = fieldToTurretTransform
+        self.timestamp = timestamp
+        self.std = std
+
+
+@dataclass
+class TurretObservation:
+    turretAngle: Rotation2d
+    timestamp: float
 
 
 class RobotPoseEstimator:
@@ -134,3 +156,94 @@ class RobotPoseEstimator:
         self.odometryPose = startPose
         self.lastWheelPositions = startWheelPositions
         self.poseBuffer.clear()
+
+
+class TurretedRobotPoseEstimator(RobotPoseEstimator):
+    def __init__(
+        self,
+        kinematics: SwerveDrive4Kinematics,
+        gyro: Rotation2d,
+        startWheelPositions: tuple[
+            SwerveModulePosition,
+            SwerveModulePosition,
+            SwerveModulePosition,
+            SwerveModulePosition,
+        ],
+        startPose: Pose2d,
+        odoStdDevs: tuple[float, float, float],
+    ) -> None:
+        super().__init__(kinematics, gyro, startWheelPositions, startPose, odoStdDevs)
+
+        self.turretBuffer = TimeInterpolatableRotation2dBuffer(2.0)
+
+    def addTurretMeasurement(self, measurement: TurretObservation):
+        self.turretBuffer.addSample(measurement.timestamp, measurement.turretAngle)
+
+    def addTurretedVisionMeasurement(self, measurement: TurretedVisionObservation):
+        if self.poseBuffer.getInternalBuffer()[-1][0] - 2.0 > measurement.timestamp:
+            return
+        if self.turretBuffer.getInternalBuffer()[-1][0] - 2.0 > measurement.timestamp:
+            return
+
+        poseSample = self.poseBuffer.sample(measurement.timestamp)
+        if poseSample is None:
+            return
+
+        turretSample = self.turretBuffer.sample(measurement.timestamp)
+        if turretSample is None:
+            return
+
+        sampledRotationTrasnfrom = Transform3d(
+            0, 0, 0, Rotation3d(0, 0, turretSample.radians())
+        )
+        measuredFieldToRobot = (
+            measurement.fieldToTurretTransform
+            + sampledRotationTrasnfrom.inverse()
+            + kTurretLocation.inverse()
+        )
+        measuredFieldToRobot2d = Pose2d(
+            measuredFieldToRobot.translation().toTranslation2d(),
+            measuredFieldToRobot.rotation().toRotation2d(),
+        )
+
+        sampleToOdometryTransform = Transform2d(poseSample, self.odometryPose)
+        odometryToSampleTransform = Transform2d(self.odometryPose, poseSample)
+
+        estimateAtTime = self.estimatedPose + odometryToSampleTransform
+
+        r = [i * i for i in measurement.std]
+
+        visionK = [0.0, 0.0, 0.0]
+        for i in range(3):
+            stdDev = self.odoStdDevs[i]
+            if stdDev == 0.0:
+                visionK[i] = 0.0
+            else:
+                visionK[i] = stdDev / (stdDev + sqrt(stdDev * r[i]))
+        transform = Transform2d(estimateAtTime, measuredFieldToRobot2d)
+        kTimesTransform = [
+            visionK[i] * k
+            for i, k in enumerate(
+                [transform.X(), transform.Y(), transform.rotation().radians()]
+            )
+        ]
+        scaledTransform = Transform2d(
+            kTimesTransform[0], kTimesTransform[1], kTimesTransform[2]
+        )
+        self.estimatedPose = (
+            estimateAtTime + scaledTransform + sampleToOdometryTransform
+        )
+
+    def resetPosition(
+        self,
+        _gyro: Rotation2d,
+        startWheelPositions: tuple[
+            SwerveModulePosition,
+            SwerveModulePosition,
+            SwerveModulePosition,
+            SwerveModulePosition,
+        ],
+        startPose: Pose2d,
+    ):
+        super().resetPosition(_gyro, startWheelPositions, startPose)
+        self.turretBuffer.clear()

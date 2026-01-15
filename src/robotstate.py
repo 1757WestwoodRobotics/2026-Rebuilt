@@ -1,16 +1,21 @@
 from typing import Callable
 from pykit.logger import Logger
 from wpilib import RobotBase
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.geometry import Pose2d, Pose3d, Rotation2d, Rotation3d, Transform3d
 from wpimath.kinematics import ChassisSpeeds, SwerveDrive4Odometry, SwerveModulePosition
 
+from util.convenientmath import pose3dFrom2d
 from util.robotposeestimator import (
     OdometryObservation,
     RobotPoseEstimator,
+    TurretObservation,
+    TurretedRobotPoseEstimator,
+    TurretedVisionObservation,
     VisionObservation,
 )
 
 from constants.drive import kDriveKinematics
+from constants.turret import kTurretLocation
 from constants.auto import kAutoDistanceTolerance, kAutoRotationTolerance
 from util.logtracer import LogTracer
 
@@ -18,6 +23,7 @@ from util.logtracer import LogTracer
 class RobotState:
     headingOffset: Rotation2d = Rotation2d()
     robotHeading: Rotation2d = Rotation2d()
+    turretRotation: Rotation2d = Rotation2d()
 
     modulePositions: tuple[
         SwerveModulePosition,
@@ -31,7 +37,7 @@ class RobotState:
         SwerveModulePosition(),
     )
 
-    estimator: RobotPoseEstimator = RobotPoseEstimator(
+    estimator: TurretedRobotPoseEstimator = TurretedRobotPoseEstimator(
         kDriveKinematics, Rotation2d(), modulePositions, Pose2d(), (0.1, 0.1, 0.1)
     )
     odometry: SwerveDrive4Odometry = SwerveDrive4Odometry(
@@ -54,6 +60,18 @@ class RobotState:
         cls.estimator.addVisionMeasurement(measurement)
 
     @classmethod
+    def addTurretedVisionMeasurement(cls, measurement: TurretedVisionObservation):
+        cls.estimator.addTurretedVisionMeasurement(measurement)
+
+    @classmethod
+    def getTurretPose(cls) -> Pose3d:
+        return (
+            pose3dFrom2d(cls.getPose())
+            + kTurretLocation
+            + Transform3d(0, 0, 0, Rotation3d(0, 0, cls.turretRotation.radians()))
+        )
+
+    @classmethod
     def periodic(
         cls,
         heading: Rotation2d,
@@ -66,8 +84,10 @@ class RobotState:
             SwerveModulePosition,
             SwerveModulePosition,
         ],
+        turretRotation: Rotation2d,
     ) -> None:
         LogTracer.resetOuter("RobotState")
+        cls.turretRotation = turretRotation
         cls.robotHeading = heading
         cls.modulePositions = modulePositions
         cls.odometry.update(heading, modulePositions)
@@ -77,11 +97,15 @@ class RobotState:
         cls.estimator.addOdometryMeasurement(
             OdometryObservation(modulePositions, heading, headingTimestamp)
         )
+        cls.estimator.addTurretMeasurement(
+            TurretObservation(turretRotation, headingTimestamp)
+        )
         LogTracer.record("EstimatorUpdate")
 
         estimatedFieldPose = cls.getPose()
         Logger.recordOutput("Robot/Pose/EstimatorPose", estimatedFieldPose)
         Logger.recordOutput("Robot/Pose/OdometryPose", cls.odometry.getPose())
+        Logger.recordOutput("Robot/TurretRotation", cls.turretRotation)
         Logger.recordOutput("Robot/Heading", cls.robotHeading)
         Logger.recordOutput("Robot/HeadingVelocity", robotYawVelocity)
         Logger.recordOutput("Robot/Velocity", fieldRelativeRobotVelocity)
@@ -101,6 +125,7 @@ class RobotState:
 
         if not RobotBase.isReal():
             Logger.recordOutput("Robot/SimPose", cls.getSimPose())
+            Logger.recordOutput("Robot/SimTurretPose", cls.getSimTurretPose())
 
         LogTracer.recordTotal()
 
@@ -139,6 +164,14 @@ class RobotState:
             return cls.simPoseRecieverConsumers[0]()
         print("This is not supposed to happen")
         return cls.getPose()
+
+    @classmethod
+    def getSimTurretPose(cls) -> Pose3d:
+        return (
+            pose3dFrom2d(cls.getSimPose())
+            + kTurretLocation
+            + Transform3d(0, 0, 0, Rotation3d(0, 0, cls.turretRotation.radians()))
+        )
 
     @classmethod
     def registerSimPoseRecieverConsumer(cls, consumer: Callable[[], Pose2d]) -> None:

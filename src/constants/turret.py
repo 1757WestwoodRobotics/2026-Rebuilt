@@ -31,4 +31,3 @@ kTurretSimInertia = 0.005  # kg m^2
 kTurretLocation = Transform3d(
     Translation3d(0.25, 0.25, 0.25), Rotation3d()
 )  # FILL IN LATER
-"""Transform between turrent center and center of robot"""
