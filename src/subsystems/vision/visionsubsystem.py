@@ -32,6 +32,7 @@ class VisionSubsystem(Subsystem):
         for _ in io:
             self.inputs.append(VisionSubsystemIO.VisionSubsystemIOInputs())
 
+    # pylint:disable-next=too-many-locals, too-many-statements
     def periodic(self) -> None:
         LogTracer.resetOuter("VisionSubsystem")
         for idx, (i, inp) in enumerate(zip(self.io, self.inputs)):

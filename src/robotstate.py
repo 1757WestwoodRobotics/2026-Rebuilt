@@ -7,17 +7,16 @@ from wpimath.kinematics import ChassisSpeeds, SwerveDrive4Odometry, SwerveModule
 from util.convenientmath import pose3dFrom2d
 from util.robotposeestimator import (
     OdometryObservation,
-    RobotPoseEstimator,
     TurretObservation,
     TurretedRobotPoseEstimator,
     TurretedVisionObservation,
     VisionObservation,
 )
+from util.logtracer import LogTracer
 
 from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
 from constants.auto import kAutoDistanceTolerance, kAutoRotationTolerance
-from util.logtracer import LogTracer
 
 
 class RobotState:
