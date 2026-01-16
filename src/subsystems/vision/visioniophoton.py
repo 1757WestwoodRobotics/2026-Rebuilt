@@ -19,7 +19,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
         Initializes the VisionSubsystemIOPhotonVision with a PhotonCamera.
         Args:
             name (str): The name of the PhotonCamera.
-            robotToCamera (Transform3d): The transform from the robot to the camera. Alternativly, if the camera is turreted, this is the transform from the turret base to the camera.
+            robotToCamera (Transform3d): The transform from the robot to the camera. Alternatively, if the camera is turreted, this is the transform from the turret base to the camera.
             isTurreted (bool): Whether the camera is turreted.
         """
         VisionSubsystemIO.__init__(self)
