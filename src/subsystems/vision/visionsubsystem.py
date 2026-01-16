@@ -112,7 +112,11 @@ class VisionSubsystem(Subsystem):
                         observation.tagCount == 1
                         and observation.ambiguity > kMaxVisionAmbiguity
                     )
-                    or abs(observation.fieldToTurret.Z() - kTurretLocation.Z())
+                    or abs(
+                        (observation.fieldToTurret + kTurretLocation.inverse())
+                        .translation()
+                        .Z()
+                    )
                     > kMaxVisionZError  # work backwards onto what the robot pose would be
                     or observation.fieldToTurret.X() < 0.0
                     or observation.fieldToTurret.X()
