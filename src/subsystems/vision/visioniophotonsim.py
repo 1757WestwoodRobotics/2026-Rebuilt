@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import Optional, overload
+from typing import Optional
 from wpimath.geometry import Pose2d, Pose3d, Transform3d
 from photonlibpy.simulation import SimCameraProperties, PhotonCameraSim, VisionSystemSim
 

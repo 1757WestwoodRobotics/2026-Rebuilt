@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from math import sqrt
 from wpimath.geometry import Pose2d, Rotation2d, Rotation3d, Transform2d, Transform3d
 from wpimath.interpolation import (
