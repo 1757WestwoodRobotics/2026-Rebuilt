@@ -27,6 +27,8 @@ class VisionSubsystemIOPhotonSim(VisionSubsystemIOPhotonVision):
             VisionSubsystemIOPhotonSim.visionSim = VisionSystemSim("main")
             VisionSubsystemIOPhotonSim.visionSim.addAprilTags(kApriltagFieldLayout)
 
+        # The turret sim is seperate from the main sim to account for the relative "base" transform changing
+        # when the turret rotates. This is also offset from the main robot.
         if VisionSubsystemIOPhotonSim.turretSim is None:
             VisionSubsystemIOPhotonSim.turretSim = VisionSystemSim("turret")
             VisionSubsystemIOPhotonSim.turretSim.addAprilTags(kApriltagFieldLayout)
