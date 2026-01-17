@@ -7,43 +7,46 @@ from constants.field import kTargetLocation
 from util.angleoptimize import optimizeAngle
 
 
-class TurretCommands:
-    @staticmethod
-    def trackedTurret(turret: TurretSubsystem) -> Command:
-        def trackFunc():
-            turret.setClosedLoop(True)
-            robotPose = RobotState.getPose()
-            targetRelativeToRobot = kTargetLocation - robotPose.translation()
-            targetAngle = targetRelativeToRobot.angle()
+def trackedTurret(turret: TurretSubsystem) -> Command:
+    """Returns a command that tracks a target specified by kTargetLocation"""
 
-            turretAngle = targetAngle - robotPose.rotation()
+    def trackFunc():
+        turret.setClosedLoop(True)
+        robotPose = RobotState.getPose()
+        targetRelativeToRobot = kTargetLocation - robotPose.translation()
+        targetAngle = (
+            targetRelativeToRobot.angle()
+        )  # targetAngle ignores rotation of robot
 
-            turret.setTurretGoal(
-                optimizeAngle(Rotation2d(), turretAngle)
-            )  # ensure within possible rotations of the turret
+        turretAngle = targetAngle - robotPose.rotation()  # account for robot rotation
 
-        return cmd.run(trackFunc, turret).withName("TurretTracking")
+        turret.setTurretGoal(
+            optimizeAngle(Rotation2d(), turretAngle)
+        )  # ensure within possible rotations of the turret
 
-    @staticmethod
-    def runToGoal(turret: TurretSubsystem, goal) -> Command:
-        return (
-            TurretCommands.runOverride(turret, goal)
-            .until(turret.atTarget)
-            .withName("TurretGoal")
-        )
+    return cmd.run(trackFunc, turret).withName("TurretTracking")
 
-    @staticmethod
-    def runManual(turret: TurretSubsystem, volts: float) -> Command:
-        def manualFunc():
-            turret.setClosedLoop(False)
-            turret.setTurretRawVolts(volts)
 
-        return cmd.run(manualFunc, turret).withName("TurretManual")
+def runToGoal(turret: TurretSubsystem, goal) -> Command:
+    """Returns a command that moves the turret toward the target goal (using override)"""
+    return runOverride(turret, goal).until(turret.atTarget).withName("TurretGoal")
 
-    @staticmethod
-    def runOverride(turret: TurretSubsystem, goal) -> Command:
-        def overrideFunc():
-            turret.setClosedLoop(True)
-            turret.setTurretGoal(goal)
 
-        return cmd.run(overrideFunc, turret).withName("TurretOverride")
+def runManual(turret: TurretSubsystem, volts: float) -> Command:
+    """Returns a command that moves the turret toward the target goal a certain amount (as dictated by volts supplied)"""
+
+    def manualFunc():
+        turret.setClosedLoop(False)
+        turret.setTurretRawVolts(volts)
+
+    return cmd.run(manualFunc, turret).withName("TurretManual")
+
+
+def runOverride(turret: TurretSubsystem, goal) -> Command:
+    """Returns a command that moves the turret toward the target"""
+
+    def overrideFunc():
+        turret.setClosedLoop(True)
+        turret.setTurretGoal(goal)
+
+    return cmd.run(overrideFunc, turret).withName("TurretOverride")
