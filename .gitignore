@@ -147,4 +147,4 @@ pyrightconfig.json
 pyLogs
 
 # VS Code
-settings.json
+.vscode/settings.json
