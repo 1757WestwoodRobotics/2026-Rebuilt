@@ -8,7 +8,7 @@ from phoenix6.configs.talon_fx_configs import (
     StaticFeedforwardSignValue,
 )
 from phoenix6.controls import (
-    MotionMagicTorqueCurrentFOC,
+    MotionMagicVoltage,
     VelocityTorqueCurrentFOC,
 )
 from phoenix6.hardware.talon_fx import TalonFX
@@ -52,7 +52,7 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
     driveConfig: TalonFXConfiguration = TalonFXConfiguration()
     steerConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    steerRequest: MotionMagicTorqueCurrentFOC = MotionMagicTorqueCurrentFOC(0)
+    steerRequest: MotionMagicVoltage = MotionMagicVoltage(0)
     driveRequest: VelocityTorqueCurrentFOC = VelocityTorqueCurrentFOC(0)
 
     def __init__(self, name: str, config: SwerveModuleConfigParams) -> None:

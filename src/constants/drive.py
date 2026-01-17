@@ -221,11 +221,11 @@ kDriveVGain = 0
 kDriveSGain = 2.3611
 
 kSteerPIDSlot = 0
-kSteerPGain = 4000.0
+kSteerPGain = 100.0
 kSteerIGain = 0.0
-kSteerDGain = 50.0
-kSteerVGain = 1.5
-kSteerSGain = 0.2
+kSteerDGain = 0.5
+kSteerVGain = 1.91
+kSteerSGain = 0.1
 
 kFrontLeftDriveInverted = True
 kFrontRightDriveInverted = False
