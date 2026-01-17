@@ -33,8 +33,6 @@ from constants.drive import (
     kSteerSGain,
     kDriveCurrentLimit,
     kSteerCurrentLimit,
-    kSteerGearingRatio,
-    kDriveGearingRatio,
 )
 
 from constants.math import kRadiansPerRevolution
@@ -58,6 +56,7 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
     def __init__(self, name: str, config: SwerveModuleConfigParams) -> None:
         SwerveModuleIO.__init__(self, name)
         print(f"Initializing swerve module: {self.name}")
+        self.config = config
         self.driveMotor = TalonFX(config.driveMotorID, config.canbus)
         self.steerMotor = TalonFX(config.steerMotorID, config.canbus)
         self.swerveEncoder = CANcoder(config.swerveEncoderID, config.canbus)
@@ -72,7 +71,7 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             .with_k_d(kDriveDGain)
             .with_k_v(kDriveVGain)
         )
-        self.driveConfig.feedback.sensor_to_mechanism_ratio = kDriveGearingRatio
+        self.driveConfig.feedback.sensor_to_mechanism_ratio = config.driveGearing
         self.driveConfig.current_limits = kDriveCurrentLimit
         self.driveConfig.motor_output.inverted = (
             InvertedValue.COUNTER_CLOCKWISE_POSITIVE
@@ -100,18 +99,18 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
         self.steerConfig.torque_current.peak_forward_torque_current = 40
         self.steerConfig.torque_current.peak_reverse_torque_current = 40
         self.steerConfig.motion_magic.motion_magic_cruise_velocity = (
-            100 / kSteerGearingRatio
+            100 / config.steerGearing
         )
         self.steerConfig.motion_magic.motion_magic_acceleration = (
             self.steerConfig.motion_magic.motion_magic_cruise_velocity / 0.1
         )
-        self.steerConfig.motion_magic.motion_magic_expo_k_v = 0.12 * kSteerGearingRatio
+        self.steerConfig.motion_magic.motion_magic_expo_k_v = 0.12 * config.steerGearing
         self.steerConfig.motion_magic.motion_magic_expo_k_a = 0.1
         self.steerConfig.closed_loop_ramps.torque_closed_loop_ramp_period = (
             kRobotUpdatePeriod
         )
         # optionally fuse the cancoder to the steer motor
-        self.steerConfig.feedback.sensor_to_mechanism_ratio = kSteerGearingRatio
+        self.steerConfig.feedback.sensor_to_mechanism_ratio = config.steerGearing
         self.steerConfig.closed_loop_general.continuous_wrap = True
         self.steerConfig.current_limits = kSteerCurrentLimit
         self.steerConfig.motor_output.inverted = (

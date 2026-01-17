@@ -9,12 +9,8 @@ from wpimath.system.plant import DCMotor
 from .math import (
     kMetersPerInch,
     kRadiansPerRevolution,
-    kSecondsPerMinute,
-    k100MillisecondsPerSecond,
-    kRPMPerAngularVelocity,
     kMillisecondsPerSecond,
 )
-from .motors import kTalonEncoderPulsesPerRevolution
 
 # Robot Physical parameters
 kRobotWidth = 28 * kMetersPerInch
@@ -74,10 +70,13 @@ kWheelDistancePerRevolution = kWheelCircumference
 kWheelDistancePerRadian = kWheelDistancePerRevolution / kRadiansPerRevolution
 """meters / radian"""
 
-kDriveGearingRatio = (50 / 14) * (16 / 28) * (45 / 15)
+kDriveGearingRatio = (54 / 14) * (25 / 32) * (30 / 15)
 """dimensionless"""
 
-kSteerGearingRatio = 150 / 7
+kSteerGearingRatioMk5i = 26 / 1
+"""dimensionless"""
+
+kSteerGearingRatioMk5n = 287 / 11
 """dimensionless"""
 
 kMaxMotorAngularVelocity = DCMotor.krakenX60().freeSpeed
@@ -92,7 +91,10 @@ kMaxWheelLinearVelocity = kWheelDistancePerRadian * kMaxWheelAngularVelocity
 kMinWheelLinearVelocity = 0.002
 """meters / second"""
 
-kMaxSteerAngularVelocity = kMaxMotorAngularVelocity / kSteerGearingRatio
+kMaxSteerAngularVelocityMk5i = kMaxMotorAngularVelocity / kSteerGearingRatioMk5i
+"""radians / second"""
+
+kMaxSteerAngularVelocityMk5n = kMaxMotorAngularVelocity / kSteerGearingRatioMk5n
 """radians / second"""
 
 kMaxForwardLinearVelocity = kMaxWheelLinearVelocity
@@ -165,50 +167,6 @@ kFrontLeftSteerEncoderId = 10
 kFrontRightSteerEncoderId = 11
 kBackLeftSteerEncoderId = 12
 kBackRightSteerEncoderId = 13
-
-kDriveEncoderPulsesPerRevolution = kTalonEncoderPulsesPerRevolution
-"""pulses / revolution"""
-
-kDriveEncoderPulsesPerRadian = kDriveEncoderPulsesPerRevolution / kRadiansPerRevolution
-"""pulses / radian"""
-
-kDriveEncoderPulsesPerMeter = kDriveEncoderPulsesPerRadian / kWheelDistancePerRadian
-"""pulses / meter"""
-
-kWheelEncoderPulsesPerRevolution = kDriveEncoderPulsesPerRevolution * kDriveGearingRatio
-"""pulses / revolution"""
-
-kWheelEncoderPulsesPerRadian = kWheelEncoderPulsesPerRevolution / kRadiansPerRevolution
-"""pulses / radian"""
-
-kWheelEncoderPulsesPerMeter = kWheelEncoderPulsesPerRadian / kWheelDistancePerRadian
-"""pulses / meter"""
-
-kSteerEncoderPulsesPerRevolution = kTalonEncoderPulsesPerRevolution
-"""pulses / revolution"""
-
-kSteerEncoderPulsesPerRadian = kSteerEncoderPulsesPerRevolution / kRadiansPerRevolution
-"""pulses / radian"""
-
-kSwerveEncoderPulsesPerRevolution = (
-    kSteerEncoderPulsesPerRevolution * kSteerGearingRatio
-)
-"""pulses / revolution"""
-
-kSwerveEncoderPulsesPerRadian = (
-    kSwerveEncoderPulsesPerRevolution / kRadiansPerRevolution
-)
-"""pulses / radian"""
-
-
-kTalonVelocityPerRPM = (
-    kTalonEncoderPulsesPerRevolution / kSecondsPerMinute
-) / k100MillisecondsPerSecond
-"""(pulses / 100 milliseconds) / RPM"""
-
-
-kTalonVelocityPerAngularVelocity = kTalonVelocityPerRPM * kRPMPerAngularVelocity
-"""(pulses / 100 milliseconds) / (radians / second)"""
 
 kConfigurationTimeoutLimit = int(5 * kMillisecondsPerSecond)
 """milliseconds"""
