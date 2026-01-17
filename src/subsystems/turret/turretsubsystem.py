@@ -9,7 +9,7 @@ from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from util.convenientmath import clamp, clampRotation
 from util.logtracer import LogTracer
 
-from constants.turret import kTurretMinAngle, kTurretMaxAngle, kTurretTolerance
+from src.constants.turret import kTurretMinAngle, kTurretMaxAngle, kTurretTolerance
 
 
 class TurretSubsystem(Subsystem):
