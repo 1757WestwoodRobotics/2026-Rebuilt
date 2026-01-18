@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pykit.autolog import autolog
+from wpimath.geometry import Rotation2d
 
 
 class TurretSubsystemIO:
@@ -12,7 +13,7 @@ class TurretSubsystemIO:
 
         turretConnected: bool = False
 
-        turretPosition: float = 0.0
+        turretPosition: Rotation2d = Rotation2d()
         turretSpeed: float = 0.0
 
         turretAppliedVolts: float = 0.0
@@ -21,7 +22,7 @@ class TurretSubsystemIO:
     def updateInputs(self, inputs: TurretSubsystemIOInputs):
         pass
 
-    def set_turret_angle(self, position: float):
+    def set_turret_angle(self, position: Rotation2d):
         # sets the turret angle in radians
         pass
 

@@ -16,7 +16,7 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
         targetRelativeToRobot = kTargetLocation - robotPose.translation()
         targetAngle = (
             targetRelativeToRobot.angle()
-        )  # targetAngle ignores rotation of robot
+        )  # targetAngle ignores rotation of robot (that is, it is field relative)
 
         turretAngle = targetAngle - robotPose.rotation()  # account for robot rotation
 
@@ -43,7 +43,7 @@ def runManual(turret: TurretSubsystem, volts: float) -> Command:
 
 
 def runOverride(turret: TurretSubsystem, goal) -> Command:
-    """Move the turret toward the target goal."""
+    """Move the turret toward the target goal angle."""
 
     def overrideFunc():
         turret.setClosedLoop(True)

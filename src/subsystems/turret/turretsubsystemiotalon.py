@@ -6,6 +6,8 @@ from phoenix6.configs.talon_fx_configs import (
 )
 from phoenix6.controls import MotionMagicVoltage, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
+from wpimath.geometry import Rotation2d
+
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 
 from constants.turret import (
@@ -85,15 +87,15 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
             self.supply,
         )
 
-        inputs.turretPosition = self.position.value * kRadiansPerRevolution
+        inputs.turretPosition = Rotation2d(self.position.value * kRadiansPerRevolution)
         inputs.turretSpeed = self.velocity.value * kRadiansPerRevolution
         inputs.turretAppliedVolts = self.applied.value
         inputs.turretSupplyAmps = self.supply.value
 
-    def set_turret_angle(self, position: float):
+    def set_turret_angle(self, position: Rotation2d):
         """Move the motor a specified amount of radians."""
         self.motor.set_control(
-            self.closedDemand.with_position(position / kRadiansPerRevolution)
+            self.closedDemand.with_position(position.radians() / kRadiansPerRevolution)
         )
 
     def set_turret_volts(self, volts: float):

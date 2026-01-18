@@ -34,7 +34,7 @@ class TurretSubsystem(Subsystem):
             self.io.set_turret_angle(
                 clampRotation(
                     self.turretGoal, kTurretMinAngle, kTurretMaxAngle
-                ).radians()  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
+                )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
             )
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Turret/goal", self.turretGoal)
@@ -57,7 +57,7 @@ class TurretSubsystem(Subsystem):
     def isAtGoal(self, goal: Rotation2d) -> bool:
         """Determine whether turret is at goal (within a small tolerance)."""
         return (
-            abs(self.inputs.turretPosition - goal.radians())
+            abs(self.inputs.turretPosition.radians() - goal.radians())
             < kTurretTolerance.radians()
         )
 
@@ -66,7 +66,7 @@ class TurretSubsystem(Subsystem):
         return self.isAtGoal(self.turretGoal)
 
     def sysIdRoutine(self, subsystem: Subsystem) -> Command:
-        """Test drive methods of the turret by sweeping through the max and min angles."""
+        """Model the behavior of the system (for better control) by sweeping through the max and min angles."""
 
         def logState(state: State) -> None:
             loggedStateStr = ""
