@@ -64,7 +64,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
 
         self.applied = self.motor.get_motor_voltage()
         self.supply = self.motor.get_supply_current()
-
+        """sets position, velocity, voltage"""
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.position,
@@ -75,6 +75,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
         PhoenixUtil.registerSignals(
             "", self.position, self.velocity, self.applied, self.supply
         )
+        """signals what the self.position (etc) are"""
 
     def updateInputs(self, inputs: TurretSubsystemIO.TurretSubsystemIOInputs):
         inputs.turretConnected = BaseStatusSignal.is_all_good(
@@ -96,3 +97,5 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
 
     def set_turret_volts(self, volts: float):
         self.motor.set_control(self.openDemand.with_output(volts))
+
+        """takes these inputs and functions and gives them to IO, used for TurretSubsystem"""

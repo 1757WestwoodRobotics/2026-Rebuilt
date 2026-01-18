@@ -18,7 +18,7 @@ class TurretSubsystem(Subsystem):
         self.setName(type(self).__name__)
         self.io = io
         self.inputs = TurretSubsystemIO.TurretSubsystemIOInputs()
-
+        """grabs the inputs from TurretSubsystemIO"""
         self.isClosedLoop = True
         self.turretGoal = Rotation2d()
 
@@ -34,7 +34,7 @@ class TurretSubsystem(Subsystem):
                     self.turretGoal, kTurretMinAngle, kTurretMaxAngle
                 ).radians()
             )
-
+        """sets max and min angle for turret"""
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Turret/goal", self.turretGoal)
         Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
@@ -61,6 +61,8 @@ class TurretSubsystem(Subsystem):
             abs(self.inputs.turretPosition - goal.radians())
             < kTurretTolerance.radians()
         )
+
+    """returns whether or not the angle is less than the goal tolerance angle"""
 
     @autolog_output(key="Turret/at target")
     def atTarget(self) -> bool:
@@ -90,7 +92,7 @@ class TurretSubsystem(Subsystem):
                 subsystem,
             ),
         )
-
+        """defines logging state"""
         return cmd.sequence(
             cmd.runOnce(lambda: self.setClosedLoop(False), self),
             charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
@@ -107,3 +109,6 @@ class TurretSubsystem(Subsystem):
             ),
             cmd.runOnce(lambda: self.setClosedLoop(True), self),
         )
+
+
+"""runs a sequence of turning the turret to find the goal once"""
