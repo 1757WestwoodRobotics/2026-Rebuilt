@@ -9,7 +9,7 @@ description = "2026 Robot Code"
 readme="README.md"
 requires-python=">= 3.11"
 dependencies = [
-    "black>=25.9.0",
+    "black~=26.1.0",
     "mypy>=1.19.1",
     "phoenix6>=26.1.0",
     "photonlibpy==2026.0.1b38",

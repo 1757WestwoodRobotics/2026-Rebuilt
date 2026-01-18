@@ -9,7 +9,6 @@ from .drive import (
     kMaxRotationAngularAcceleration,
 )
 
-
 kTrajectoryPositionPGainAuto = 9
 kTrajectoryPositionPGainVision = 5
 kTrajectoryPositionIGain = 0
