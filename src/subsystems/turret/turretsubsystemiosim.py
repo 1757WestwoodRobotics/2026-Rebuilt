@@ -8,7 +8,6 @@ from util.convenientmath import clamp
 from constants.turret import kTurretSimMotor, kTurretGearRatio, kTurretSimInertia
 from constants.math import kRadiansPerRevolution
 from constants import kRobotUpdatePeriod
-from util.convenientmath import clamp
 
 
 class TurretSubsystemIOSim(TurretSubsystemIOTalon):

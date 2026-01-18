@@ -6,7 +6,7 @@ from wpilib.sysid import State
 from wpimath.geometry import Rotation2d
 
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
-from util.convenientmath import clamp, clampRotation
+from util.convenientmath import clampRotation
 from util.logtracer import LogTracer
 
 from constants.turret import kTurretMinAngle, kTurretMaxAngle, kTurretTolerance

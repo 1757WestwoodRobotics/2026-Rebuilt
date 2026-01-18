@@ -242,7 +242,7 @@ class RobotContainer:
                     RobotState.addVisionMeasurement,
                     [VisionSubsystemIO(), VisionSubsystemIO()],
                 )
-                self.turret = TurretSubsystem(TurretSubsystemIOSim())
+                self.turret = TurretSubsystem(TurretSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
