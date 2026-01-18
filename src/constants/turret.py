@@ -2,7 +2,6 @@ from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
 from wpimath.geometry import Rotation2d
 from wpimath.system.plant import DCMotor
 
-
 kTurretMinAngle = Rotation2d.fromDegrees(-160)
 kTurretMaxAngle = Rotation2d.fromDegrees(160)
 

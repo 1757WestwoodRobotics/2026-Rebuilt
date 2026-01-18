@@ -9,7 +9,6 @@ from wpilib import Joystick
 from util.controltype import AnalogInput
 from util.convenientmath import number, map_range
 
-
 Axis = Callable[[], float]
 
 

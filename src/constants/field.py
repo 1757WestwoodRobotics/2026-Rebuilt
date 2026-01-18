@@ -9,4 +9,4 @@ kFieldWidth = 26 * kMetersPerFoot + 5.7 * kMetersPerInch
 """meters"""
 
 kTargetLocation = Translation2d(kFieldWidth / 2, kFieldLength / 3.5761)
-"""Sets target in center of field.  Presumbly, this needs to be adjusted for 2026."""
+"""Location of target on field.  Best current guess for 2026"""

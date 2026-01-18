@@ -1,7 +1,6 @@
 # Velocity Dynamic Control
 from wpimath.system.plant import DCMotor
 
-
 kVelocitySetpoint1ControlKey = "controls/velocity/Setpoint 1"
 kVelocitySetpoint2ControlKey = "controls/velocity/Setpoint 2"
 kVelocityControlGearRatio = "controls/velocity/ratio"
