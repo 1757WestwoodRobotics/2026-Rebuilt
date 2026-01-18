@@ -3,9 +3,13 @@ from pykit.autolog import autolog
 
 
 class TurretSubsystemIO:
+    """Serve as a template for specific IO classes (e.g., Talon, Sim, etc.)."""
+
     @autolog
     @dataclass
     class TurretSubsystemIOInputs:
+        """Initialize required turret motor controls."""
+
         turretConnected: bool = False
 
         turretPosition: float = 0.0

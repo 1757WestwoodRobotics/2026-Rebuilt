@@ -12,16 +12,19 @@ from util.convenientmath import clamp
 
 
 class TurretSubsystemIOSim(TurretSubsystemIOTalon):
+    """Simulate the Talon motor."""
+
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__()  # Initialize the Sim motor the same way as the actual Talon motor
         self.turretSimModel = DCMotorSim(
             LinearSystemId.DCMotorSystem(
                 kTurretSimMotor, kTurretSimInertia, kTurretGearRatio
             ),
             kTurretSimMotor,
-        )
+        )  # Create a DC motor simulation model with specified parameters
 
     def updateInputs(self, inputs: TurretSubsystemIO.TurretSubsystemIOInputs) -> None:
+        """Simulate the motor behavior, then update TalonIO inputs."""
         turretMotorSim = self.motor.sim_state
         simVoltage = RobotController.getInputVoltage()
 
@@ -43,6 +46,6 @@ class TurretSubsystemIOSim(TurretSubsystemIOTalon):
                 simVoltage - turretMotorSim.supply_current * kTurretSimMotor.R,
                 0,
                 simVoltage,
-            )
+            )  # Apply some simulated voltage within appropriate limits
         )
-        super().updateInputs(inputs)
+        super().updateInputs(inputs)  # Call the TalonIO updateInputs method

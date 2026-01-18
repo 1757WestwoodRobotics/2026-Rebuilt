@@ -8,7 +8,7 @@ from util.angleoptimize import optimizeAngle
 
 
 def trackedTurret(turret: TurretSubsystem) -> Command:
-    """Returns a command that tracks a target specified by kTargetLocation"""
+    """Identify a target specified by kTargetLocation, and enable subsystem to move toward it."""
 
     def trackFunc():
         turret.setClosedLoop(True)
@@ -28,12 +28,12 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
 
 
 def runToGoal(turret: TurretSubsystem, goal) -> Command:
-    """Returns a command that moves the turret toward the target goal (using override)"""
+    """Move the turret toward the supplied goal angle until reached (using override)."""
     return runOverride(turret, goal).until(turret.atTarget).withName("TurretGoal")
 
 
 def runManual(turret: TurretSubsystem, volts: float) -> Command:
-    """Returns a command that moves the turret toward the target goal a certain amount (as dictated by volts supplied)"""
+    """Move the turret a certain amount (as dictated by volts supplied)."""
 
     def manualFunc():
         turret.setClosedLoop(False)
@@ -43,7 +43,7 @@ def runManual(turret: TurretSubsystem, volts: float) -> Command:
 
 
 def runOverride(turret: TurretSubsystem, goal) -> Command:
-    """Returns a command that moves the turret toward the target"""
+    """Move the turret toward the target goal."""
 
     def overrideFunc():
         turret.setClosedLoop(True)

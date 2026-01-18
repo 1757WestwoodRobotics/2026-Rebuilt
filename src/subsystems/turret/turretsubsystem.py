@@ -17,14 +17,16 @@ class TurretSubsystem(Subsystem):
         Subsystem.__init__(self)
         self.setName(type(self).__name__)
         self.io = io
-        self.inputs = TurretSubsystemIO.TurretSubsystemIOInputs()
-        """grabs the inputs from TurretSubsystemIO"""
+        self.inputs = (
+            TurretSubsystemIO.TurretSubsystemIOInputs()
+        )  # initialize IO inputs
         self.isClosedLoop = True
         self.turretGoal = Rotation2d()
 
     def periodic(self) -> None:
+        """Run ongoing subsystem periodic process."""
         LogTracer.resetOuter("TurretSubsystem periodic")
-        self.io.updateInputs(self.inputs)
+        self.io.updateInputs(self.inputs)  # update state of motor
         Logger.processInputs("Turret", self.inputs)
         LogTracer.record("UpdateInputs")
 
@@ -32,43 +34,40 @@ class TurretSubsystem(Subsystem):
             self.io.set_turret_angle(
                 clampRotation(
                     self.turretGoal, kTurretMinAngle, kTurretMaxAngle
-                ).radians()
+                ).radians()  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
             )
-        """sets max and min angle for turret"""
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Turret/goal", self.turretGoal)
         Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
         LogTracer.recordTotal()
 
     def setClosedLoop(self, closedLoop: bool) -> None:
-        """
-        Sets whether the turret is in closed loop control or not
-        """
         self.isClosedLoop = closedLoop
 
     def setTurretRawVolts(self, volts: float) -> None:
+        """Apply a specific amount of volts to motor."""
         Logger.recordOutput("Turret/RawVolts", volts)
-        self.io.set_turret_volts(volts)
+        self.io.set_turret_volts(
+            volts
+        )  # call the appropriate overridden method with the IO class
 
     def setTurretGoal(self, goal: Rotation2d) -> None:
-        """
-        Sets the turret goal position
-        """
         self.turretGoal = goal
 
     def isAtGoal(self, goal: Rotation2d) -> bool:
+        """Determine whether turret is at goal (within a small tolerance)."""
         return (
             abs(self.inputs.turretPosition - goal.radians())
             < kTurretTolerance.radians()
         )
-
-    """returns whether or not the angle is less than the goal tolerance angle"""
 
     @autolog_output(key="Turret/at target")
     def atTarget(self) -> bool:
         return self.isAtGoal(self.turretGoal)
 
     def sysIdRoutine(self, subsystem: Subsystem) -> Command:
+        """Test drive methods of the turret by sweeping through the max and min angles."""
+
         def logState(state: State) -> None:
             loggedStateStr = ""
             match state:
@@ -92,7 +91,7 @@ class TurretSubsystem(Subsystem):
                 subsystem,
             ),
         )
-        """defines logging state"""
+
         return cmd.sequence(
             cmd.runOnce(lambda: self.setClosedLoop(False), self),
             charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
@@ -109,6 +108,3 @@ class TurretSubsystem(Subsystem):
             ),
             cmd.runOnce(lambda: self.setClosedLoop(True), self),
         )
-
-
-"""runs a sequence of turning the turret to find the goal once"""

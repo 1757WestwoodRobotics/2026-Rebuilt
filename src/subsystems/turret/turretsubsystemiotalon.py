@@ -33,6 +33,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
     openDemand: VoltageOut = VoltageOut(0, False)
 
     def __init__(self) -> None:
+        """Initialize the Talon motor with appropriate robot-specific parameters and record starting values."""
         self.motor = TalonFX(kTurretCanId)
 
         self.turretConfig.current_limits = kTurretCurrentLimit
@@ -64,7 +65,6 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
 
         self.applied = self.motor.get_motor_voltage()
         self.supply = self.motor.get_supply_current()
-        """sets position, velocity, voltage"""
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.position,
@@ -75,9 +75,9 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
         PhoenixUtil.registerSignals(
             "", self.position, self.velocity, self.applied, self.supply
         )
-        """signals what the self.position (etc) are"""
 
     def updateInputs(self, inputs: TurretSubsystemIO.TurretSubsystemIOInputs):
+        """Update state of motor per the appropriate specifc API."""
         inputs.turretConnected = BaseStatusSignal.is_all_good(
             self.position,
             self.velocity,
@@ -91,11 +91,11 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
         inputs.turretSupplyAmps = self.supply.value
 
     def set_turret_angle(self, position: float):
+        """Move the motor a specified amount of radians."""
         self.motor.set_control(
             self.closedDemand.with_position(position / kRadiansPerRevolution)
         )
 
     def set_turret_volts(self, volts: float):
+        """Move the motor by applying a specific amount of volts."""
         self.motor.set_control(self.openDemand.with_output(volts))
-
-        """takes these inputs and functions and gives them to IO, used for TurretSubsystem"""
