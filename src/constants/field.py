@@ -8,5 +8,11 @@ kFieldLength = 54 * kMetersPerFoot + 3.2 * kMetersPerInch
 kFieldWidth = 26 * kMetersPerFoot + 5.7 * kMetersPerInch
 """meters"""
 
-kTargetLocation = Translation2d(kFieldWidth / 2, kFieldLength / 3.5761)
-"""Location of target on field.  Best current guess for 2026"""
+kBlueTargetLocation = Translation2d(
+    kFieldWidth / 2, kFieldLength / 3.5761
+)  # Must be fixed
+
+kRedTargetLocation = Translation2d(
+    kFieldWidth / 2, kFieldLength / 3.5761
+)  # Must be fixed
+"""Location of targets on field.  Best current guess for 2026"""

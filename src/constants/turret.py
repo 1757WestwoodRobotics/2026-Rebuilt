@@ -1,5 +1,5 @@
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
-from wpimath.geometry import Rotation2d
+from wpimath.geometry import Rotation2d, Translation2d
 from wpimath.system.plant import DCMotor
 
 kTurretMinAngle = Rotation2d.fromDegrees(-160)
@@ -27,3 +27,6 @@ kTurretCurrentLimit = (
 
 kTurretSimMotor = DCMotor.falcon500(1)
 kTurretSimInertia = 0.005  # kg m^2
+
+kTurretLocation = Translation2d(0.25, 0.25)  # FILL IN LATER
+"""Distance between turrent center and center of robot"""

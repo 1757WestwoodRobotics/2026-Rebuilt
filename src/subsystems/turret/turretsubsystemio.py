@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pykit.autolog import autolog
 from wpimath.geometry import Rotation2d
 
@@ -13,7 +13,7 @@ class TurretSubsystemIO:
 
         turretConnected: bool = False
 
-        turretPosition: Rotation2d = Rotation2d()
+        turretPosition: Rotation2d = field(default_factory=Rotation2d)
         turretSpeed: float = 0.0
 
         turretAppliedVolts: float = 0.0
