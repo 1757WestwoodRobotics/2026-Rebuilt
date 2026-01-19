@@ -1,10 +1,9 @@
 from commands2 import Command, cmd
 from wpimath.geometry import Rotation2d
-from robotstate import RobotState
 from wpilib import DriverStation
 
+from robotstate import RobotState
 from subsystems.turret.turretsubsystem import TurretSubsystem
-
 from constants.field import kBlueTargetLocation, kRedTargetLocation
 from constants.turret import kTurretLocation
 from util.angleoptimize import optimizeAngle
