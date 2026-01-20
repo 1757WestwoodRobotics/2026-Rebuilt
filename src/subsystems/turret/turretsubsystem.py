@@ -70,20 +70,16 @@ class TurretSubsystem(Subsystem):
 
     def isAtorBeyondGoal(self, goal: Rotation2d) -> bool:
         """Determine whether turret is at or beyond a goal (within a tolerance)."""
-        try:
-            attain = (
+        if np.sign(goal.radians()) > 0:
+            return (
                 self.inputs.turretPosition.radians()
-                / (goal.radians() - np.sign(goal.radians()) * kTurretTolerance)
-                >= 1
+                >= (goal - kTurretTolerance).radians()
             )
-        except ZeroDivisionError:
-            attain = (
+        else:
+            return (
                 self.inputs.turretPosition.radians()
-                / (goal.radians() - np.sign(goal.radians()) * kTurretTolerance + 0.0001)
-                >= 1
+                <= (goal + kTurretTolerance).radians()
             )
-
-        return attain
 
     def isAtGoal(self, goal: Rotation2d) -> bool:
         """Determine whether turret is at goal (within a small tolerance)."""
