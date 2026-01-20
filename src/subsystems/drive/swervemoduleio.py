@@ -23,9 +23,9 @@ class SwerveModuleConfigParams:
         driveGearing: float,
         steerMotorID: int,
         steerMotorInverted: bool,
+        steerGearing: float,
         swerveEncoderID: int,
         swerveEncoderOffset: float,
-        steerGearing: float,
         canbus: str = "",
     ) -> None:
         self.driveMotorID = driveMotorID
