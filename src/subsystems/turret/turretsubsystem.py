@@ -1,6 +1,7 @@
+import numpy as np
 from commands2 import Command, Subsystem, cmd
 from commands2.sysid import SysIdRoutine
-from pykit.autolog import autolog_output
+from pykit.autolog import autolog_output, autologgable_output
 from pykit.logger import Logger
 from wpilib.sysid import State
 from wpimath.geometry import Rotation2d
@@ -12,6 +13,7 @@ from util.logtracer import LogTracer
 from constants.turret import kTurretMinAngle, kTurretMaxAngle, kTurretTolerance
 
 
+@autologgable_output
 class TurretSubsystem(Subsystem):
     def __init__(self, io: TurretSubsystemIO) -> None:
         Subsystem.__init__(self)
@@ -54,6 +56,35 @@ class TurretSubsystem(Subsystem):
     def setTurretGoal(self, goal: Rotation2d) -> None:
         self.turretGoal = goal
 
+    def isAtMin(self) -> bool:
+        return (
+            self.inputs.turretPosition.radians()
+            <= (kTurretMinAngle + kTurretTolerance).radians()
+        )
+
+    def isAtMax(self) -> bool:
+        return (
+            self.inputs.turretPosition.radians()
+            >= (kTurretMaxAngle - kTurretTolerance).radians()
+        )
+
+    def isAtorBeyondGoal(self, goal: Rotation2d) -> bool:
+        """Determine whether turret is at or beyond a goal (within a tolerance)."""
+        try:
+            attain = (
+                self.inputs.turretPosition.radians()
+                / (goal.radians() - np.sign(goal.radians()) * kTurretTolerance)
+                >= 1
+            )
+        except ZeroDivisionError:
+            attain = (
+                self.inputs.turretPosition.radians()
+                / (goal.radians() - np.sign(goal.radians()) * kTurretTolerance + 0.0001)
+                >= 1
+            )
+
+        return attain
+
     def isAtGoal(self, goal: Rotation2d) -> bool:
         """Determine whether turret is at goal (within a small tolerance)."""
         return (
@@ -81,7 +112,7 @@ class TurretSubsystem(Subsystem):
                     loggedStateStr = "dynamic-reverse"
                 case State.kNone:
                     loggedStateStr = "none"
-            Logger.recordOutput("Shooter/SysID State", loggedStateStr)
+            Logger.recordOutput("Turret/SysID State", loggedStateStr)
 
         charactarizationRoutine = SysIdRoutine(
             SysIdRoutine.Config(0.5, 6, 10, logState),
@@ -95,16 +126,16 @@ class TurretSubsystem(Subsystem):
         return cmd.sequence(
             cmd.runOnce(lambda: self.setClosedLoop(False), self),
             charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
-                lambda: self.isAtGoal(kTurretMaxAngle)
+                self.isAtMax
             ),
             charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
-                lambda: self.isAtGoal(kTurretMinAngle)
+                self.isAtMin
             ),
             charactarizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
-                lambda: self.isAtGoal(kTurretMaxAngle)
+                self.isAtMax
             ),
             charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
-                lambda: self.isAtGoal(kTurretMinAngle)
+                self.isAtMin
             ),
             cmd.runOnce(lambda: self.setClosedLoop(True), self),
         )
