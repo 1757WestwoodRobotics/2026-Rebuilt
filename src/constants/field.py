@@ -10,9 +10,4 @@ kFieldWidth = 26 * kMetersPerFoot + 5.7 * kMetersPerInch
 
 kBlueTargetLocation = Translation2d(
     kFieldWidth / 2, kFieldLength / 3.5761
-)  # Must be fixed
-
-kRedTargetLocation = Translation2d(
-    kFieldWidth / 2, kFieldLength / 3.5761
-)  # Must be fixed
-"""Location of targets on field.  Best current guess for 2026"""
+)  # Location of Blue target (flipped when necessary)

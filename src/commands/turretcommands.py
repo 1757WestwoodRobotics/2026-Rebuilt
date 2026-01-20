@@ -1,12 +1,13 @@
 from commands2 import Command, cmd
-from wpimath.geometry import Rotation2d
+from wpimath.geometry import Translation2d, Rotation2d
 from wpilib import DriverStation
 
 from robotstate import RobotState
 from subsystems.turret.turretsubsystem import TurretSubsystem
-from constants.field import kBlueTargetLocation, kRedTargetLocation
+from constants.field import kBlueTargetLocation
 from constants.turret import kTurretLocation
 from util.angleoptimize import optimizeAngle
+from util.fliputil import FlipUtil
 
 
 def trackedTurret(turret: TurretSubsystem) -> Command:
@@ -14,17 +15,17 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
 
     def trackFunc():
         turret.setClosedLoop(True)
-
-        # Select appropriate location of target
-        if DriverStation.getAlliance() == DriverStation.Alliance.kRed:
-            kTargetLocation = kRedTargetLocation
-        else:
-            kTargetLocation = kBlueTargetLocation
-
         robotPose = RobotState.getPose()
 
-        turretRelativeToRobot = kTurretLocation - robotPose.translation()
-        targetRelativeToTurret = kTargetLocation - turretRelativeToRobot
+        turret2DLocationOnField = (
+            Translation2d(
+                kTurretLocation.translation().X(), kTurretLocation.translation().Y()
+            )
+            + robotPose.translation()
+        )  # add Turret location transform in 2D onto the robotPose
+        targetRelativeToTurret = (
+            FlipUtil.fieldTranslation(kBlueTargetLocation) - turret2DLocationOnField
+        )
         targetAngle = targetRelativeToTurret.angle()
 
         turretAngle = targetAngle - robotPose.rotation()  # account for robot rotation

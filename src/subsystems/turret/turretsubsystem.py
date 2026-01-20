@@ -69,7 +69,7 @@ class TurretSubsystem(Subsystem):
         )
 
     def isAtorBeyondGoal(self, goal: Rotation2d) -> bool:
-        """Determine whether turret is at or beyond a goal (within a tolerance)."""
+        """Determine whether turret is at or beyond a goal (within a small tolerance)."""
         if np.sign(goal.radians()) > 0:
             return (
                 self.inputs.turretPosition.radians()
