@@ -1,5 +1,5 @@
 from commands2 import Command, cmd
-from wpimath.geometry import Translation2d, Rotation2d
+from wpimath.geometry import Rotation2d
 
 from robotstate import RobotState
 from subsystems.turret.turretsubsystem import TurretSubsystem
