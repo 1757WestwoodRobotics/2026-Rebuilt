@@ -1,6 +1,7 @@
 from typing import Callable
+from commands2.button import Trigger
 from pykit.logger import Logger
-from wpilib import RobotBase
+from wpilib import RobotBase, DriverStation
 from wpimath.geometry import Pose2d, Pose3d, Rotation2d, Rotation3d, Transform3d
 from wpimath.kinematics import ChassisSpeeds, SwerveDrive4Odometry, SwerveModulePosition
 
@@ -71,6 +72,50 @@ class RobotState:
         )
 
     @classmethod
+    def getAutoWinner(cls) -> DriverStation.Alliance | None:
+        match DriverStation.getGameSpecificMessage():
+            case "R":
+                return DriverStation.Alliance.kRed
+            case "B":
+                return DriverStation.Alliance.kBlue
+            case None | "":
+                return None
+            case _:
+                raise ValueError("Invalid game specific message")
+
+    @classmethod
+    def didWinAuto(cls) -> bool:
+        autoWinner = cls.getAutoWinner()
+        if autoWinner is None:  # we are likely in auto currently
+            return False
+        return autoWinner == DriverStation.getAlliance()
+
+    @classmethod
+    def hubActive(cls) -> bool:
+        isAuto = DriverStation.isAutonomous()
+        if isAuto:
+            return True
+        else:
+            time = DriverStation.getMatchTime()
+            if time <= 30:  # endgame, both hubs active
+                return True
+            elif time >= 210:  # first 10 seconds, both hubs active (transition shift)
+                return True
+            didWinAuto = cls.didWinAuto()
+            if time <= 55:  # shift 4
+                return didWinAuto
+            elif time <= 80:  # shift 3
+                return not didWinAuto
+            elif time <= 105:  # shift 2
+                return didWinAuto
+            else:  # 105 < time < 210, shift 1
+                return not didWinAuto
+
+    @classmethod
+    def shiftTrigger(cls) -> Trigger:
+        return Trigger(cls.hubActive)
+
+    @classmethod
     def periodic(
         cls,
         heading: Rotation2d,
@@ -121,6 +166,8 @@ class RobotState:
             abs(autoPositionDelta.rotation().radians()) < kAutoRotationTolerance,
         )
         Logger.recordOutput("Auto/StartingPose", cls.targetAutonomousStartingLocation)
+        Logger.recordOutput("Game/WonAuto", cls.didWinAuto())
+        Logger.recordOutput("Game/HubActive", cls.hubActive())
 
         if not RobotBase.isReal():
             Logger.recordOutput("Robot/SimPose", cls.getSimPose())
