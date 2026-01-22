@@ -12,23 +12,23 @@ dependencies = [
     "black~=26.1.0",
     "mypy>=1.19.1",
     "phoenix6>=26.1.0",
-    "photonlibpy==2026.0.1b38",
+    "photonlibpy~=2026.1.1",
     "pylint>=4.0.2",
-    "robotpy>=2026.1.1",
-    "robotpy-apriltag>=2026.1.1",
+    "robotpy>=2026.2.1",
+    "robotpy-apriltag>=2026.2.1",
     "robotpy-cli>=2026.0.1",
-    "robotpy-halsim-gui>=2026.1.1",
+    "robotpy-halsim-gui>=2026.2.1",
     "robotpy-pathplannerlib>=2026.1.1",
     "robotpy-pykit>=1.0.1",
     "robotpy-pykit-watch>=1.0.0",
-    "robotpy-rev>=2026.0.0",
-    "wpilib>=2026.1.1",
+    "robotpy-rev>=2026.0.1",
+    "wpilib>=2026.2.1",
 ]
 
 [tool.robotpy]
 
 # Version of robotpy this project depends on
-robotpy_version = "2026.1.1"
+robotpy_version = "2026.2.1"
 
 # Which extra RobotPy components should be installed
 # -> equivalent to `pip install robotpy[extra1, ...]
@@ -37,7 +37,7 @@ robotpy_extras = [
     "apriltag",
     "commands2",
     # "cscore"
-    "navx",
+    # "navx",
     "pathplannerlib",
     # "phoenix5",
     "phoenix6",
@@ -50,7 +50,7 @@ robotpy_extras = [
 # Other pip packages to install
 requires = [
     "robotpy-pykit==1.0.1",
-    "photonlibpy"
+    "photonlibpy~=2026.1.1"
 ]
 
 
