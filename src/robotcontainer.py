@@ -7,6 +7,7 @@ from pykit.networktables.loggeddashboardchooser import LoggedDashboardChooser
 import wpilib
 from wpimath.geometry import Pose2d, Rotation2d
 import commands2
+import commands2.cmd as Commands
 from pathplannerlib.auto import PathPlannerAuto
 
 from commands.drive.fieldrelativedrive import FieldRelativeDrive
@@ -288,6 +289,13 @@ class RobotContainer:
             "No auto selected!!!", wpilib.Alert.AlertType.kWarning
         )
 
+        self.shiftActiveAlert = wpilib.Alert(
+            "SHIFT ACTIVE!", wpilib.Alert.AlertType.kInfo
+        )
+        self.shiftActiveAlert.set(
+            True
+        )  # Start true to prevent missing alert at beginning of match
+
         # Autonomous routines
 
         self.nothingAuto = commands2.WaitCommand(kAutoDuration)
@@ -369,6 +377,10 @@ class RobotContainer:
         )
 
         OperatorInterface.Drive.defense_state().whileTrue(DefenseState(self.drive))
+
+        RobotState.shiftTrigger().whileTrue(
+            Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
+        ).whileFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
 
     def updateAlerts(self):
         self.driverDisconnected.set(not wpilib.DriverStation.isJoystickConnected(0))
