@@ -17,10 +17,7 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
         robotPose = RobotState.getPose()
 
         turret2DLocationOnField = (
-            Translation2d(
-                kTurretLocation.translation().X(), kTurretLocation.translation().Y()
-            )
-            + robotPose.translation()
+            kTurretLocation.translation().toTranslation2d() + robotPose.translation()
         )  # add Turret location transform in 2D onto the robotPose
         targetRelativeToTurret = (
             FlipUtil.fieldTranslation(kBlueTargetLocation) - turret2DLocationOnField
