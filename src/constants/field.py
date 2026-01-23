@@ -9,5 +9,5 @@ kFieldWidth = 26 * kMetersPerFoot + 5.7 * kMetersPerInch
 """meters"""
 
 kBlueTargetLocation = Translation2d(
-    kFieldWidth / 2, kFieldLength / 3.5761
+    kFieldWidth / 3.5761, kFieldLength / 2
 )  # Location of Blue target (flipped when necessary)
