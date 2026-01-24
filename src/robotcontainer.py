@@ -292,9 +292,9 @@ class RobotContainer:
         self.shiftActiveAlert = wpilib.Alert(
             "SHIFT ACTIVE!", wpilib.Alert.AlertType.kInfo
         )
-        self.shiftActiveAlert.set(
-            True
-        )  # Start true to prevent missing alert at beginning of match
+        self.shiftActiveAlert.set(True)
+        # Initialize as active at startup;
+        # this initial value may be updated later based on the actual shift state
 
         # Autonomous routines
 
