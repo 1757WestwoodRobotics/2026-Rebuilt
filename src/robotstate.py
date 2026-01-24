@@ -14,10 +14,10 @@ from util.robotposeestimator import (
     VisionObservation,
 )
 from util.logtracer import LogTracer
-
 from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
 from constants.auto import kAutoDistanceTolerance, kAutoRotationTolerance
+from constants.field import kEndgameDuration, kShiftDuration
 
 
 class RobotState:
@@ -92,23 +92,34 @@ class RobotState:
 
     @classmethod
     def hubActive(cls) -> bool:
-        isAuto = DriverStation.isAutonomous()
-        if isAuto:
+        if DriverStation.isAutonomous():
             return True
         else:
-            time = DriverStation.getMatchTime()
-            if time <= 30:  # endgame, both hubs active
+            time = (
+                DriverStation.getMatchTime()
+            )  # this is the time remaining in the match, not elapsed time
+            if time <= 0:
+                return True  # safety net for negative time, assume its active (testing)
+            if time <= kEndgameDuration:  # endgame, both hubs active
                 return True
-            elif time >= 210:  # first 10 seconds, both hubs active (transition shift)
+            elif (
+                time >= kEndgameDuration + kShiftDuration * 4
+            ):  # first 10 seconds, both hubs active (transition shift)
                 return True
             didWinAuto = cls.didWinAuto()
-            if time <= 55:  # shift 4
+            if (
+                time <= kEndgameDuration + kShiftDuration
+            ):  # shift 4, 1 shift and endgame remain
                 return didWinAuto
-            elif time <= 80:  # shift 3
+            elif (
+                time <= kEndgameDuration + kShiftDuration * 2
+            ):  # shift 3, 2 shifts and endgame remain
                 return not didWinAuto
-            elif time <= 105:  # shift 2
+            elif (
+                time <= kEndgameDuration + kShiftDuration * 3
+            ):  # shift 2, 3 shifts and endgame remain
                 return didWinAuto
-            else:  # 105 < time < 210, shift 1
+            else:  # 105 < time < 210, shift 1, 4 shifts and endgame remain
                 return not didWinAuto
 
     @classmethod
