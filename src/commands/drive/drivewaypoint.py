@@ -36,32 +36,6 @@ from constants.math import kMetersPerInch, kRadiansPerDegree
 
 
 class DriveWaypoint(Command):
-    driveKp = LoggedTunableNumber(
-        "DriveWaypoint/driveKp", kTrajectoryPositionPGainVision
-    )
-    driveKi = LoggedTunableNumber("DriveWaypoint/driveKi", kTrajectoryPositionIGain)
-    driveKd = LoggedTunableNumber("DriveWaypoint/driveKd", kTrajectoryPositionDGain)
-    angleKp = LoggedTunableNumber("DriveWaypoint/angleKp", kTrajectoryAnglePGain)
-    angleKi = LoggedTunableNumber("DriveWaypoint/angleKi", kTrajectoryAngleIGain)
-    angleKd = LoggedTunableNumber("DriveWaypoint/angleKd", kTrajectoryAngleDGain)
-
-    driveMaxVel = LoggedTunableNumber(
-        "DriveWaypoint/driveMaxVel", kMaxForwardLinearVelocity
-    )
-    driveMaxAccel = LoggedTunableNumber(
-        "DriveWaypoint/driveMaxAccel", kMaxForwardLinearAccelerationWaypoint
-    )
-    angleMaxVel = LoggedTunableNumber(
-        "DriveWaypoint/angleMaxVel", kMaxRotationAngularVelocity
-    )
-    angleMaxAccel = LoggedTunableNumber(
-        "DriveWaypoint/angleMaxAccel", kMaxRotationAngularAcceleration
-    )
-
-    driveTolerance = LoggedTunableNumber(
-        "DriveWaypoint/driveTolerance", 2 * kMetersPerInch
-    )
-    angleTolerance = LoggedTunableNumber("DriveWaypoint/angleTolerance", 3.0)
 
     def __init__(
         self,
@@ -83,6 +57,45 @@ class DriveWaypoint(Command):
 
         self.xoff = xOffset
         self.yoff = yOffset
+
+        self.driveKp = LoggedTunableNumber(
+            "DriveWaypoint/driveKp", kTrajectoryPositionPGainVision
+        )
+        self.driveKi = LoggedTunableNumber(
+            "DriveWaypoint/driveKi", kTrajectoryPositionIGain
+        )
+        self.driveKd = LoggedTunableNumber(
+            "DriveWaypoint/driveKd", kTrajectoryPositionDGain
+        )
+        self.angleKp = LoggedTunableNumber(
+            "DriveWaypoint/angleKp", kTrajectoryAnglePGain
+        )
+        self.angleKi = LoggedTunableNumber(
+            "DriveWaypoint/angleKi", kTrajectoryAngleIGain
+        )
+        self.angleKd = LoggedTunableNumber(
+            "DriveWaypoint/angleKd", kTrajectoryAngleDGain
+        )
+
+        self.driveMaxVel = LoggedTunableNumber(
+            "DriveWaypoint/driveMaxVel", kMaxForwardLinearVelocity
+        )
+        self.driveMaxAccel = LoggedTunableNumber(
+            "DriveWaypoint/driveMaxAccel", kMaxForwardLinearAccelerationWaypoint
+        )
+        self.angleMaxVel = LoggedTunableNumber(
+            "DriveWaypoint/angleMaxVel", kMaxRotationAngularVelocity
+        )
+        self.angleMaxAccel = LoggedTunableNumber(
+            "DriveWaypoint/angleMaxAccel", kMaxRotationAngularAcceleration
+        )
+
+        self.driveTolerance = LoggedTunableNumber(
+            "DriveWaypoint/driveTolerance", 2 * kMetersPerInch
+        )
+        self.angleToleranceDegrees = LoggedTunableNumber(
+            "DriveWaypoint/angleToleranceDegrees", 3.0
+        )
 
         self.xController = ProfiledPIDController(
             self.driveKp.get(),
@@ -112,7 +125,9 @@ class DriveWaypoint(Command):
         self.thetaController.enableContinuousInput(-pi, pi)
         self.xController.setTolerance(self.driveTolerance.get())
         self.yController.setTolerance(self.driveTolerance.get())
-        self.thetaController.setTolerance(self.angleTolerance.get() * kRadiansPerDegree)
+        self.thetaController.setTolerance(
+            self.angleToleranceDegrees.get() * kRadiansPerDegree
+        )
 
         self.driveKp.onChange(self.xController.setP)
         self.driveKi.onChange(self.xController.setI)
@@ -161,7 +176,7 @@ class DriveWaypoint(Command):
         self.driveTolerance.onChange(self.xController.setTolerance)
         self.driveTolerance.onChange(self.yController.setTolerance)
 
-        self.angleTolerance.onChange(
+        self.angleToleranceDegrees.onChange(
             lambda value: self.thetaController.setTolerance(value * kRadiansPerDegree)
         )
 
