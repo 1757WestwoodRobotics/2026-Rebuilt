@@ -11,3 +11,20 @@ kFieldWidth = 26 * kMetersPerFoot + 5.7 * kMetersPerInch
 kBlueTargetLocation = Translation2d(
     kFieldWidth / 3.5761, kFieldLength / 2
 )  # Location of Blue target (flipped when necessary)
+kAutoDuration = 20
+"""seconds"""
+
+kEndgameDuration = 30
+"""seconds"""
+
+kTeleopDuration = 140
+"""seconds"""
+
+kMatchDuration = kAutoDuration + kTeleopDuration
+"""seconds"""
+
+kTransitionShiftDuration = 10
+"""seconds"""
+
+kShiftDuration = 25
+"""seconds"""
