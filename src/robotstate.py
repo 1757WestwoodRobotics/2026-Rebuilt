@@ -81,7 +81,11 @@ class RobotState:
             case None | "":
                 return None
             case _:
-                raise ValueError("Invalid game specific message")
+                print(
+                    "Invalid game specific message:",
+                    DriverStation.getGameSpecificMessage(),
+                )
+                return None
 
     @classmethod
     def didWinAuto(cls) -> bool:
@@ -104,7 +108,7 @@ class RobotState:
                 return True
             elif (
                 time >= kEndgameDuration + kShiftDuration * 4
-            ):  # first 10 seconds, both hubs active (transition shift)
+            ):  # transition period, before shift 4, all hubs active
                 return True
             didWinAuto = cls.didWinAuto()
             if (
