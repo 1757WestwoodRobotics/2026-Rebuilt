@@ -19,11 +19,12 @@ class LoggedTunableNumber:
     _default: float
     _dashboardNumber: LoggedNetworkNumber
 
-    _callbacks: list[Callable[[float], None]] = []
+    _callbacks: list[Callable[[float], None]]
 
     def __init__(self, key: str, default: float = 0.0) -> None:
         self._key = LoggedTunableNumber._tableKey + "/" + key
         self._default = default
+        self._callbacks = []
         if kTuningMode:
             self._dashboardNumber = LoggedNetworkNumber(self._key, default)
 
