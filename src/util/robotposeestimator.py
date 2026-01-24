@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from math import sqrt
 from wpimath.geometry import Pose2d, Rotation2d, Rotation3d, Transform2d, Transform3d
 from wpimath.interpolation import (
@@ -12,6 +11,10 @@ from constants.turret import kTurretLocation
 
 # shamelessly reimplemented from 6328
 class OdometryObservation:
+    """
+    Represents an odometry measurement for the robot pose estimator.
+    """
+
     def __init__(
         self,
         wheelPositions: tuple[
@@ -29,6 +32,10 @@ class OdometryObservation:
 
 
 class VisionObservation:
+    """
+    Represents a vision measurement for the robot pose estimator.
+    """
+
     def __init__(self, visionPose: Pose2d, timestamp: float, std: list[float]) -> None:
         assert len(std) == 3
         self.visionPose = visionPose
@@ -37,6 +44,10 @@ class VisionObservation:
 
 
 class TurretedVisionObservation:
+    """
+    Represents a vision measurement from a camera mounted on a turret for the robot pose estimator.
+    """
+
     def __init__(
         self, fieldToTurretTransform: Transform3d, timestamp: float, std: list[float]
     ) -> None:
@@ -46,13 +57,21 @@ class TurretedVisionObservation:
         self.std = std
 
 
-@dataclass
 class TurretObservation:
-    turretAngle: Rotation2d
-    timestamp: float
+    """
+    Represents a turret angle measurement for the robot pose estimator.
+    """
+
+    def __init__(self, turretAngle: Rotation2d, timestamp: float) -> None:
+        self.turretAngle = turretAngle
+        self.timestamp = timestamp
 
 
 class RobotPoseEstimator:
+    """
+    Estimates the robot pose using odometry and vision measurements.
+    """
+
     # pylint:disable-next=too-many-arguments, too-many-positional-arguments
     def __init__(
         self,
@@ -78,6 +97,13 @@ class RobotPoseEstimator:
         self.poseBuffer = TimeInterpolatablePose2dBuffer(2.0)
 
     def addOdometryMeasurement(self, measurement: OdometryObservation):
+        """
+        Adds an odometry measurement to the pose estimator.
+        Args:
+            measurement: The odometry measurement to add. As given from a drive base
+        Returns:
+            None
+        """
         lastOdoPose = self.odometryPose
 
         twist = self.kinematics.toTwist2d(
@@ -95,6 +121,13 @@ class RobotPoseEstimator:
         self.lastWheelPositions = measurement.wheelPositions
 
     def addVisionMeasurement(self, measurement: VisionObservation):
+        """
+        Adds a vision measurement to the pose estimator.
+        Args:
+            measurement: The vision measurement to add. As given from a vision system
+        Returns:
+            None
+        """
         # check if measurement is valid enough to work with
         if self.poseBuffer.getInternalBuffer()[-1][0] - 2.0 > measurement.timestamp:
             return
@@ -149,6 +182,15 @@ class RobotPoseEstimator:
         ],
         startPose: Pose2d,
     ):
+        """
+        Resets the pose estimator to a known pose.
+        Args:
+            _gyro: The current gyro angle.
+            startWheelPositions: The current wheel positions.
+            startPose: The pose to reset to.
+        Returns:
+            None
+        """
         self.gyroOffset = (
             startPose.rotation() - self.odometryPose.rotation() - self.gyroOffset
         )
@@ -159,6 +201,11 @@ class RobotPoseEstimator:
 
 
 class TurretedRobotPoseEstimator(RobotPoseEstimator):
+    """
+    Estimates the robot pose using odometry and vision measurements from a turret-mounted camera.
+    Supports both turreted and non-turreted vision measurements.
+    """
+
     def __init__(
         self,
         kinematics: SwerveDrive4Kinematics,
@@ -177,9 +224,23 @@ class TurretedRobotPoseEstimator(RobotPoseEstimator):
         self.turretBuffer = TimeInterpolatableRotation2dBuffer(2.0)
 
     def addTurretMeasurement(self, measurement: TurretObservation):
+        """
+        Adds a turret angle measurement to the pose estimator.
+        Args:
+            measurement: The turret angle measurement to add. As given from a turret subsystem
+        Returns:
+            None
+        """
         self.turretBuffer.addSample(measurement.timestamp, measurement.turretAngle)
 
     def addTurretedVisionMeasurement(self, measurement: TurretedVisionObservation):
+        """
+        Adds a turreted vision measurement to the pose estimator.
+        Args:
+            measurement: The turreted vision measurement to add. As given from a vision subsystem
+        Returns:
+            None
+        """
         if self.poseBuffer.getInternalBuffer()[-1][0] - 2.0 > measurement.timestamp:
             return
         if self.turretBuffer.getInternalBuffer()[-1][0] - 2.0 > measurement.timestamp:
@@ -245,5 +306,14 @@ class TurretedRobotPoseEstimator(RobotPoseEstimator):
         ],
         startPose: Pose2d,
     ):
+        """
+        Resets the pose estimator to a known pose.
+        Args:
+            _gyro: The current gyro angle.
+            startWheelPositions: The current wheel positions.
+            startPose: The pose to reset to.
+        Returns:
+            None
+        """
         super().resetPosition(_gyro, startWheelPositions, startPose)
         self.turretBuffer.clear()
