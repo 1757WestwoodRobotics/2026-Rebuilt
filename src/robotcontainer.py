@@ -378,9 +378,9 @@ class RobotContainer:
 
         OperatorInterface.Drive.defense_state().whileTrue(DefenseState(self.drive))
 
-        RobotState.shiftTrigger().whileTrue(
+        RobotState.shiftTrigger().onTrue(
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
-        ).whileFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
+        ).onFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
 
     def updateAlerts(self):
         self.driverDisconnected.set(not wpilib.DriverStation.isJoystickConnected(0))
