@@ -40,12 +40,12 @@ class LoggedTunableNumber:
     def hasChanged(self) -> bool:
         """
         returns True if the value has changed since the last time this method was called, False otherwise
-        if the value has never been checked before, it will return True, since it has changed from a non-existent value
+        if the value has never been checked before, it will return True in tuning mode, and False otherwise
         """
         currentValue = self.get()
         if self._key not in self._lastHasChangedValues:
             self._lastHasChangedValues[self._key] = currentValue
-            return True
+            return kTuningMode
         if self._lastHasChangedValues[self._key] != currentValue:
             self._lastHasChangedValues[self._key] = currentValue
             return True
