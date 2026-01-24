@@ -31,7 +31,10 @@ class LoggedTunableNumber:
 
     def get(self) -> float:
         """returns the current value of the tunable number, if in tuning mode, otherwise returns the default value"""
-        return self._dashboardNumber.value if kTuningMode else self._default
+        if kTuningMode:
+            assert hasattr(self, "_dashboardNumber")
+            return self._dashboardNumber.value
+        return self._default
 
     def hasChanged(self) -> bool:
         """
