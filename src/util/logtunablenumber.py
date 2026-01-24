@@ -72,7 +72,7 @@ class AutoUpdateGroup:
 
     def __init__(
         self,
-        callback: Callable[[list[float]], None],
+        callback: Callable[..., None],
         tunableNumbers: list[LoggedTunableNumber],
     ) -> None:
         self._callback = callback
