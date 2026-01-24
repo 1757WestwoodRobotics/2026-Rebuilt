@@ -101,6 +101,8 @@ class AutoUpdateGroup:
         self._tunableNumbers = tunableNumbers
         self._lastValues = [tunableNumber.get() for tunableNumber in tunableNumbers]
 
+        AutoUpdateGroup._updateGroups.append(self)
+
     def periodic(self) -> None:
         """calls the callback if any of the tunable numbers have changed"""
         currentValues = [tunableNumber.get() for tunableNumber in self._tunableNumbers]
