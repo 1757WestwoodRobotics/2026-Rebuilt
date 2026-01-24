@@ -61,7 +61,7 @@ class DriveWaypoint(Command):
     driveTolerance = LoggedTunableNumber(
         "DriveWaypoint/driveTolerance", 2 * kMetersPerInch
     )
-    angleTolerance = LoggedTunableNumber("DriveWaypoint/angleToleranceDegrees", 3.0)
+    angleTolerance = LoggedTunableNumber("DriveWaypoint/angleTolerance", 3.0)
 
     def __init__(
         self,
@@ -161,7 +161,9 @@ class DriveWaypoint(Command):
         self.driveTolerance.onChange(self.xController.setTolerance)
         self.driveTolerance.onChange(self.yController.setTolerance)
 
-        self.angleTolerance.onChange(self.thetaController.setTolerance)
+        self.angleTolerance.onChange(
+            lambda value: self.thetaController.setTolerance(value * kRadiansPerDegree)
+        )
 
         self.targetPose = self.targetSupplier()
 
