@@ -1,8 +1,13 @@
-from .math import kMetersPerFoot
+from wpimath.geometry import Translation2d
+from .math import kMetersPerInch, kMetersPerFoot
 
-# Field Physical parameters
-kFieldLength = 54 * kMetersPerFoot
+# Field physical parameters
+kFieldLength = 54 * kMetersPerFoot + 3.2 * kMetersPerInch
 """meters"""
 
-kFieldWidth = 27 * kMetersPerFoot
+kFieldWidth = 26 * kMetersPerFoot + 5.7 * kMetersPerInch
 """meters"""
+
+kBlueTargetLocation = Translation2d(
+    kFieldWidth / 3.5761, kFieldLength / 2
+)  # Location of Blue target (flipped when necessary)

@@ -12,6 +12,7 @@ from pathplannerlib.auto import PathPlannerAuto
 from commands.drive.fieldrelativedrive import FieldRelativeDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
+import commands.turretcommands as TurretCommands  # module, not class
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -21,6 +22,10 @@ from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.drive.swervemoduleio import SwerveModuleConfigParams, SwerveModuleIO
 from subsystems.drive.swervemoduleiosim import SwerveModuleIOSim
 from subsystems.drive.swervemoduleiotalonfx import SwerveModuleIOCTRE
+from subsystems.turret.turretsubsystem import TurretSubsystem
+from subsystems.turret.turretsubsystemio import TurretSubsystemIO
+from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
+from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visioniophotonsim import VisionSubsystemIOPhotonSim
@@ -148,6 +153,7 @@ class RobotContainer:
                         ),
                     ],
                 )
+                self.turret = TurretSubsystem(TurretSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -220,6 +226,7 @@ class RobotContainer:
                         ),
                     ],
                 )
+                self.turret = TurretSubsystem(TurretSubsystemIOSim())
 
             case _:
                 self.drive = DriveSubsystem(
@@ -235,6 +242,7 @@ class RobotContainer:
                     RobotState.addVisionMeasurement,
                     [VisionSubsystemIO(), VisionSubsystemIO()],
                 )
+                self.turret = TurretSubsystem(TurretSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
@@ -256,6 +264,7 @@ class RobotContainer:
         self.chooser: LoggedDashboardChooser[commands2.Command] = (
             LoggedDashboardChooser("Autonomous")
         )
+        self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
 
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
@@ -286,6 +295,7 @@ class RobotContainer:
                 OperatorInterface.Drive.ChassisControls.Rotation.x,
             )
         )
+        self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
 
