@@ -5,6 +5,12 @@ from constants import kTuningMode
 
 
 class LoggedTunableNumber:
+    """
+    A number that can be tuned via a dashboard when in tuning mode.
+    This is linked to a NetworkTables entry at /Tuning/<key>.
+    See https://docs.advantagescope.org/overview/live-sources/tuning-mode/ for more information about tuning mode.
+    """
+
     _tableKey: str = "/Tuning"
     _lastHasChangedValues: dict[str, float] = {}
     _tunableNumbers: list["LoggedTunableNumber"] = []
@@ -24,9 +30,14 @@ class LoggedTunableNumber:
         LoggedTunableNumber._tunableNumbers.append(self)
 
     def get(self) -> float:
+        """returns the current value of the tunable number, if in tuning mode, otherwise returns the default value"""
         return self._dashboardNumber.value if kTuningMode else self._default
 
     def hasChanged(self) -> bool:
+        """
+        returns True if the value has changed since the last time this method was called, False otherwise
+        if the value has never been checked before, it will return True, since it has changed from a non-existent value
+        """
         currentValue = self.get()
         if self._key not in self._lastHasChangedValues:
             self._lastHasChangedValues[self._key] = currentValue
@@ -40,6 +51,7 @@ class LoggedTunableNumber:
     def ifChanged(
         func: Callable[[list[float]], None], tunableNumbers: "list[LoggedTunableNumber]"
     ) -> None:
+        """calls a callback with the current values of tunableNumbers if any of them have changed since the last time this method was called"""
         anyChanged = False
         for tunableNumber in tunableNumbers:
             if tunableNumber.hasChanged():
@@ -49,9 +61,11 @@ class LoggedTunableNumber:
             func([tunableNumber.get() for tunableNumber in tunableNumbers])
 
     def onChange(self, func: Callable[[float], None]) -> None:
+        """registers a callback to be called when the value changes"""
         self._callbacks.append(func)
 
     def periodic(self) -> None:
+        """calls the registered callbacks if the value has changed"""
         if self.hasChanged():
             currentValue = self.get()
             for callback in self._callbacks:
@@ -59,11 +73,16 @@ class LoggedTunableNumber:
 
     @staticmethod
     def updateAll() -> None:
+        """calls periodic on all LoggedTunableNumbers to check for changes and call callbacks"""
         for tunableNumber in LoggedTunableNumber._tunableNumbers:
             tunableNumber.periodic()
 
 
 class AutoUpdateGroup:
+    """
+    A group of LoggedTunableNumbers that will automatically call a callback when any of them change.
+    """
+
     _callback: Callable[..., None]
     _tunableNumbers: list[LoggedTunableNumber]
     _lastValues: list[float]
@@ -80,6 +99,7 @@ class AutoUpdateGroup:
         self._lastValues = [tunableNumber.get() for tunableNumber in tunableNumbers]
 
     def periodic(self) -> None:
+        """calls the callback if any of the tunable numbers have changed"""
         currentValues = [tunableNumber.get() for tunableNumber in self._tunableNumbers]
         if currentValues != self._lastValues:
             self._lastValues = currentValues
@@ -87,5 +107,6 @@ class AutoUpdateGroup:
 
     @staticmethod
     def updateAll() -> None:
+        """calls periodic on all AutoUpdateGroups to check for changes and call callbacks"""
         for updateGroup in AutoUpdateGroup._updateGroups:
             updateGroup.periodic()
