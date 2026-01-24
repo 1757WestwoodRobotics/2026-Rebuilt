@@ -39,9 +39,9 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
         for result in self.camera.getAllUnreadResults():
             if result.multitagResult is not None:
                 fieldToCamera = result.multitagResult.estimatedPose.best
-                fieldToRobot = fieldToCamera + self.robotToCamera.inverse()
+                fieldToBase = fieldToCamera + self.robotToCamera.inverse()
 
-                robotPose = Pose3d(fieldToRobot.translation(), fieldToRobot.rotation())
+                robotPose = Pose3d(fieldToBase.translation(), fieldToBase.rotation())
 
                 totalTagDistance = 0.0
                 for target in result.targets:
@@ -64,7 +64,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                     turretedObservations.append(
                         VisionSubsystemTurretedPoseObservation(
                             result.getTimestampSeconds(),
-                            fieldToRobot,  # this transform is from field to turret
+                            fieldToBase,  # this transform is from field to turret
                             result.multitagResult.estimatedPose.ambiguity,
                             len(result.multitagResult.fiducialIDsUsed),
                             totalTagDistance / len(result.targets),
@@ -82,9 +82,9 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                     )
                     cameraToTarget = target.bestCameraToTarget
                     fieldToCamera = fieldToTarget + cameraToTarget.inverse()
-                    fieldToRobot = fieldToCamera + self.robotToCamera.inverse()
+                    fieldToBase = fieldToCamera + self.robotToCamera.inverse()
                     robotPose = Pose3d(
-                        fieldToRobot.translation(), fieldToRobot.rotation()
+                        fieldToBase.translation(), fieldToBase.rotation()
                     )
 
                     tagIds.append(target.fiducialId)
@@ -104,7 +104,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                         turretedObservations.append(
                             VisionSubsystemTurretedPoseObservation(
                                 result.getTimestampSeconds(),
-                                fieldToRobot,
+                                fieldToBase,
                                 target.poseAmbiguity,
                                 1,
                                 cameraToTarget.translation().norm(),
