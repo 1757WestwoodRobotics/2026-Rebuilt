@@ -26,9 +26,6 @@ kAutoWaitDuration = 1
 kAutoTargetOffset = Translation2d(2, 0)
 """[meters, meters]"""
 
-kAutoDuration = 15
-"""seconds"""
-
 kAutoDistanceTolerance = 0.1
 """meters"""
 
