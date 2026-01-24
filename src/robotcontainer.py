@@ -35,12 +35,12 @@ from subsystems.drive.driveio import DriveIO
 
 from operatorinterface import OperatorInterface
 
-from constants.auto import kAutoDuration
 from constants.vision import (
     kRobotToCamera1Transform,
     kRobotToCamera2Transform,
     kTurretToCameraTransform,
 )
+from constants.field import kAutoDuration
 from constants.drive import (
     kTurboSpeedMultiplier,
     kNormalSpeedMultiplier,
