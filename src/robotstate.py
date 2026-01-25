@@ -73,6 +73,11 @@ class RobotState:
 
     @classmethod
     def getAutoWinner(cls) -> DriverStation.Alliance | None:
+        """
+        Returns the alliance that won autonomous, or None if unknown
+        This is determined by the game specific message sent by the field
+        https://docs.wpilib.org/en/stable/docs/yearly-overview/2026-game-data.html
+        """
         match DriverStation.getGameSpecificMessage():
             case "R":
                 return DriverStation.Alliance.kRed
@@ -89,6 +94,11 @@ class RobotState:
 
     @classmethod
     def didWinAuto(cls) -> bool:
+        """
+        Returns true if our alliance won autonomous, false otherwise
+        If unknown, returns false
+        If the current alliance is unknown, returns false
+        """
         autoWinner = cls.getAutoWinner()
         if autoWinner is None:  # we are likely in auto currently
             return False
@@ -96,6 +106,17 @@ class RobotState:
 
     @classmethod
     def hubActive(cls) -> bool:
+        """
+        Returns true if the active hub is the one we are scoring on
+        The active hub is determined by the match time and whether we won autonomous
+        0-20 seconds: Autonomous, both hubs active
+        21-110 seconds: Shift periods, only one hub active
+            Shift 1 (86-110s): Hub determined by autonomous winner
+            Shift 2 (61-85s):  Hub opposite of autonomous winner
+            Shift 3 (36-60s):  Hub determined by autonomous winner
+            Shift 4 (21-35s):  Hub opposite of autonomous winner
+        111-140 seconds: Endgame, both hubs active
+        """
         if DriverStation.isAutonomous():
             return True
         else:
@@ -128,6 +149,11 @@ class RobotState:
 
     @classmethod
     def shiftTrigger(cls) -> Trigger:
+        """
+        Returns a trigger that is active when the hub we are scoring on is active
+        This is used for command based programming to enable/disable commands based on hub activity
+        See https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
+        """
         return Trigger(cls.hubActive)
 
     @classmethod
