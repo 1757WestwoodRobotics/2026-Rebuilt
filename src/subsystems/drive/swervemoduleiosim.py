@@ -6,7 +6,6 @@ from subsystems.drive.swervemoduleio import SwerveModuleConfigParams, SwerveModu
 
 from constants.math import kRadiansPerRevolution
 from constants.sim import kSimMotorResistance
-from constants.drive import kDriveGearingRatio, kSteerGearingRatio
 from constants import kRobotUpdatePeriod
 from util.convenientmath import clamp
 
@@ -20,13 +19,13 @@ class SwerveModuleIOSim(SwerveModuleIOCTRE):
 
         self.driveSim = DCMotorSim(
             LinearSystemId.DCMotorSystem(
-                self.driveMotorModel, 0.025, kDriveGearingRatio
+                self.driveMotorModel, 0.025, config.driveGearing
             ),
             self.driveMotorModel,
         )
         self.steerSim = DCMotorSim(
             LinearSystemId.DCMotorSystem(
-                self.steerMotorModel, 0.004, kSteerGearingRatio
+                self.steerMotorModel, 0.004, config.steerGearing
             ),
             self.steerMotorModel,
         )
@@ -48,12 +47,12 @@ class SwerveModuleIOSim(SwerveModuleIOCTRE):
         self.steerSim.update(kRobotUpdatePeriod)
 
         wheelSim.set_raw_rotor_position(
-            self.driveSim.getAngularPositionRotations() * kDriveGearingRatio
+            self.driveSim.getAngularPositionRotations() * self.config.driveGearing
         )  # since the robot position is before mechanism ratio, we have to add the ratio ourselves
         wheelSim.set_rotor_velocity(
             self.driveSim.getAngularVelocity()
             / kRadiansPerRevolution
-            * kDriveGearingRatio
+            * self.config.driveGearing
         )
         wheelSim.set_supply_voltage(
             clamp(
@@ -64,12 +63,12 @@ class SwerveModuleIOSim(SwerveModuleIOCTRE):
         )
 
         steerSim.set_raw_rotor_position(
-            self.steerSim.getAngularPositionRotations() * kSteerGearingRatio
+            self.steerSim.getAngularPositionRotations() * self.config.steerGearing
         )
         steerSim.set_rotor_velocity(
             self.steerSim.getAngularVelocity()
             / kRadiansPerRevolution
-            * kDriveGearingRatio
+            * self.config.steerGearing
         )
         steerSim.set_supply_voltage(
             clamp(

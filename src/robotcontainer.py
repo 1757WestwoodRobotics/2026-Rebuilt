@@ -68,6 +68,9 @@ from constants.drive import (
     kBackRightSteerInverted,
     kBackRightSteerEncoderId,
     kBackRightAbsoluteEncoderOffset,
+    kDriveGearingRatio,
+    kSteerGearingRatioMk5i,
+    kSteerGearingRatioMk5n,
 )
 from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
@@ -93,8 +96,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kFrontLeftDriveMotorId,
                                 kFrontLeftDriveInverted,
+                                kDriveGearingRatio,
                                 kFrontLeftSteerMotorId,
                                 kFrontLeftSteerInverted,
+                                kSteerGearingRatioMk5i,
                                 kFrontLeftSteerEncoderId,
                                 kFrontLeftAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -105,8 +110,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kFrontRightDriveMotorId,
                                 kFrontRightDriveInverted,
+                                kDriveGearingRatio,
                                 kFrontRightSteerMotorId,
                                 kFrontRightSteerInverted,
+                                kSteerGearingRatioMk5i,
                                 kFrontRightSteerEncoderId,
                                 kFrontRightAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -117,8 +124,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kBackLeftDriveMotorId,
                                 kBackLeftDriveInverted,
+                                kDriveGearingRatio,
                                 kBackLeftSteerMotorId,
                                 kBackLeftSteerInverted,
+                                kSteerGearingRatioMk5n,
                                 kBackLeftSteerEncoderId,
                                 kBackLeftAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -129,8 +138,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kBackRightDriveMotorId,
                                 kBackRightDriveInverted,
+                                kDriveGearingRatio,
                                 kBackRightSteerMotorId,
                                 kBackRightSteerInverted,
+                                kSteerGearingRatioMk5n,
                                 kBackRightSteerEncoderId,
                                 kBackRightAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -164,8 +175,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kFrontLeftDriveMotorId,
                                 kFrontLeftDriveInverted,
+                                kDriveGearingRatio,
                                 kFrontLeftSteerMotorId,
                                 kFrontLeftSteerInverted,
+                                kSteerGearingRatioMk5i,
                                 kFrontLeftSteerEncoderId,
                                 kFrontLeftAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -176,8 +189,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kFrontRightDriveMotorId,
                                 kFrontRightDriveInverted,
+                                kDriveGearingRatio,
                                 kFrontRightSteerMotorId,
                                 kFrontRightSteerInverted,
+                                kSteerGearingRatioMk5i,
                                 kFrontRightSteerEncoderId,
                                 kFrontRightAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -188,8 +203,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kBackLeftDriveMotorId,
                                 kBackLeftDriveInverted,
+                                kDriveGearingRatio,
                                 kBackLeftSteerMotorId,
                                 kBackLeftSteerInverted,
+                                kSteerGearingRatioMk5n,
                                 kBackLeftSteerEncoderId,
                                 kBackLeftAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -200,8 +217,10 @@ class RobotContainer:
                             SwerveModuleConfigParams(
                                 kBackRightDriveMotorId,
                                 kBackRightDriveInverted,
+                                kDriveGearingRatio,
                                 kBackRightSteerMotorId,
                                 kBackRightSteerInverted,
+                                kSteerGearingRatioMk5n,
                                 kBackRightSteerEncoderId,
                                 kBackRightAbsoluteEncoderOffset,
                                 kCANivoreName,

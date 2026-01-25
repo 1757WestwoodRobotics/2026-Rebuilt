@@ -9,8 +9,10 @@ class SwerveModuleConfigParams:
     swerveEncoderID: int
     driveMotorID: int
     driveMotorInverted: bool
+    driveGearing: float
     steerMotorID: int
     steerMotorInverted: bool
+    steerGearing: float
     canbus: str = ""
 
     # pylint:disable-next=too-many-arguments, too-many-positional-arguments
@@ -18,16 +20,20 @@ class SwerveModuleConfigParams:
         self,
         driveMotorID: int,
         driveMotorInverted: bool,
+        driveGearing: float,
         steerMotorID: int,
         steerMotorInverted: bool,
+        steerGearing: float,
         swerveEncoderID: int,
         swerveEncoderOffset: float,
         canbus: str = "",
     ) -> None:
         self.driveMotorID = driveMotorID
         self.driveMotorInverted = driveMotorInverted
+        self.driveGearing = driveGearing
         self.steerMotorID = steerMotorID
         self.steerMotorInverted = steerMotorInverted
+        self.steerGearing = steerGearing
         self.swerveEncoderID = swerveEncoderID
         self.swerveEncoderOffset = swerveEncoderOffset
         self.canbus = canbus
