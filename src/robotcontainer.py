@@ -10,7 +10,7 @@ import commands2
 import commands2.cmd as Commands
 from pathplannerlib.auto import PathPlannerAuto
 
-from commands.drive.fieldrelativedrive import FieldRelativeDrive
+from commands.drive.fieldrelativeassisteddrive import FieldRelativeAssistedDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
 import commands.turretcommands as TurretCommands  # module, not class
@@ -326,7 +326,7 @@ class RobotContainer:
         self.configureButtonBindings()
 
         self.drive.setDefaultCommand(
-            FieldRelativeDrive(
+            FieldRelativeAssistedDrive(
                 self.drive,
                 lambda: OperatorInterface.Drive.ChassisControls.Translation.y()
                 * kTurboSpeedMultiplier,
