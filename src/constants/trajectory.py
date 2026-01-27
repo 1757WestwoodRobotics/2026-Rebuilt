@@ -50,6 +50,10 @@ kTargetWaypointXControllerKey = "waypoint/x"
 kTargetWaypointYControllerKey = "waypoint/y"
 kTargetWaypointThetaControllerKey = "waypoint/theta"
 
-kRotationPGain = 0.1
+kRotationPGain = 0.2
 kRotationIGain = 0
 kRotationDGain = 0.00
+
+kTrenchAlignmentPGain = 0.5
+kTrenchAlignmentIGain = 0
+kTrenchAlignmentDGain = 0.0
