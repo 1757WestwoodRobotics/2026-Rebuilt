@@ -3,7 +3,7 @@ from wpimath.geometry import Rotation2d
 
 from robotstate import RobotState
 from subsystems.turret.turretsubsystem import TurretSubsystem
-from constants.field import kBlueTargetLocation
+from constants.field import kCloseHubLocation
 from constants.turret import kTurretLocation
 from util.angleoptimize import optimizeAngle
 from util.fliputil import FlipUtil
@@ -20,7 +20,7 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
             kTurretLocation.translation().toTranslation2d() + robotPose.translation()
         )  # add Turret location transform in 2D onto the robotPose
         targetRelativeToTurret = (
-            FlipUtil.fieldTranslation(kBlueTargetLocation) - turret2DLocationOnField
+            FlipUtil.fieldTranslation(kCloseHubLocation) - turret2DLocationOnField
         )
         targetAngle = targetRelativeToTurret.angle()
 
