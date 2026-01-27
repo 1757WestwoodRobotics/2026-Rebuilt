@@ -62,7 +62,7 @@ class FieldRelativeAssistedDrive(FieldRelativeDrive):
             currentRotation = RobotState.getRotation().radians()
             assistedRotation = self.rotationPid.calculate(
                 currentRotation, round(currentRotation / (pi / 2)) * (pi / 2)
-            )  # face forward along trench
+            )  # face at nearest 90 deg
             sideways = self.lineupPid.calculate(
                 robotPose.translation().y, closestTrench.y
             )
