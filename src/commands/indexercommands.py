@@ -9,10 +9,10 @@ def holdIndexer(indexer: IndexerSubsystem) -> Command:
     ).withName("HoldIndexer")
 
 
-def feedIndexer(indexer: IndexerSubsystem) -> Command:
+def kickIndexer(indexer: IndexerSubsystem) -> Command:
     return cmd.run(
         partial(indexer.setTarget, IndexerSubsystemTarget.SHOOT), indexer
-    ).withName("FeedIndexer")
+    ).withName("KickIndexer")
 
 
 def reverseIndexer(indexer: IndexerSubsystem) -> Command:

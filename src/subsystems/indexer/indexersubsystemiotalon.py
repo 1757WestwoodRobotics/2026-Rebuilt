@@ -9,9 +9,9 @@ from util.phoenixutil import tryUntilOk, PhoenixUtil
 
 from constants import kRobotUpdateFrequency
 from constants.indexer import (
-    kFeederCANId,
-    kFeederCurrentLimit,
-    kFeederGearRatio,
+    kKickerCANId,
+    kKickerCurrentLimit,
+    kKickerGearRatio,
     kIndexerCANId,
     kIndexerCurrentLimit,
     kIndexerGearRatio,
@@ -20,29 +20,29 @@ from constants.indexer import (
 
 class IndexerSubsystemIOTalon(IndexerSubsystemIO):
     indexerConfig: TalonFXConfiguration = TalonFXConfiguration()
-    feederConfig: TalonFXConfiguration = TalonFXConfiguration()
+    kickerConfig: TalonFXConfiguration = TalonFXConfiguration()
 
     indexerDemand: VoltageOut = VoltageOut(0, False)
-    feederDemand: VoltageOut = VoltageOut(0, False)
+    kickerDemand: VoltageOut = VoltageOut(0, False)
 
     def __init__(self) -> None:
         self.indexerMotor = TalonFX(kIndexerCANId)
-        self.feederMotor = TalonFX(kFeederCANId)
+        self.kickerMotor = TalonFX(kKickerCANId)
 
         self.indexerConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
-        self.feederConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
+        self.kickerConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
 
         self.indexerConfig.current_limits = kIndexerCurrentLimit
-        self.feederConfig.current_limits = kFeederCurrentLimit
+        self.kickerConfig.current_limits = kKickerCurrentLimit
 
-        self.indexerConfig.feedback.sensor_to_mechanism_ratio = kIndexerGearRatio
-        self.feederConfig.feedback.sensor_to_mechanism_ratio = kFeederGearRatio
+        self.indexerConfig.kickback.sensor_to_mechanism_ratio = kIndexerGearRatio
+        self.kickerConfig.kickback.sensor_to_mechanism_ratio = kKickerGearRatio
 
         tryUntilOk(
             5, lambda: self.indexerMotor.configurator.apply(self.indexerConfig, 0.25)
         )
         tryUntilOk(
-            5, lambda: self.feederMotor.configurator.apply(self.feederConfig, 0.25)
+            5, lambda: self.kickerMotor.configurator.apply(self.kickerConfig, 0.25)
         )
 
         self.indexerPosition = self.indexerMotor.get_position()
@@ -52,12 +52,12 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
 
         self.indexerSensor = self.indexerMotor.get_forward_limit()
 
-        self.feederPosition = self.feederMotor.get_position()
-        self.feederVelocity = self.feederMotor.get_velocity()
-        self.feederSupply = self.feederMotor.get_supply_current()
-        self.feederApplied = self.feederMotor.get_motor_voltage()
+        self.kickerPosition = self.kickerMotor.get_position()
+        self.kickerVelocity = self.kickerMotor.get_velocity()
+        self.kickerSupply = self.kickerMotor.get_supply_current()
+        self.kickerApplied = self.kickerMotor.get_motor_voltage()
 
-        self.feederSensor = self.feederMotor.get_forward_limit()
+        self.kickerSensor = self.kickerMotor.get_forward_limit()
 
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
@@ -66,11 +66,11 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.indexerSupply,
             self.indexerApplied,
             self.indexerSensor,
-            self.feederPosition,
-            self.feederVelocity,
-            self.feederSupply,
-            self.feederApplied,
-            self.feederSensor,
+            self.kickerPosition,
+            self.kickerVelocity,
+            self.kickerSupply,
+            self.kickerApplied,
+            self.kickerSensor,
         )
 
         PhoenixUtil.registerSignals(
@@ -80,11 +80,11 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.indexerSupply,
             self.indexerApplied,
             self.indexerSensor,
-            self.feederPosition,
-            self.feederVelocity,
-            self.feederSupply,
-            self.feederApplied,
-            self.feederSensor,
+            self.kickerPosition,
+            self.kickerVelocity,
+            self.kickerSupply,
+            self.kickerApplied,
+            self.kickerSensor,
         )
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:
@@ -101,25 +101,25 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         inputs.indexAppliedVolts = self.indexerApplied.value
         inputs.indexSupplyAmps = self.indexerSupply.value
 
-        inputs.feedConnected = BaseStatusSignal.is_all_good(
-            self.feederPosition,
-            self.feederVelocity,
-            self.feederApplied,
-            self.feederSupply,
-            self.feederSensor,
+        inputs.kickConnected = BaseStatusSignal.is_all_good(
+            self.kickerPosition,
+            self.kickerVelocity,
+            self.kickerApplied,
+            self.kickerSupply,
+            self.kickerSensor,
         )
-        inputs.feedPosition = self.feederPosition.value
-        inputs.feedVelocity = self.feederVelocity.value
-        inputs.feedAppliedVolts = self.feederApplied.value
-        inputs.feedSupplyAmps = self.feederSupply.value
+        inputs.kickPosition = self.kickerPosition.value
+        inputs.kickVelocity = self.kickerVelocity.value
+        inputs.kickAppliedVolts = self.kickerApplied.value
+        inputs.kickSupplyAmps = self.kickerSupply.value
 
         inputs.indexerSensor = (
             self.indexerSensor.value == ForwardLimitValue.CLOSED_TO_GROUND
         )
-        inputs.feedSensor = (
-            self.feederSensor.value == ForwardLimitValue.CLOSED_TO_GROUND
+        inputs.kickSensor = (
+            self.kickerSensor.value == ForwardLimitValue.CLOSED_TO_GROUND
         )
 
-    def setIndexerTarget(self, indexer: float, feeder: float) -> None:
+    def setIndexerTarget(self, indexer: float, kicker: float) -> None:
         self.indexerMotor.set_control(self.indexerDemand.with_output(indexer))
-        self.feederMotor.set_control(self.feederDemand.with_output(feeder))
+        self.kickerMotor.set_control(self.kickerDemand.with_output(kicker))

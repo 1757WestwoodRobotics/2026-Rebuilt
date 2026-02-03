@@ -40,6 +40,10 @@ from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
 
 # should be uncommented for real robot, asking Phoenix for signals on motors that doesn't exist dramatically increases loop time
 # from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
+from subsystems.indexer.indexersubsystem import IndexerSubsystem
+from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
+from subsystems.indexer.indexersubsystemiosim import IndexerSubsystemIOSIM
+from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visionsubsystem import VisionSubsystem
@@ -189,6 +193,7 @@ class RobotContainer:
                 self.turret = TurretSubsystem(TurretSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -280,6 +285,7 @@ class RobotContainer:
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIOSIM())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
 
@@ -299,6 +305,7 @@ class RobotContainer:
                     [VisionSubsystemIO(), VisionSubsystemIO()],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIO())
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
 
@@ -337,6 +344,7 @@ class RobotContainer:
             LoggedDashboardChooser("Autonomous")
         )
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
+        self.chooser.addOption("Indexer SysID", self.indexer.sysIdRoutine(self.indexer))
         self.chooser.addOption("Climb SysID", self.climber.sysIdRoutine(self.climber))
         self.chooser.addOption("Intake SysID", self.intake.sysIdRoutine(self.intake))
 
@@ -361,6 +369,7 @@ class RobotContainer:
         self.configureButtonBindings()
 
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
+        self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
 

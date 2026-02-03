@@ -6,8 +6,8 @@ from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
 
 from constants.math import kRadiansPerRevolution
 from constants.indexer import (
-    kFeederGearRatio,
-    kFeederMotor,
+    kKickerGearRatio,
+    kKickerMotor,
     kIndexerGearRatio,
     kIndexerMotor,
 )
@@ -24,25 +24,25 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
             kIndexerMotor,
         )
 
-        self.feederSimModel = DCMotorSim(
-            LinearSystemId.DCMotorSystem(kFeederMotor, 0.04, kFeederGearRatio),
-            kFeederMotor,
+        self.kickerSimModel = DCMotorSim(
+            LinearSystemId.DCMotorSystem(kKickerMotor, 0.04, kKickerGearRatio),
+            kKickerMotor,
         )
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:
         indexerMotorSim = self.indexerMotor.sim_state
-        feederMotorSim = self.feederMotor.sim_state
+        kickerMotorSim = self.kickerMotor.sim_state
 
         simVoltage = RobotController.getInputVoltage()
 
         indexerAppliedVoltage = clamp(indexerMotorSim.motor_voltage, -12.0, 12.0)
-        feederAppliedVoltage = clamp(feederMotorSim.motor_voltage, -12.0, 12.0)
+        kickerAppliedVoltage = clamp(kickerMotorSim.motor_voltage, -12.0, 12.0)
 
         self.indexerSimModel.setInputVoltage(indexerAppliedVoltage)
-        self.feederSimModel.setInputVoltage(feederAppliedVoltage)
+        self.kickerSimModel.setInputVoltage(kickerAppliedVoltage)
 
         self.indexerSimModel.update(kRobotUpdatePeriod)
-        self.feederSimModel.update(kRobotUpdatePeriod)
+        self.kickerSimModel.update(kRobotUpdatePeriod)
 
         indexerMotorSim.set_raw_rotor_position(
             self.indexerSimModel.getAngularPositionRotations() * kIndexerGearRatio
@@ -60,17 +60,17 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
             )
         )
 
-        feederMotorSim.set_raw_rotor_position(
-            self.feederSimModel.getAngularPositionRotations() * kFeederGearRatio
+        kickerMotorSim.set_raw_rotor_position(
+            self.kickerSimModel.getAngularPositionRotations() * kKickerGearRatio
         )
-        feederMotorSim.set_rotor_velocity(
-            self.feederSimModel.getAngularVelocity()
-            * kFeederGearRatio
+        kickerMotorSim.set_rotor_velocity(
+            self.kickerSimModel.getAngularVelocity()
+            * kKickerGearRatio
             / kRadiansPerRevolution
         )
-        feederMotorSim.set_supply_voltage(
+        kickerMotorSim.set_supply_voltage(
             clamp(
-                simVoltage - feederMotorSim.supply_current * kFeederMotor.R,
+                simVoltage - kickerMotorSim.supply_current * kKickerMotor.R,
                 0,
                 simVoltage,
             )

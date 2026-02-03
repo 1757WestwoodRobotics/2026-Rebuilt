@@ -8,41 +8,41 @@ from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.logtracer import LogTracer
 
 from constants.indexer import (
-    kIndexerForwardVoltage,
-    kIndexerReverseVoltage,
-    kFeedForwardVoltage,
-    kFeedReverseVoltage,
+    kSpindexerForwardVoltage,
+    kSpindexerReverseVoltage,
+    kKickForwardVoltage,
+    kKickReverseVoltage,
 )
 
 
-class IndexerMotorGoal(Enum):
-    FORWARD = kIndexerForwardVoltage
+class SpindexerMotorGoal(Enum):
+    FORWARD = kSpindexerForwardVoltage
     NEUTRAL = 0.0
-    REVERSE = kIndexerReverseVoltage
+    REVERSE = kSpindexerReverseVoltage
 
 
-class FeedMotorGoal(Enum):
-    FORWARD = kFeedForwardVoltage
+class KickMotorGoal(Enum):
+    FORWARD = kKickForwardVoltage
     NEUTRAL = 0.0
-    REVERSE = kFeedReverseVoltage
+    REVERSE = kKickReverseVoltage
 
 
 class IndexerSubsystemGoal(Enum):
-    FEED = (
-        IndexerMotorGoal.FORWARD,
-        FeedMotorGoal.FORWARD,
+    KICK = (
+        SpindexerMotorGoal.FORWARD,
+        KickMotorGoal.FORWARD,
     )
     SINGLE_HOLD = (
-        IndexerMotorGoal.FORWARD,
-        FeedMotorGoal.REVERSE,
+        SpindexerMotorGoal.FORWARD,
+        KickMotorGoal.REVERSE,
     )
     DUAL_HOLD = (
-        IndexerMotorGoal.NEUTRAL,
-        FeedMotorGoal.NEUTRAL,
+        SpindexerMotorGoal.NEUTRAL,
+        SpindexerMotorGoal.NEUTRAL,
     )
     REVERSE = (
-        IndexerMotorGoal.REVERSE,
-        FeedMotorGoal.REVERSE,
+        SpindexerMotorGoal.REVERSE,
+        KickMotorGoal.REVERSE,
     )
 
 
@@ -61,10 +61,10 @@ class IndexerSubsystem(Subsystem):
         self.io = io
         self.inputs = IndexerSubsystemIO.IndexerSubsystemInputs()
 
-        self.indexerMotorGoal = IndexerMotorGoal.NEUTRAL
-        self.feedMotorGoal = FeedMotorGoal.NEUTRAL
+        self.indexerMotorGoal = SpindexerMotorGoal.NEUTRAL
+        self.kickMotorGoal = KickMotorGoal.NEUTRAL
 
-        self.subsystemTarget = IndexerSubsystemTarget.HOLDING
+        self.subsystemTarget = SpindexerSubsystemTarget.HOLDING
         self.subsystemGoal = IndexerSubsystemGoal.SINGLE_HOLD
 
     def periodic(self) -> None:
@@ -80,20 +80,20 @@ class IndexerSubsystem(Subsystem):
                 else:
                     self.subsystemGoal = IndexerSubsystemGoal.SINGLE_HOLD
             case IndexerSubsystemTarget.SHOOT:
-                self.subsystemGoal = IndexerSubsystemGoal.FEED
+                self.subsystemGoal = IndexerSubsystemGoal.KICK
             case IndexerSubsystemTarget.EJECT:
                 self.subsystemGoal = IndexerSubsystemGoal.REVERSE
 
         self.updateGoals()
-        self.io.setIndexerTarget(self.indexerMotorGoal.value, self.feedMotorGoal.value)
+        self.io.setIndexerTarget(self.indexerMotorGoal.value, self.kickMotorGoal.value)
         LogTracer.record("SetIndexerTarget")
 
         Logger.recordOutput(
             "Indexer/Goal/Indexer Motor Goal", self.indexerMotorGoal.value
         )
-        Logger.recordOutput("Indexer/Goal/Feed Motor Goal", self.feedMotorGoal.value)
+        Logger.recordOutput("Indexer/Goal/Kick Motor Goal", self.kickMotorGoal.value)
         Logger.recordOutput("Indexer/Sensor/Indexer", self.inputs.indexerSensor)
-        Logger.recordOutput("Indexer/Sensor/Feed", self.inputs.feedSensor)
+        Logger.recordOutput("Indexer/Sensor/Kick", self.inputs.kickSensor)
 
         LogTracer.recordTotal()
 
@@ -101,12 +101,12 @@ class IndexerSubsystem(Subsystem):
         self.subsystemTarget = target
 
     def updateGoals(self):
-        self.indexerMotorGoal, self.feedMotorGoal = self.subsystemGoal.value
+        self.indexerMotorGoal, self.kickMotorGoal = self.subsystemGoal.value
 
     @autolog_output(key="Indexer/has ball")
     def hasBall(self) -> bool:
-        return self.inputs.indexerSensor or self.inputs.feedSensor
+        return self.inputs.indexerSensor or self.inputs.kickSensor
 
     @autolog_output(key="Indexer/has two ball")
     def hasTwoBall(self) -> bool:
-        return self.inputs.indexerSensor and self.inputs.feedSensor
+        return self.inputs.indexerSensor and self.inputs.kickSensor
