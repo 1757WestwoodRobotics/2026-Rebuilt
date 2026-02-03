@@ -1,4 +1,4 @@
-from phoenix6.configs import CurrentLimitsConfigs
+from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
 from wpimath.system.plant import DCMotor
 
 
