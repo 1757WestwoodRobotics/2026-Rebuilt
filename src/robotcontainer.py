@@ -14,6 +14,7 @@ from commands.drive.fieldrelativedrive import FieldRelativeDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
 import commands.turretcommands as TurretCommands  # module, not class
+import commands.indexercommands as IndexerCommands  # module, not class
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
