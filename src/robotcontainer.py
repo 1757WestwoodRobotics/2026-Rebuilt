@@ -16,6 +16,7 @@ from commands.defensestate import DefenseState
 import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
+import commands.indexercommands as IndexerCommands  # module, not class
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
