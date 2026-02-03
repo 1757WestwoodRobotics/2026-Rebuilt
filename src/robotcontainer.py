@@ -28,6 +28,10 @@ from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
 from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
+from subsystems.indexer.indexersubsystem import IndexerSubsystem
+from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
+from subsystems.indexer.indexersubsystemiosim import IndexerSubsystemIOSIM
+from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visioniophotonsim import VisionSubsystemIOPhotonSim
@@ -172,6 +176,7 @@ class RobotContainer:
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOTalon())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -260,6 +265,7 @@ class RobotContainer:
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIOSIM())
 
             case _:
                 self.drive = DriveSubsystem(
@@ -277,6 +283,7 @@ class RobotContainer:
                     [VisionSubsystemIO(), VisionSubsystemIO()],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
@@ -306,6 +313,7 @@ class RobotContainer:
             LoggedDashboardChooser("Autonomous")
         )
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
+        self.chooser.addOption("Indexer SysID", self.indexer.sysIdRoutine(self.indexer))
 
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
@@ -337,6 +345,7 @@ class RobotContainer:
             )
         )
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
+        self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
 
