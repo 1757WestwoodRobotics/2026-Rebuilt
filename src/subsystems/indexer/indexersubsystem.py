@@ -1,8 +1,10 @@
 from enum import Enum, auto
 
-from commands2 import Subsystem
-from pykit.autolog import autolog_output, autologgable_output
+from commands2 import Subsystem, Command, cmd
+from commands2.sysid import SysIdRoutine
+from pykit.autolog import autologgable_output
 from pykit.logger import Logger
+from wpilib.sysid import State
 
 from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.logtracer import LogTracer
@@ -95,3 +97,36 @@ class IndexerSubsystem(Subsystem):
 
     def updateGoals(self):
         self.spindexerMotorGoal, self.kickMotorGoal = self.subsystemGoal.value
+
+    def sysIdRoutine(self, subsystem: Subsystem) -> Command:
+
+        def logState(state: State) -> None:
+            loggedStateStr = ""
+            match state:
+                case State.kQuasistaticForward:
+                    loggedStateStr = "quasistatic-forward"
+                case State.kQuasistaticReverse:
+                    loggedStateStr = "quasistatic-reverse"
+                case State.kDynamicForward:
+                    loggedStateStr = "dynamic-forward"
+                case State.kDynamicReverse:
+                    loggedStateStr = "dynamic-reverse"
+                case State.kNone:
+                    loggedStateStr = "none"
+            Logger.recordOutput("Indexer/SysID State", loggedStateStr)
+
+        charactarizationRoutine = SysIdRoutine(
+            SysIdRoutine.Config(0.5, 6, 10, logState),
+            SysIdRoutine.Mechanism(
+                self.io.setIndexerTarget,
+                (lambda _: None),
+                subsystem,
+            ),
+        )
+
+        return cmd.sequence(
+            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward),
+            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse),
+            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kForward),
+            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse),
+        )
