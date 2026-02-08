@@ -5,7 +5,7 @@ from phoenix6.configs.talon_fx_configs import (
     InvertedValue,
     NeutralModeValue,
     Slot0Configs,
-    StaticKickforwardSignValue,
+    StaticFeedforwardSignValue,
 )
 from phoenix6.controls import (
     MotionMagicVoltage,
@@ -92,8 +92,8 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             .with_k_v(kSteerVGain)
             .with_k_s(kSteerSGain)
             .with_k_a(0)
-            .with_static_kickforward_sign(
-                StaticKickforwardSignValue.USE_CLOSED_LOOP_SIGN
+            .with_static_feedforward_sign(
+                StaticFeedforwardSignValue.USE_CLOSED_LOOP_SIGN
             )
         )
         self.steerConfig.torque_current.peak_forward_torque_current = 40

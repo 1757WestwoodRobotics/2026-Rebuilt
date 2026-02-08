@@ -9,7 +9,7 @@
 # of your robot code without too much extra effort.
 #
 
-from phoenix6.unmanaged import kick_enable
+from phoenix6.unmanaged import feed_enable
 from wpilib import RobotController
 from wpimath.geometry import Pose2d, Rotation2d, Transform2d
 from pyfrc.physics.core import PhysicsInterface
@@ -95,7 +95,7 @@ class PhysicsEngine:
         """
         if not self.doSim:
             return
-        kick_enable(tm_diff)
+        feed_enable(tm_diff)
 
         if not self.sim_initialized:
             self.sim_initialized = True
