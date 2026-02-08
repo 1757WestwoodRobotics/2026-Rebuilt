@@ -71,7 +71,7 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             .with_k_d(kDriveDGain)
             .with_k_v(kDriveVGain)
         )
-        self.driveConfig.kickback.sensor_to_mechanism_ratio = config.driveGearing
+        self.driveConfig.feedback.sensor_to_mechanism_ratio = config.driveGearing
         self.driveConfig.current_limits = kDriveCurrentLimit
         self.driveConfig.motor_output.inverted = (
             InvertedValue.COUNTER_CLOCKWISE_POSITIVE
@@ -110,7 +110,7 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             kRobotUpdatePeriod
         )
         # optionally fuse the cancoder to the steer motor
-        self.steerConfig.kickback.sensor_to_mechanism_ratio = config.steerGearing
+        self.steerConfig.feedback.sensor_to_mechanism_ratio = config.steerGearing
         self.steerConfig.closed_loop_general.continuous_wrap = True
         self.steerConfig.current_limits = kSteerCurrentLimit
         self.steerConfig.motor_output.inverted = (
