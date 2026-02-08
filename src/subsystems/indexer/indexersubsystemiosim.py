@@ -8,10 +8,9 @@ from constants.math import kRadiansPerRevolution
 from constants.indexer import (
     kKickerGearRatio,
     kKickerMotor,
-    kIndexerGearRatio,
-    kIndexerMotor,
+    kSpindexerGearRatio,
+    kSpindexerMotor,
 )
-from constants.sim import kSimMotorResistance
 from constants import kRobotUpdatePeriod
 from util.convenientmath import clamp
 
@@ -19,9 +18,9 @@ from util.convenientmath import clamp
 class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
     def __init__(self) -> None:
         super().__init__()
-        self.indexerSimModel = DCMotorSim(
-            LinearSystemId.DCMotorSystem(kIndexerMotor, 0.04, kIndexerGearRatio),
-            kIndexerMotor,
+        self.spindexerSimModel = DCMotorSim(
+            LinearSystemId.DCMotorSystem(kSpindexerMotor, 0.04, kSpindexerGearRatio),
+            kSpindexerMotor,
         )
 
         self.kickerSimModel = DCMotorSim(
@@ -30,31 +29,31 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         )
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:
-        indexerMotorSim = self.indexerMotor.sim_state
+        spindexerMotorSim = self.spindexerMotor.sim_state
         kickerMotorSim = self.kickerMotor.sim_state
 
         simVoltage = RobotController.getInputVoltage()
 
-        indexerAppliedVoltage = clamp(indexerMotorSim.motor_voltage, -12.0, 12.0)
+        spindexerAppliedVoltage = clamp(spindexerMotorSim.motor_voltage, -12.0, 12.0)
         kickerAppliedVoltage = clamp(kickerMotorSim.motor_voltage, -12.0, 12.0)
 
-        self.indexerSimModel.setInputVoltage(indexerAppliedVoltage)
+        self.spindexerSimModel.setInputVoltage(spindexerAppliedVoltage)
         self.kickerSimModel.setInputVoltage(kickerAppliedVoltage)
 
-        self.indexerSimModel.update(kRobotUpdatePeriod)
+        self.spindexerSimModel.update(kRobotUpdatePeriod)
         self.kickerSimModel.update(kRobotUpdatePeriod)
 
-        indexerMotorSim.set_raw_rotor_position(
-            self.indexerSimModel.getAngularPositionRotations() * kIndexerGearRatio
+        spindexerMotorSim.set_raw_rotor_position(
+            self.spindexerSimModel.getAngularPositionRotations() * kSpindexerGearRatio
         )
-        indexerMotorSim.set_rotor_velocity(
-            self.indexerSimModel.getAngularVelocity()
-            * kIndexerGearRatio
+        spindexerMotorSim.set_rotor_velocity(
+            self.spindexerSimModel.getAngularVelocity()
+            * kSpindexerGearRatio
             / kRadiansPerRevolution
         )
-        indexerMotorSim.set_supply_voltage(
+        spindexerMotorSim.set_supply_voltage(
             clamp(
-                simVoltage - indexerMotorSim.supply_current * kIndexerMotor.R,
+                simVoltage - spindexerMotorSim.supply_current * kSpindexerMotor.R,
                 0,
                 simVoltage,
             )

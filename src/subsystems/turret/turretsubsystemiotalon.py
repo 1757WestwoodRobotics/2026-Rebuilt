@@ -39,7 +39,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
         self.motor = TalonFX(kTurretCanId)
 
         self.turretConfig.current_limits = kTurretCurrentLimit
-        self.turretConfig.kickback.sensor_to_mechanism_ratio = kTurretGearRatio
+        self.turretConfig.feedback.sensor_to_mechanism_ratio = kTurretGearRatio
         self.turretConfig.slot0 = (
             Slot0Configs()
             .with_k_p(kTurretPGain)
