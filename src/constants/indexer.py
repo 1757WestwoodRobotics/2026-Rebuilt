@@ -1,7 +1,6 @@
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
 from wpimath.system.plant import DCMotor
 
-
 kSpindexerCANId = 22
 kKickerCANId = 23
 
