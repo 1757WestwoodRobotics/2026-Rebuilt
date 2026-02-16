@@ -14,7 +14,7 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
 
     def trackFunc():
         turret.setClosedLoop(True)
-        robotPose = RobotState.getPose()
+        robotPose = RobotState.getHubPose()
 
         turret2DLocationOnField = (
             kTurretLocation.translation().toTranslation2d() + robotPose.translation()

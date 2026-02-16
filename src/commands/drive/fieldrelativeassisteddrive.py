@@ -39,7 +39,7 @@ class FieldRelativeAssistedDrive(FieldRelativeDrive):
         self.setName(type(self).__name__)
 
     def execute(self) -> None:
-        robotPose = RobotState.getPose()
+        robotPose = RobotState.getFieldPose()
         requestedRotation = self.rotation()
 
         closestTrench = robotPose.translation().nearest(kTrenchCenters)

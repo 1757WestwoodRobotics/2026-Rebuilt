@@ -18,6 +18,7 @@ from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
 from constants.auto import kAutoDistanceTolerance, kAutoRotationTolerance
 from constants.field import kEndgameDuration, kShiftDuration
+from constants.vision import kRedHubAprilTags, kBlueHubAprilTags
 
 
 class RobotState:
@@ -37,9 +38,14 @@ class RobotState:
         SwerveModulePosition(),
     )
 
-    estimator: TurretedRobotPoseEstimator = TurretedRobotPoseEstimator(
+    fieldEstimator: TurretedRobotPoseEstimator = TurretedRobotPoseEstimator(
         kDriveKinematics, Rotation2d(), modulePositions, Pose2d(), (0.1, 0.1, 0.1)
     )
+    hubEstimator: TurretedRobotPoseEstimator = TurretedRobotPoseEstimator(
+        kDriveKinematics, Rotation2d(), modulePositions, Pose2d(), (0.1, 0.1, 0.1)
+    )
+    """hub estimator is a pose estimator that cares about being relative to the hub.
+    Its poses will be returned as full field, but only use apriltags that are on the hub."""
     odometry: SwerveDrive4Odometry = SwerveDrive4Odometry(
         kDriveKinematics, Rotation2d(), modulePositions, Pose2d()
     )
@@ -52,21 +58,37 @@ class RobotState:
     targetAutonomousStartingLocation: Pose2d = Pose2d()
 
     @classmethod
+    def hubTags(cls) -> list[int]:
+        """
+        Returns the april tag IDs of the hubs we are scoring on
+        This is determined by the alliance color and whether we won autonomous
+        Defaults to blue hub tags if alliance is unknown
+        """
+        if DriverStation.getAlliance() == DriverStation.Alliance.kRed:
+            return kRedHubAprilTags
+        else:
+            return kBlueHubAprilTags
+
+    @classmethod
     def setAutonomousStartingLogation(cls, location: Pose2d):
         cls.targetAutonomousStartingLocation = location
 
     @classmethod
     def addVisionMeasurement(cls, measurement: VisionObservation):
-        cls.estimator.addVisionMeasurement(measurement)
+        cls.fieldEstimator.addVisionMeasurement(measurement)
+        if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
+            cls.hubEstimator.addVisionMeasurement(measurement)
 
     @classmethod
     def addTurretedVisionMeasurement(cls, measurement: TurretedVisionObservation):
-        cls.estimator.addTurretedVisionMeasurement(measurement)
+        cls.fieldEstimator.addTurretedVisionMeasurement(measurement)
+        if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
+            cls.hubEstimator.addTurretedVisionMeasurement(measurement)
 
     @classmethod
     def getTurretPose(cls) -> Pose3d:
         return (
-            pose3dFrom2d(cls.getPose())
+            pose3dFrom2d(cls.getFieldPose())
             + kTurretLocation
             + Transform3d(0, 0, 0, Rotation3d(0, 0, cls.turretRotation.radians()))
         )
@@ -179,17 +201,24 @@ class RobotState:
 
         cls.robotFieldVelocity = fieldRelativeRobotVelocity
         LogTracer.record("OdometryUpdate")
-        cls.estimator.addOdometryMeasurement(
+        cls.fieldEstimator.addOdometryMeasurement(
             OdometryObservation(modulePositions, heading, headingTimestamp)
         )
-        cls.estimator.addTurretMeasurement(
+        cls.fieldEstimator.addTurretMeasurement(
+            TurretObservation(turretRotation, headingTimestamp)
+        )
+        cls.hubEstimator.addOdometryMeasurement(
+            OdometryObservation(modulePositions, heading, headingTimestamp)
+        )
+        cls.hubEstimator.addTurretMeasurement(
             TurretObservation(turretRotation, headingTimestamp)
         )
         LogTracer.record("EstimatorUpdate")
 
-        estimatedFieldPose = cls.getPose()
+        estimatedFieldPose = cls.getFieldPose()
         Logger.recordOutput("Robot/Pose/EstimatorPose", estimatedFieldPose)
         Logger.recordOutput("Robot/Pose/OdometryPose", cls.odometry.getPose())
+        Logger.recordOutput("Robot/Pose/HubEstimatorPose", cls.getHubPose())
         Logger.recordOutput("Robot/TurretRotation", cls.turretRotation)
         Logger.recordOutput("Robot/Heading", cls.robotHeading)
         Logger.recordOutput("Robot/HeadingVelocity", robotYawVelocity)
@@ -217,18 +246,23 @@ class RobotState:
         LogTracer.recordTotal()
 
     @classmethod
-    def getPose(cls) -> Pose2d:
-        return cls.estimator.estimatedPose
+    def getFieldPose(cls) -> Pose2d:
+        return cls.fieldEstimator.estimatedPose
+
+    @classmethod
+    def getHubPose(cls) -> Pose2d:
+        return cls.hubEstimator.estimatedPose
 
     @classmethod
     def getRotation(cls) -> Rotation2d:
-        return cls.getPose().rotation()
+        return cls.getFieldPose().rotation()
 
     @classmethod
     def resetPose(cls, pose: Pose2d = Pose2d()) -> None:
         cls.headingOffset = cls.robotHeading - pose.rotation()
         cls.odometry.resetPosition(cls.robotHeading, cls.modulePositions, pose)
-        cls.estimator.resetPosition(cls.robotHeading, cls.modulePositions, pose)
+        cls.fieldEstimator.resetPosition(cls.robotHeading, cls.modulePositions, pose)
+        cls.hubEstimator.resetPosition(cls.robotHeading, cls.modulePositions, pose)
 
         if RobotBase.isSimulation() and not Logger.isReplay():
             cls.resetSimPose(pose)
@@ -250,7 +284,7 @@ class RobotState:
         if len(cls.simPoseRecieverConsumers) == 1:
             return cls.simPoseRecieverConsumers[0]()
         print("This is not supposed to happen")
-        return cls.getPose()
+        return cls.getFieldPose()
 
     @classmethod
     def getSimTurretPose(cls) -> Pose3d:
