@@ -102,7 +102,7 @@ class VisionSubsystem(Subsystem):
                         observation.pose.toPose2d(),
                         observation.timestamp,
                         [linearStdDev, linearStdDev, angularStdDev],
-                        observation.tags
+                        observation.tags,
                     )
                 )
             LogTracer.record(f"Camera{idx} ProcessObservations")
@@ -147,7 +147,7 @@ class VisionSubsystem(Subsystem):
                         observation.fieldToTurret,
                         observation.timestamp,
                         [linearStdDev, linearStdDev, angularStdDev],
-                        observation.tags
+                        observation.tags,
                     )
                 )
 
