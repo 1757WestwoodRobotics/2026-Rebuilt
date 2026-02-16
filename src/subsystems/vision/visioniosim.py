@@ -83,6 +83,7 @@ class VisionSubsystemIOSim(VisionSubsystemIO):
                         botPose,
                         0.1,
                         1,
+                        [tagId],
                         avgDist,
                         ObservationType.PHOTONVISION.value,
                     )
