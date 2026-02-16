@@ -360,3 +360,5 @@ kApriltagPositionDictAndyMark = {
         Rotation3d(0.0, 0.0, 300 * kRadiansPerDegree),
     ),
 }
+kRedHubAprilTags = [2, 3, 4, 5, 8, 9, 10, 11]
+kBlueHubAprilTags = [19, 20, 21, 24, 25, 26, 27]
