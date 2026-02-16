@@ -186,14 +186,14 @@ class DriveWaypoint(Command):
         self.running = True
         # pylint: disable=W0201
 
-        currentPose = RobotState.getPose()
+        currentPose = RobotState.getFieldPose()
         self.xController.reset(currentPose.X())
         self.yController.reset(currentPose.Y())
 
         self.thetaController.reset(RobotState.getRotation().radians(), 0)
 
     def execute(self) -> None:
-        currentPose = RobotState.getPose()
+        currentPose = RobotState.getFieldPose()
         self.targetPose = self.targetSupplier()
 
         absoluteOutput = ChassisSpeeds(

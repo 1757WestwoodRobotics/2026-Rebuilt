@@ -108,7 +108,7 @@ class DriveSubsystem(Subsystem):
         self.fieldSpeeds = ChassisSpeeds()
 
         AutoBuilder.configure(
-            RobotState.getPose,
+            RobotState.getFieldPose,
             RobotState.resetPose,
             self.getRobotRelativeSpeeds,
             self.drivePathPlanned,

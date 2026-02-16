@@ -36,11 +36,18 @@ class VisionObservation:
     Represents a vision measurement for the robot pose estimator.
     """
 
-    def __init__(self, visionPose: Pose2d, timestamp: float, std: list[float]) -> None:
+    def __init__(
+        self,
+        visionPose: Pose2d,
+        timestamp: float,
+        std: list[float],
+        tagsUsed: list[int],
+    ) -> None:
         assert len(std) == 3
         self.visionPose = visionPose
         self.timestamp = timestamp
         self.std = std
+        self.tagsUsed = tagsUsed
 
 
 class TurretedVisionObservation:
@@ -49,12 +56,17 @@ class TurretedVisionObservation:
     """
 
     def __init__(
-        self, fieldToTurretTransform: Transform3d, timestamp: float, std: list[float]
+        self,
+        fieldToTurretTransform: Transform3d,
+        timestamp: float,
+        std: list[float],
+        tagsUsed: list[int],
     ) -> None:
         assert len(std) == 3
         self.fieldToTurretTransform = fieldToTurretTransform
         self.timestamp = timestamp
         self.std = std
+        self.tagsUsed = tagsUsed
 
 
 class TurretObservation:

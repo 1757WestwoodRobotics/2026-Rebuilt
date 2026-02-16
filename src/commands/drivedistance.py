@@ -31,7 +31,7 @@ class DriveDistance(Command):
         self.distanceToTarget: Optional[float] = None
 
     def initialize(self) -> None:
-        currentPose = RobotState.getPose()
+        currentPose = RobotState.getFieldPose()
         if self.axis is DriveDistance.Axis.X:
             self.targetPose = currentPose + Transform2d(self.distance, 0, 0)
         elif self.axis is DriveDistance.Axis.Y:
@@ -63,7 +63,7 @@ class DriveDistance(Command):
     def updateDistanceToTarget(self) -> None:
         if self.targetPose is None:
             return
-        currentPose = RobotState.getPose()
+        currentPose = RobotState.getFieldPose()
         self.distanceToTarget = currentPose.translation().distance(
             self.targetPose.translation()
         )
