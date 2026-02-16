@@ -70,6 +70,7 @@ class VisionSubsystemIOLimelight(VisionSubsystemIO):
                         VisionSubsystemIOLimelight.parsePose(sample.value),
                         sample.value[17] if len(sample.value) >= 18 else 0,
                         int(sample.value[7]),
+                        [], # TODO: add tag IDs to LL output
                         sample.value[9],
                         ObservationType.MEGATAG_1.value,
                     )
@@ -86,6 +87,7 @@ class VisionSubsystemIOLimelight(VisionSubsystemIO):
                         VisionSubsystemIOLimelight.parsePose(sample.value),
                         0.0,
                         int(sample.value[7]),
+                        [], # TODO: add tag IDs to LL output
                         sample.value[9],
                         ObservationType.MEGATAG_2.value,
                     )

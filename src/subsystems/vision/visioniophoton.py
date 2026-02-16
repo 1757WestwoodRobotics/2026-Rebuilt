@@ -56,6 +56,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                             robotPose,
                             result.multitagResult.estimatedPose.ambiguity,
                             len(result.multitagResult.fiducialIDsUsed),
+                            result.multitagResult.fiducialIDsUsed,
                             totalTagDistance / len(result.targets),
                             ObservationType.PHOTONVISION.value,
                         )
@@ -67,6 +68,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                             fieldToBase,  # this transform is from field to turret
                             result.multitagResult.estimatedPose.ambiguity,
                             len(result.multitagResult.fiducialIDsUsed),
+                            result.multitagResult.fiducialIDsUsed,
                             totalTagDistance / len(result.targets),
                             ObservationType.PHOTONVISION.value,
                         )
@@ -96,6 +98,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 robotPose,
                                 target.poseAmbiguity,
                                 1,
+                                [target.fiducialId],
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
@@ -107,6 +110,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 fieldToBase,
                                 target.poseAmbiguity,
                                 1,
+                                [target.fiducialId],
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
