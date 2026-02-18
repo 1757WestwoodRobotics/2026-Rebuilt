@@ -14,6 +14,7 @@ from pathplannerlib.auto import PathPlannerAuto
 from commands.drive.fieldrelativeassisteddrive import FieldRelativeAssistedDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
+from commands.intakecommands import IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
 
@@ -29,6 +30,10 @@ from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.drive.swervemoduleio import SwerveModuleConfigParams, SwerveModuleIO
 from subsystems.drive.swervemoduleiosim import SwerveModuleIOSim
 from subsystems.drive.swervemoduleiotalonfx import SwerveModuleIOCTRE
+from subsystems.intake.intakesubsystem import IntakeSubsystem
+from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
+from subsystems.intake.intakesubsystemiosim import IntakeSubsystemIOSIM
+from subsystems.intake.intakesubsystemiotalon import IntakeSubsystemIOTalon
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
@@ -184,6 +189,7 @@ class RobotContainer:
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
+                self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -276,6 +282,7 @@ class RobotContainer:
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
+                self.intake = IntakeSubsystem(IntakeSubsystemIOSIM())
 
             case _:
                 self.drive = DriveSubsystem(
@@ -294,6 +301,7 @@ class RobotContainer:
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIO())
+                self.intake = IntakeSubsystem(IntakeSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
@@ -352,6 +360,7 @@ class RobotContainer:
         self.oi = OperatorInterface()
         self.configureButtonBindings()
 
+        self.intake.setDefaultCommand(IntakeCommands.retractIntake(self.intake))
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
@@ -421,6 +430,8 @@ class RobotContainer:
         )
         self.oi.operatorController.button(7).whileTrue(
             ClimbCommands.bumpDown(self.climber).repeatedly()
+        self.oi.driverController.leftBumper().toggleOnTrue(
+            IntakeCommands.deployIntake(self.intake)
         )
 
         RobotState.shiftTrigger().onTrue(
