@@ -71,7 +71,8 @@ kWheelDistancePerRadian = kWheelDistancePerRevolution / kRadiansPerRevolution
 """meters / radian"""
 
 kDriveGearingRatio = (54 / 14) * (25 / 32) * (30 / 15)
-"""dimensionless"""
+"""dimensionless
+this is the L2 gearing ratio"""
 
 kSteerGearingRatioMk5i = 26 / 1
 """dimensionless"""
