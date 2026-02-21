@@ -18,6 +18,10 @@ import commands.turretcommands as TurretCommands  # module, not class
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
 from robotstate import RobotState
+from subsystems.climber.climbersubsystem import ClimberSubsystem
+from subsystems.climber.climbersubsystemio import ClimberSubsystemIO
+from subsystems.climber.climbersubsystemiosim import ClimberSubsystemIOSim
+from subsystems.climber.climbersubsystemiotalon import ClimberSubsystemIOTalon
 from subsystems.drive.driveiopigeon import DriveIOPigeon
 from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.drive.swervemoduleio import SwerveModuleConfigParams, SwerveModuleIO
@@ -177,6 +181,7 @@ class RobotContainer:
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
+                self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -268,6 +273,7 @@ class RobotContainer:
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
+                self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
 
             case _:
                 self.drive = DriveSubsystem(
@@ -285,6 +291,7 @@ class RobotContainer:
                     [VisionSubsystemIO(), VisionSubsystemIO()],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
+                self.climber = ClimberSubsystem(ClimberSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
