@@ -29,7 +29,6 @@ from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
 from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
-from subsystems.vision.visioniophotonsim import VisionSubsystemIOPhotonSim
 from subsystems.vision.visionsubsystem import VisionSubsystem
 from subsystems.drive.driveio import DriveIO
 
@@ -81,6 +80,8 @@ from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
 from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
 
+if kRobotMode == RobotModes.SIMULATION: # required since opencv can't go on rio
+    from subsystems.vision.visioniophotonsim import VisionSubsystemIOPhotonSim
 
 class RobotContainer:
     """
@@ -171,7 +172,7 @@ class RobotContainer:
                         ),
                     ],
                 )
-                self.turret = TurretSubsystem(TurretSubsystemIOTalon())
+                self.turret = TurretSubsystem(TurretSubsystemIO())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
