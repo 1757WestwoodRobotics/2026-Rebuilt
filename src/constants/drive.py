@@ -133,17 +133,17 @@ kBackRightModuleName = "back_right"
 
 
 # CANivore
-kCANivoreName = "Drive"
+kCANivoreName = "canivore"
 
 # Motors
-kFrontLeftDriveMotorId = 1
-kFrontLeftSteerMotorId = 2
-kFrontRightDriveMotorId = 3
-kFrontRightSteerMotorId = 4
-kBackLeftDriveMotorId = 5
-kBackLeftSteerMotorId = 6
-kBackRightDriveMotorId = 7
-kBackRightSteerMotorId = 8
+kFrontLeftDriveMotorId = 32
+kFrontLeftSteerMotorId = 52
+kFrontRightDriveMotorId = 33
+kFrontRightSteerMotorId = 53
+kBackLeftDriveMotorId = 31
+kBackLeftSteerMotorId = 51
+kBackRightDriveMotorId = 30
+kBackRightSteerMotorId = 50
 
 kDriveCurrentLimit = (
     CurrentLimitsConfigs()
@@ -160,13 +160,13 @@ kSteerCurrentLimit = (
 kDriveAngularVelocityCoeff = 0.01  # while translating and rotating, need a bit extra motion to compensate for moving reference frame
 
 # Pigeon
-kPigeonCANId = 50
+kPigeonCANId = 20
 
 # Encoders
-kFrontLeftSteerEncoderId = 10
-kFrontRightSteerEncoderId = 11
-kBackLeftSteerEncoderId = 12
-kBackRightSteerEncoderId = 13
+kFrontLeftSteerEncoderId = 42
+kFrontRightSteerEncoderId = 43
+kBackLeftSteerEncoderId = 41
+kBackRightSteerEncoderId = 40
 
 kConfigurationTimeoutLimit = int(5 * kMillisecondsPerSecond)
 """milliseconds"""
@@ -190,10 +190,10 @@ kFrontRightDriveInverted = False
 kBackLeftDriveInverted = True
 kBackRightDriveInverted = False
 
-kFrontLeftSteerInverted = False
-kFrontRightSteerInverted = False
-kBackLeftSteerInverted = False
-kBackRightSteerInverted = False
+kFrontLeftSteerInverted = True
+kFrontRightSteerInverted = True
+kBackLeftSteerInverted = True
+kBackRightSteerInverted = True
 
 """
 To determine encoder offsets (with robot ON and DISABLED):
@@ -209,16 +209,16 @@ To determine encoder offsets (with robot ON and DISABLED):
   7. Click "Self-Test Snapshot"
   8. Record value from line: "Absolute Position (unsigned):"
 """
-kFrontLeftAbsoluteEncoderOffset = -0.139892578125
+kFrontLeftAbsoluteEncoderOffset = -0.142334
 """rotations"""
 
-kFrontRightAbsoluteEncoderOffset = -0.477783203125
+kFrontRightAbsoluteEncoderOffset = 0.281738
 """rotations"""
 
-kBackLeftAbsoluteEncoderOffset = 0.46142578125
+kBackLeftAbsoluteEncoderOffset = 0.479248
 """rotations"""
 
-kBackRightAbsoluteEncoderOffset = 0.015625
+kBackRightAbsoluteEncoderOffset = 0.316162
 """rotations"""
 
 kNormalSpeedMultiplier = 0.50  # half full on normal
