@@ -192,7 +192,7 @@ class RobotPoseEstimator:
             None
         """
         self.gyroOffset = (
-            startPose.rotation() - self.odometryPose.rotation() - self.gyroOffset
+            startPose.rotation() - (self.odometryPose.rotation() - self.gyroOffset)
         )
         self.estimatedPose = startPose
         self.odometryPose = startPose
