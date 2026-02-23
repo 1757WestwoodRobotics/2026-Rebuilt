@@ -361,4 +361,4 @@ kApriltagPositionDictAndyMark = {
     ),
 }
 kRedHubAprilTags = [2, 3, 4, 5, 8, 9, 10, 11]
-kBlueHubAprilTags = [19, 20, 21, 24, 25, 26, 27]
+kBlueHubAprilTags = [18, 19, 20, 21, 24, 25, 26, 27]
