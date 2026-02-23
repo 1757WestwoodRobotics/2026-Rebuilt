@@ -14,7 +14,7 @@ from pathplannerlib.auto import PathPlannerAuto
 from commands.drive.fieldrelativeassisteddrive import FieldRelativeAssistedDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
-from commands.intakecommands import IntakeCommands
+import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
 
@@ -360,7 +360,6 @@ class RobotContainer:
         self.oi = OperatorInterface()
         self.configureButtonBindings()
 
-        self.intake.setDefaultCommand(IntakeCommands.retractIntake(self.intake))
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
@@ -430,8 +429,13 @@ class RobotContainer:
         )
         self.oi.operatorController.button(7).whileTrue(
             ClimbCommands.bumpDown(self.climber).repeatedly()
-        self.oi.driverController.leftBumper().toggleOnTrue(
-            IntakeCommands.deployIntake(self.intake)
+        )
+
+        self.oi.driverController.leftBumper().onTrue(
+            IntakeCommands.toggleIntakeDeployment(self.intake)
+        )
+        self.oi.driverController.rightTrigger().whileTrue(
+            IntakeCommands.runIntakeRollers(self.intake)
         )
 
         RobotState.shiftTrigger().onTrue(
