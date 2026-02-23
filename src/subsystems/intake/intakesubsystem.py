@@ -37,6 +37,10 @@ class IntakeSubsystemGoal(Enum):
         PivotGoal.DEPLOYED,
         RollerGoal.FORWARD,
     )
+    EXTENDED = (
+        PivotGoal.DEPLOYED,
+        RollerGoal.NEUTRAL,
+    )
     RETRACTED = (
         PivotGoal.RETRACTED,
         RollerGoal.NEUTRAL,
