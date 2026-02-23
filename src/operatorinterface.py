@@ -4,6 +4,7 @@ from wpilib.interfaces import GenericHID
 from util.helpfultriggerwrappers import Deadband, Invert, SignSquare
 
 from constants.oi import kXboxJoystickDeadband
+from util.joystick.commandfarmcontroller import CommandFarmController
 
 
 class OperatorInterface:
@@ -16,7 +17,7 @@ class OperatorInterface:
 
     def __init__(self) -> None:
         self.driverController = CommandXboxController(0)
-        self.operatorController = CommandXboxController(1)
+        self.operatorController = CommandFarmController(1)
 
         self.driverX = SignSquare(
             Invert(Deadband(self.driverController.getLeftX, kXboxJoystickDeadband))

@@ -45,6 +45,9 @@ class ClimberSubsystem(Subsystem):
     def setClimberGoal(self, goal: float) -> None:
         self.climberGoal = goal
 
+    def bumpClimberGoal(self, bumpAmount: float) -> None:
+        self.climberGoal += bumpAmount
+
     def isAtGoal(self, goal: float) -> bool:
         return abs(self.inputs.climberPosition - goal) <= kClimberPositionTolerance
 
