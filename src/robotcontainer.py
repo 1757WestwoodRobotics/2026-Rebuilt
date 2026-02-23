@@ -362,7 +362,7 @@ class RobotContainer:
                 self.oi.driverRotation,
             )
         )
-        self.oi.driverController.x().whileTrue(
+        self.oi.driverController.rightBumper().whileTrue(
             AngleAlignDrive(
                 self.drive,
                 lambda: self.oi.driverY() * kNormalSpeedMultiplier,
