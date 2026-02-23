@@ -294,6 +294,13 @@ class RobotContainer:
             "SHIFT ACTIVE!", wpilib.Alert.AlertType.kInfo
         )
         self.shiftActiveAlert.set(True)
+
+        self.usbAlert = wpilib.Alert(
+            "No USB Drive in robot!", wpilib.Alert.AlertType.kError
+        )
+        if wpilib.RobotBase.isReal() and not os.path.exists("/U/logs"):
+            self.usbAlert.set(True)
+
         # Initialize as active at startup;
         # this initial value may be updated later based on the actual shift state
 
