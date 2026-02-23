@@ -108,6 +108,12 @@ class RobotPoseEstimator:
 
         self.poseBuffer = TimeInterpolatablePose2dBuffer(2.0)
 
+        self._lastMeasurementTime = 0.0
+
+    @property
+    def lastMeasurementTime(self) -> float:
+        return self._lastMeasurementTime
+
     def addOdometryMeasurement(self, measurement: OdometryObservation):
         """
         Adds an odometry measurement to the pose estimator.
@@ -181,6 +187,10 @@ class RobotPoseEstimator:
 
         self.estimatedPose = (
             estimateAtTime + scaledTransform + sampleToOdometryTransform
+        )
+
+        self._lastMeasurementTime = max(
+            self._lastMeasurementTime, measurement.timestamp
         )
 
     def resetPosition(
@@ -305,6 +315,10 @@ class TurretedRobotPoseEstimator(RobotPoseEstimator):
         )
         self.estimatedPose = (
             estimateAtTime + scaledTransform + sampleToOdometryTransform
+        )
+
+        self._lastMeasurementTime = max(
+            self._lastMeasurementTime, measurement.timestamp
         )
 
     def resetPosition(

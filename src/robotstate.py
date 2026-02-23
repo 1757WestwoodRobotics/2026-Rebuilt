@@ -216,9 +216,17 @@ class RobotState:
         LogTracer.record("EstimatorUpdate")
 
         estimatedFieldPose = cls.getFieldPose()
-        Logger.recordOutput("Robot/Pose/EstimatorPose", estimatedFieldPose)
+        Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
+        Logger.recordOutput(
+            "Robot/Pose/Estimator/LastVisionUpdate",
+            cls.fieldEstimator.lastMeasurementTime,
+        )
         Logger.recordOutput("Robot/Pose/OdometryPose", cls.odometry.getPose())
-        Logger.recordOutput("Robot/Pose/HubEstimatorPose", cls.getHubPose())
+        Logger.recordOutput("Robot/Pose/HubEstimator/Pose", cls.getHubPose())
+        Logger.recordOutput(
+            "Robot/Pose/HubEstimator/LastVisionUpdate",
+            cls.hubEstimator.lastMeasurementTime,
+        )
         Logger.recordOutput("Robot/TurretRotation", cls.turretRotation)
         Logger.recordOutput("Robot/Heading", cls.robotHeading)
         Logger.recordOutput("Robot/HeadingVelocity", robotYawVelocity)
