@@ -23,6 +23,7 @@ def bumpUp(climber: ClimberSubsystem) -> Command:
     """Bump the climber up by a small amount"""
     return bumpClimber(climber, kClimberBumpAmount)
 
+
 def bumpDown(climber: ClimberSubsystem) -> Command:
     """Bump the climber down by a small amount"""
     return bumpClimber(climber, -kClimberBumpAmount)

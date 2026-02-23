@@ -2,9 +2,9 @@ from commands2 import Command, cmd
 from commands2.button import CommandXboxController
 from wpilib.interfaces import GenericHID
 from util.helpfultriggerwrappers import Deadband, Invert, SignSquare
+from util.joystick.commandfarmcontroller import CommandFarmController
 
 from constants.oi import kXboxJoystickDeadband
-from util.joystick.commandfarmcontroller import CommandFarmController
 
 
 class OperatorInterface:
@@ -13,7 +13,7 @@ class OperatorInterface:
     """
 
     driverController: CommandXboxController
-    operatorController: CommandXboxController
+    operatorController: CommandFarmController
 
     def __init__(self) -> None:
         self.driverController = CommandXboxController(0)

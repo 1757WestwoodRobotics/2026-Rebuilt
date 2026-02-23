@@ -1,6 +1,6 @@
 from phoenix6 import BaseStatusSignal
 from phoenix6.configs.talon_fx_configs import Slot0Configs, TalonFXConfiguration
-from phoenix6.controls import MotionMagicVoltage, PositionTorqueCurrentFOC, VoltageOut
+from phoenix6.controls import PositionTorqueCurrentFOC, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
 from subsystems.climber.climbersubsystemio import ClimberSubsystemIO
 
@@ -8,7 +8,6 @@ from constants import kRobotUpdateFrequency
 from constants.climber import (
     kClimberCANId,
     kClimberCurrentLimit,
-    kClimberGearRatio,
     kClimberPGain,
     kClimberIGain,
     kClimberDGain,
