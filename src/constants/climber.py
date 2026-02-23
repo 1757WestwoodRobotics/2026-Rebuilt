@@ -31,3 +31,8 @@ kClimberCurrentLimit = (
 
 kClimberSimMotor = DCMotor.falcon500(1)
 kClimberSimInertia = 0.005  # kg m^2
+
+kDeployedHeight = 8.75 * kMetersPerInch  # meters
+kRetractedHeight = 0.0  # meters
+
+kClimberBumpAmount = 1 * kMetersPerInch  # meters

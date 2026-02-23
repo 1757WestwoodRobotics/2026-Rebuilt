@@ -14,6 +14,7 @@ from commands.drive.fieldrelativeassisteddrive import FieldRelativeAssistedDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
 import commands.turretcommands as TurretCommands  # module, not class
+import commands.climbcommands as ClimbCommands  # module, not class
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -399,6 +400,19 @@ class RobotContainer:
         )
 
         self.oi.driverController.x().whileTrue(DefenseState(self.drive))
+
+        self.oi.operatorController.button(1).onTrue(
+            ClimbCommands.deployClimber(self.climber)
+        )
+        self.oi.operatorController.button(6).onTrue(
+            ClimbCommands.retractClimber(self.climber)
+        )
+        self.oi.operatorController.button(2).whileTrue(
+            ClimbCommands.bumpUp(self.climber).repeatedly()
+        )
+        self.oi.operatorController.button(7).whileTrue(
+            ClimbCommands.bumpDown(self.climber).repeatedly()
+        )
 
         RobotState.shiftTrigger().onTrue(
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
