@@ -216,6 +216,7 @@ class RobotPoseEstimator:
         self.gyroOffset = startPose.rotation() - (
             self.odometryPose.rotation() - self.gyroOffset
         )
+        self._lastMeasurementTime = 0.0  # reset measurement time on reset
         self.estimatedPose = startPose
         self.odometryPose = startPose
         self.lastWheelPositions = startWheelPositions
