@@ -8,13 +8,14 @@ from constants import kRobotUpdateFrequency
 from constants.climber import (
     kClimberCANId,
     kClimberCurrentLimit,
+    kClimberGearRatio,
+    kClimberSpoolCircumference,
     kClimberPGain,
     kClimberIGain,
     kClimberDGain,
     kClimberSGain,
     kClimberVGain,
     kClimberAGain,
-    kClimberDistancePerRevolution,
 )
 from util.phoenixutil import PhoenixUtil, tryUntilOk
 
@@ -29,7 +30,7 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
         self.motor = TalonFX(kClimberCANId)
 
         self.config.current_limits = kClimberCurrentLimit
-        self.config.feedback.sensor_to_mechanism_ratio = kClimberDistancePerRevolution
+        self.config.feedback.sensor_to_mechanism_ratio = kClimberGearRatio
         self.config.slot0 = (
             Slot0Configs()
             .with_k_p(kClimberPGain)
@@ -69,14 +70,16 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
             self.supply,
             self.torque,
         )
-        inputs.climberPosition = self.position.value
+        inputs.climberPosition = self.position.value * kClimberSpoolCircumference
         inputs.climberSpeed = self.velocity.value
         inputs.climberAppliedVolts = self.applied.value
         inputs.climberSupplyAmps = self.supply.value
         inputs.climberTorqueAmps = self.torque.value
 
     def set_climber_position(self, position: float):
-        self.motor.set_control(self.closedDemand.with_position(position))
+        self.motor.set_control(
+            self.closedDemand.with_position(position / kClimberSpoolCircumference)
+        )
 
     def set_climber_volts(self, volts: float):
         self.motor.set_control(self.openDemand.with_output(volts))
