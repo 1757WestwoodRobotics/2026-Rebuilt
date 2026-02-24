@@ -21,7 +21,6 @@ dependencies = [
     "robotpy-pathplannerlib>=2026.1.1",
     "robotpy-pykit>=1.0.4",
     "robotpy-pykit-watch>=1.0.0",
-    "robotpy-rev>=2026.0.1",
     "wpilib>=2026.2.1",
 ]
 

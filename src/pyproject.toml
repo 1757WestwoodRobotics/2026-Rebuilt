@@ -1,6 +1,7 @@
 #
 # Use this configuration file to control what RobotPy packages are installed
 # on your RoboRIO
+# This is seperate from the root-level pyproject.toml, which is used for development and testing on your computer
 #
 [tool.robotpy]
 
@@ -27,6 +28,6 @@ components = [
 requires = [
     "robotpy-pykit==1.0.4",
     "photonlibpy~=2026.1.1",
-    "robotpy-pathplannerlib",
-    "phoenix6",
+    "robotpy-pathplannerlib>=2026.1.1",
+    "phoenix6>=26.1.0",
 ]
