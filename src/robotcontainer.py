@@ -26,7 +26,8 @@ from subsystems.drive.swervemoduleiotalonfx import SwerveModuleIOCTRE
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
-from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
+
+# from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visionsubsystem import VisionSubsystem
@@ -79,8 +80,10 @@ from constants.drive import (
 from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
 
-if kRobotMode == RobotModes.SIMULATION: # required since opencv can't go on rio
+if kRobotMode == RobotModes.SIMULATION:  # required since opencv can't go on rio
+    # pylint:disable-next=ungrouped-imports
     from subsystems.vision.visioniophotonsim import VisionSubsystemIOPhotonSim
+
 
 class RobotContainer:
     """
@@ -239,18 +242,21 @@ class RobotContainer:
                     RobotState.addVisionMeasurement,
                     RobotState.addTurretedVisionMeasurement,
                     [
+                        # pylint: disable-next=possibly-used-before-assignment
                         VisionSubsystemIOPhotonSim(
                             "camera-br",
                             kRobotToCamera1Transform,
                             # pylint: disable-next=unnecessary-lambda
                             lambda: RobotState.getSimPose(),
                         ),
+                        # pylint: disable-next=possibly-used-before-assignment
                         VisionSubsystemIOPhotonSim(
                             "camera-fl",
                             kRobotToCamera2Transform,
                             # pylint: disable-next=unnecessary-lambda
                             lambda: RobotState.getSimPose(),
                         ),
+                        # pylint: disable-next=possibly-used-before-assignment
                         VisionSubsystemIOPhotonSim(
                             "camera-turret",
                             kTurretToCameraTransform,
