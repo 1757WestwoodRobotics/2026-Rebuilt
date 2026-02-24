@@ -438,6 +438,12 @@ class RobotContainer:
             IntakeCommands.runIntakeRollers(self.intake)
         )
 
+        # these buttons come from our strategy spreadsheet, 
+        # they are magic numbers but all buttons are labeled properly on the controller
+        self.oi.operatorController.button(3).whileTrue(
+            IntakeCommands.reverseIntake(self.intake)
+        )
+
         RobotState.shiftTrigger().onTrue(
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
         ).onFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
