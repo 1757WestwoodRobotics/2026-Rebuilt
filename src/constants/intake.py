@@ -31,8 +31,9 @@ kPivotConstraints = TrapezoidProfileRadians.Constraints(
     kPivotMaxVelocity, kPivotMaxAcceleration
 )
 
+# Positive angle is extended, negative angle is retracted
 kPivotMinAngle = Rotation2d()
-kPivotMaxAngle = Rotation2d.fromDegrees(90)
+kPivotMaxAngle = Rotation2d.fromDegrees(125.5)
 
 kPivotTolerance = Rotation2d.fromDegrees(2)
 
@@ -46,7 +47,7 @@ kRollerMotor = DCMotor.krakenX60FOC(1)
 kRollerGearRatio = 18 / 24
 
 kPivotRetractedPosition = Rotation2d()
-kPivotExtendedPosition = Rotation2d.fromDegrees(90)
+kPivotExtendedPosition = Rotation2d.fromDegrees(125.5)
 
 kRollerCANId = 2
 

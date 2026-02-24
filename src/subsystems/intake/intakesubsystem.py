@@ -14,10 +14,13 @@ from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
 from constants.intake import (
     kPivotRetractedPosition,
     kPivotExtendedPosition,
+    kPivotMinAngle,
+    kPivotMaxAngle,
     kRollerForwardVoltage,
     kRollerReverseVoltage,
     kPivotTolerance,
 )
+from util.convenientmath import clampRotation
 from util.logtracer import LogTracer
 
 
@@ -71,7 +74,10 @@ class IntakeSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         if self.isClosedLoop:
-            self.io.setIntakeTarget(self.rollerGoal.value, self.pivotGoal.value)
+            self.io.setIntakeTarget(
+                self.rollerGoal.value,
+                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle),
+            )
         LogTracer.record("SetIntakeTarget")
 
         Logger.recordOutput("Intake/Roller Goal", self.rollerGoal.name)
