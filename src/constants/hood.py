@@ -5,6 +5,23 @@ from wpimath.system.plant import DCMotor
 kHoodMinAngle = Rotation2d.fromDegrees(45) # from vertical to the right
 kHoodMaxAngle = Rotation2d.fromDegrees(82)
 
-kHoodGearRatio = 
+kHoodGearRatio = (16/48) * (18/24)
 
-kTurretCanId = 21 
+kTurretCanId = 8 
+
+# need to fill in
+kHoodPGain = 0.1
+kHoodIGain = 0.1
+kHoodDGain = 0.0
+kHoodSGain = 0.0
+kHoodVGain = 0.0
+kHoodAGain = 0.0
+
+kHoodCurrentLimit = (
+    CurrentLimitsConfigs()
+    .with_supply_current_limit(40) # SUBJECT TO CHANGE
+    .with_supply_current_limit_enable(True)
+)
+
+kHoodSimMotor = DCMotor.krakenX44(1) 
+kHoodSimInertia = 0 # kg m^2, SUBJECT TO CHANGE
