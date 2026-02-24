@@ -76,12 +76,16 @@ class RobotState:
     @classmethod
     def addVisionMeasurement(cls, measurement: VisionObservation):
         cls.fieldEstimator.addVisionMeasurement(measurement)
+        if len(measurement.tagsUsed) == 0:
+            return
         if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
             cls.hubEstimator.addVisionMeasurement(measurement)
 
     @classmethod
     def addTurretedVisionMeasurement(cls, measurement: TurretedVisionObservation):
         cls.fieldEstimator.addTurretedVisionMeasurement(measurement)
+        if len(measurement.tagsUsed) == 0:
+            return
         if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
             cls.hubEstimator.addTurretedVisionMeasurement(measurement)
 
