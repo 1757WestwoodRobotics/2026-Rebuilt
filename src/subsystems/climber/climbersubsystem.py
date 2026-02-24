@@ -13,6 +13,7 @@ from constants.climber import (
     kClimberMaxHeight,
 )
 from util.convenientmath import clamp
+from util.logtracer import LogTracer
 
 
 @autologgable_output
@@ -27,15 +28,19 @@ class ClimberSubsystem(Subsystem):
 
     def periodic(self) -> None:
         """Run ongoing subsystem periodic process."""
+        LogTracer.resetOuter("ClimberSubsystem periodic")
         self.io.updateInputs(self.inputs)
         Logger.processInputs("Climber", self.inputs)
+        LogTracer.record("UpdateInputs")
 
         if self.isClosedLoop:
             self.io.set_climber_position(
                 clamp(self.climberGoal, kClimberMinHeight, kClimberMaxHeight)
             )
+        LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Climber/goal", self.climberGoal)
         Logger.recordOutput("Climber/ClosedLoop", self.isClosedLoop)
+        LogTracer.recordTotal()
 
     def setClosedLoop(self, closedLoop: bool) -> None:
         self.isClosedLoop = closedLoop
