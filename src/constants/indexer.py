@@ -15,8 +15,8 @@ kKickerCurrentLimit = (
     .with_supply_current_limit_enable(True)
 )
 
-kSpindexerGearRatio = 1.0
-kKickerGearRatio = 1.0
+kSpindexerGearRatio = 42 / 60
+kKickerGearRatio = 50 / 24
 
 kSpindexerMotor = DCMotor.falcon500(1)
 kKickerMotor = DCMotor.falcon500(1)
