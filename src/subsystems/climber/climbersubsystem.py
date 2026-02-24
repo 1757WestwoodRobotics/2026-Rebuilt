@@ -91,7 +91,7 @@ class ClimberSubsystem(Subsystem):
                     loggedStateStr = "none"
             Logger.recordOutput("Climber/SysID State", loggedStateStr)
 
-        charactarizationRoutine = SysIdRoutine(
+        characterizationRoutine = SysIdRoutine(
             SysIdRoutine.Config(0.5, 6, 10, logState),
             SysIdRoutine.Mechanism(
                 self.io.set_climber_volts,
@@ -102,16 +102,16 @@ class ClimberSubsystem(Subsystem):
 
         return cmd.sequence(
             cmd.runOnce(lambda: self.setClosedLoop(False), self),
-            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
+            characterizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
                 self.isAtMax
             ),
-            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
+            characterizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
                 self.isAtMin
             ),
-            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
+            characterizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
                 self.isAtMax
             ),
-            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
+            characterizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
                 self.isAtMin
             ),
             cmd.runOnce(lambda: self.setClosedLoop(True), self),
