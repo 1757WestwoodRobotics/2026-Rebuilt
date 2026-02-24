@@ -29,7 +29,7 @@ class IndexerSubsystemIO:
     def updateInputs(self, inputs: IndexerSubsystemInputs):
         pass
 
-    def setIndexerTarget(self, indexer: float, kicker: float):
+    def setIndexerTarget(self, spindexer: float, kicker: float):
         """
         Sets the target for the indexer
         indexer and kicker are in volts
