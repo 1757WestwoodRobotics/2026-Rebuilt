@@ -5,6 +5,7 @@ from util.helpfultriggerwrappers import Deadband, Invert, SignSquare
 from util.joystick.commandfarmcontroller import CommandFarmController
 
 from constants.oi import kXboxJoystickDeadband
+from util.joystick.commandfarmcontroller import CommandFarmController
 
 
 class OperatorInterface:
