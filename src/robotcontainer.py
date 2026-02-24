@@ -27,6 +27,7 @@ from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
 
+# should be uncommented for real robot, asking Phoenix for signals on motors that doesn't exist dramatically increases loop time
 # from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
