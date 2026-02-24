@@ -1,9 +1,10 @@
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
-from wpimath.geometry import Rotation2d, Rotation3d, Translation3d, Transform3d
+from wpimath.geometry import Rotation2d
 from wpimath.system.plant import DCMotor
 
 kHoodMinAngle = Rotation2d.fromDegrees(45) # from vertical to the right
 kHoodMaxAngle = Rotation2d.fromDegrees(82)
+kHoodTolerance = Rotation2d.fromDegrees(1)
 
 kHoodGearRatio = (16/48) * (18/24)
 
@@ -19,9 +20,9 @@ kHoodAGain = 0.0
 
 kHoodCurrentLimit = (
     CurrentLimitsConfigs()
-    .with_supply_current_limit(40) # SUBJECT TO CHANGE
+    .with_supply_current_limit(20) # SUBJECT TO CHANGE
     .with_supply_current_limit_enable(True)
 )
 
 kHoodSimMotor = DCMotor.krakenX44(1) 
-kHoodSimInertia = 0 # kg m^2, SUBJECT TO CHANGE
+kHoodSimInertia = 0.002 # kg m^2
