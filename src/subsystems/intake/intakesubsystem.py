@@ -34,20 +34,20 @@ class RollerGoal(Enum):
 
 class IntakeSubsystemGoal(Enum):
     DEPLOYED = (
-        PivotGoal.DEPLOYED,
         RollerGoal.FORWARD,
+        PivotGoal.DEPLOYED,
     )
     EXTENDED = (
-        PivotGoal.DEPLOYED,
         RollerGoal.NEUTRAL,
+        PivotGoal.DEPLOYED,
     )
     RETRACTED = (
-        PivotGoal.RETRACTED,
         RollerGoal.NEUTRAL,
+        PivotGoal.RETRACTED,
     )
     REVERSED = (
-        PivotGoal.DEPLOYED,
         RollerGoal.REVERSE,
+        PivotGoal.DEPLOYED,
     )
 
 
@@ -79,7 +79,7 @@ class IntakeSubsystem(Subsystem):
         LogTracer.recordTotal()
 
     def setSubsystemGoal(self, goal: IntakeSubsystemGoal):
-        self.pivotGoal, self.rollerGoal = goal.value
+        self.rollerGoal, self.pivotGoal = goal.value
 
     def setRollerGoal(self, goal: RollerGoal):
         self.rollerGoal = goal
