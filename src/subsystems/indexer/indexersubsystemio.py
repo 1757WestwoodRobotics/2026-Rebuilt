@@ -23,9 +23,6 @@ class IndexerSubsystemIO:
         kickAppliedVolts: float = 0
         kickSupplyAmps: float = 0
 
-        spindexerSensor: bool = False
-        kickSensor: bool = False
-
     def updateInputs(self, inputs: IndexerSubsystemInputs):
         pass
 

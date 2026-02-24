@@ -1,8 +1,10 @@
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
 from wpimath.system.plant import DCMotor
 
-kSpindexerCANId = 22
-kKickerCANId = 23
+kSpindexerCANId = 3
+kSpindexerCANId = 4
+kKickerCANId = 5
+kKicker1CANId = 6
 
 kSpindexerCurrentLimit = (
     CurrentLimitsConfigs()
@@ -19,7 +21,9 @@ kSpindexerGearRatio = 42 / 60
 kKickerGearRatio = 50 / 24
 
 kSpindexerMotor = DCMotor.falcon500(1)
+kSpindexerMotor2 = DCMotor.falcon500(1)
 kKickerMotor = DCMotor.falcon500(1)
+kKickerMotor2 = DCMotor.falcon500(1)
 
 kSpindexerForwardVoltage = 6.0
 kSpindexerReverseVoltage = -6.0
