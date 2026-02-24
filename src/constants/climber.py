@@ -14,7 +14,8 @@ kClimberCANId = 10
 kClimberGearRatio = (5 / 1) * (4 / 1)
 kSpoolDiameter = 0.75 * kMetersPerInch
 
-kClimberDistancePerRevolution = kSpoolDiameter * 2 * pi * kClimberGearRatio
+kClimberSpoolCircumference = kSpoolDiameter * pi
+kClimberDistancePerRevolution = kSpoolDiameter * pi * kClimberGearRatio
 
 kClimberPGain = 0.1
 kClimberIGain = 0.0

@@ -8,7 +8,7 @@ from constants import kRobotUpdatePeriod
 
 from constants.climber import (
     kClimberSimMotor,
-    kClimberDistancePerRevolution,
+    kClimberGearRatio,
     kClimberSimInertia,
 )
 from util.convenientmath import clamp
@@ -19,7 +19,7 @@ class ClimberSubsystemIOSim(ClimberSubsystemIOTalon):
         super().__init__()
         self.climberSimModel = DCMotorSim(
             LinearSystemId.DCMotorSystem(
-                kClimberSimMotor, kClimberSimInertia, kClimberDistancePerRevolution
+                kClimberSimMotor, kClimberSimInertia, kClimberGearRatio
             ),
             kClimberSimMotor,
         )
@@ -34,11 +34,10 @@ class ClimberSubsystemIOSim(ClimberSubsystemIOTalon):
         self.climberSimModel.update(kRobotUpdatePeriod)
 
         climberMotorSim.set_raw_rotor_position(
-            self.climberSimModel.getAngularPositionRotations()
-            * kClimberDistancePerRevolution
+            self.climberSimModel.getAngularPositionRotations() * kClimberGearRatio
         )
         climberMotorSim.set_rotor_velocity(
-            self.climberSimModel.getAngularVelocity() * kClimberDistancePerRevolution
+            self.climberSimModel.getAngularVelocity() * kClimberGearRatio
         )
         climberMotorSim.set_supply_voltage(
             clamp(
