@@ -81,7 +81,7 @@ class ClimberSubsystem(Subsystem):
                     loggedStateStr = "dynamic-reverse"
                 case State.kNone:
                     loggedStateStr = "none"
-            Logger.recordOutput("Turret/SysID State", loggedStateStr)
+            Logger.recordOutput("Climber/SysID State", loggedStateStr)
 
         charactarizationRoutine = SysIdRoutine(
             SysIdRoutine.Config(0.5, 6, 10, logState),
