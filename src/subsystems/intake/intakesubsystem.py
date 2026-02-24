@@ -102,6 +102,9 @@ class IntakeSubsystem(Subsystem):
     def setOpenLoop(self) -> None:
         self.isClosedLoop = False
 
+    def setClosedLoop(self) -> None:
+        self.isClosedLoop = True
+
     def sysIdRoutine(self, subsystem: Subsystem) -> Command:
         def logState(state: State) -> None:
             loggedStateStr = ""
@@ -119,7 +122,7 @@ class IntakeSubsystem(Subsystem):
             Logger.recordOutput("Intake/SysID State", loggedStateStr)
 
         charactarizationRoutine = SysIdRoutine(
-            SysIdRoutine.Config(0.1, 6, 10, logState),
+            SysIdRoutine.Config(0.1, 4, 10, logState),
             SysIdRoutine.Mechanism(
                 self.io.setPivotVolts,
                 (lambda _: None),
@@ -141,4 +144,5 @@ class IntakeSubsystem(Subsystem):
             charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
                 partial(self.isAtGoal, PivotGoal.RETRACTED.value)
             ),
+            Commands.runOnce(self.setClosedLoop, self),
         )

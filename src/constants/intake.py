@@ -5,7 +5,7 @@ from wpimath.system.plant import DCMotor
 
 from .math import kKilogramToLbs, kMetersPerInch
 
-kPivotMotor = DCMotor.krakenX60(1)
+kPivotMotor = DCMotor.krakenX60FOC(1)
 
 kPivotMass = 7 * kKilogramToLbs  # kg
 kPivotGearRatio = 64 / 1  # dimensionless
@@ -13,16 +13,20 @@ kPivotArmLength = 4.843 * kMetersPerInch  # meters
 
 kPivotCANId = 1
 
-kPivotKp = 210.68
+# to tune SysID, use the autonomous command for the pivot, and then
+# use https://docs.advantagekit.org/data-flow/sysid-compatibility/#loading-data for how to export
+# from pykit and load into SysID. Make sure your units are proper and your controller gain preset
+# is set to phoenix6
+kPivotKp = 129.07
 kPivotKi = 0
-kPivotKd = 2.849
-kPivotKs = 0.03105
-kPivotKv = 4.4882
-kPivotKa = 0.061551
-kPivotKg = 0.33261
+kPivotKd = 2.1043
+kPivotKs = 0.024737
+kPivotKv = 1.1902
+kPivotKa = 0.011424
+kPivotKg = 0.036956
 
-kPivotMaxVelocity = 2.0  # rad / sec
-kPivotMaxAcceleration = 2.0  # rad / sec ^2
+kPivotMaxVelocity = 4.0  # rad / sec
+kPivotMaxAcceleration = 4.0  # rad / sec ^2
 kPivotConstraints = TrapezoidProfileRadians.Constraints(
     kPivotMaxVelocity, kPivotMaxAcceleration
 )

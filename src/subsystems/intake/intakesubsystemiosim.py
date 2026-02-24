@@ -26,7 +26,9 @@ class IntakeSubsystemIOSIM(IntakeSubsystemIOTalon):
 
         self.pivotSimModel = SingleJointedArmSim(
             LinearSystemId.singleJointedArmSystem(
-                kPivotMotor, kPivotMass, kPivotGearRatio
+                kPivotMotor,
+                kPivotMass * kPivotArmLength * kPivotArmLength / 3,
+                kPivotGearRatio,  # Approximate moment of inertia as long as a rod rotating about one end
             ),
             kPivotMotor,
             kPivotGearRatio,
