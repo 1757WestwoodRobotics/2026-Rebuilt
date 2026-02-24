@@ -17,31 +17,16 @@ from constants.indexer import (
 )
 
 
-class SpindexerMotorGoal(Enum):
-    FORWARD = kSpindexerForwardVoltage
+class IndexerMotorGoal(Enum):
+    FORWARD = kSpindexerForwardVoltage, kKickForwardVoltage
     NEUTRAL = 0.0
-    REVERSE = kSpindexerReverseVoltage
-
-
-class KickMotorGoal(Enum):
-    FORWARD = kKickForwardVoltage
-    NEUTRAL = 0.0
-    REVERSE = kKickReverseVoltage
+    REVERSE = kSpindexerReverseVoltage, kKickReverseVoltage
 
 
 class IndexerSubsystemGoal(Enum):
-    KICK = (
-        SpindexerMotorGoal.FORWARD,
-        KickMotorGoal.FORWARD,
-    )
-    REVERSE = (
-        SpindexerMotorGoal.REVERSE,
-        KickMotorGoal.REVERSE,
-    )
-    HOLD = (
-        SpindexerMotorGoal.NEUTRAL,
-        KickMotorGoal.NEUTRAL,
-    )
+    KICK = IndexerMotorGoal.FORWARD
+    REVERSE = IndexerMotorGoal.REVERSE
+    HOLD = IndexerMotorGoal.NEUTRAL
 
 
 class IndexerSubsystemTarget(Enum):
@@ -59,8 +44,7 @@ class IndexerSubsystem(Subsystem):
         self.io = io
         self.inputs = IndexerSubsystemIO.IndexerSubsystemInputs()
 
-        self.spindexerMotorGoal = SpindexerMotorGoal.NEUTRAL
-        self.kickMotorGoal = KickMotorGoal.NEUTRAL
+        self.indexerMotorGoal = IndexerMotorGoal.NEUTRAL
 
         self.subsystemTarget = IndexerSubsystemTarget.HOLDING
         self.subsystemGoal = IndexerSubsystemGoal.HOLD

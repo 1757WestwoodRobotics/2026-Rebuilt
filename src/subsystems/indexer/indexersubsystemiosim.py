@@ -8,8 +8,10 @@ from constants.math import kRadiansPerRevolution
 from constants.indexer import (
     kKickerGearRatio,
     kKickerMotor,
+    kKickerMotor2,
     kSpindexerGearRatio,
     kSpindexerMotor,
+    kSpindexerMotor2,
 )
 from constants import kRobotUpdatePeriod
 from util.convenientmath import clamp
@@ -21,11 +23,13 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         self.spindexerSimModel = DCMotorSim(
             LinearSystemId.DCMotorSystem(kSpindexerMotor, 0.04, kSpindexerGearRatio),
             kSpindexerMotor,
+            kSpindexerMotor2,
         )
 
         self.kickerSimModel = DCMotorSim(
             LinearSystemId.DCMotorSystem(kKickerMotor, 0.04, kKickerGearRatio),
             kKickerMotor,
+            kKickerMotor2,
         )
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:

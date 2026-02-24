@@ -51,14 +51,10 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         self.spindexerSupply = self.spindexerMotor.get_supply_current()
         self.spindexerApplied = self.spindexerMotor.get_motor_voltage()
 
-        self.spindexerSensor = self.spindexerMotor.get_forward_limit()
-
         self.kickerPosition = self.kickerMotor.get_position()
         self.kickerVelocity = self.kickerMotor.get_velocity()
         self.kickerSupply = self.kickerMotor.get_supply_current()
         self.kickerApplied = self.kickerMotor.get_motor_voltage()
-
-        self.kickerSensor = self.kickerMotor.get_forward_limit()
 
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
@@ -66,12 +62,10 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.spindexerVelocity,
             self.spindexerSupply,
             self.spindexerApplied,
-            self.spindexerSensor,
             self.kickerPosition,
             self.kickerVelocity,
             self.kickerSupply,
             self.kickerApplied,
-            self.kickerSensor,
         )
 
         PhoenixUtil.registerSignals(
@@ -80,12 +74,10 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.spindexerVelocity,
             self.spindexerSupply,
             self.spindexerApplied,
-            self.spindexerSensor,
             self.kickerPosition,
             self.kickerVelocity,
             self.kickerSupply,
             self.kickerApplied,
-            self.kickerSensor,
         )
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:
@@ -106,19 +98,11 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.kickerVelocity,
             self.kickerApplied,
             self.kickerSupply,
-            self.kickerSensor,
         )
         inputs.kickPosition = self.kickerPosition.value
         inputs.kickVelocity = self.kickerVelocity.value
         inputs.kickAppliedVolts = self.kickerApplied.value
         inputs.kickSupplyAmps = self.kickerSupply.value
-
-        inputs.spindexerSensor = (
-            self.spindexerSensor.value == ForwardLimitValue.CLOSED_TO_GROUND
-        )
-        inputs.kickSensor = (
-            self.kickerSensor.value == ForwardLimitValue.CLOSED_TO_GROUND
-        )
 
     def setIndexerTarget(self, spindexer: float, kicker: float) -> None:
         self.spindexerMotor.set_control(self.spindexerDemand.with_output(spindexer))
