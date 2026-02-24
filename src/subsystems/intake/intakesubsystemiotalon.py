@@ -137,11 +137,6 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
     def setIntakeTarget(self, roller: float, position: Rotation2d):
         clampedOutput = clampRotation(position, kPivotMinAngle, kPivotMaxAngle)
         self.rollerMotor.set_control(self.rollerDemand.with_output(roller))
-        # self.pivotMotor.set_control(
-        #     self.pivotRawDemand.with_position(
-        #         clampedOutput.radians() / kRadiansPerRevolution
-        #     )
-        # )
         self.pivotMotor.set_control(
             self.pivotDemand.with_position(
                 clampedOutput.radians() / kRadiansPerRevolution
