@@ -40,7 +40,7 @@ def toggleIntakeDeployment(intake: IntakeSubsystem) -> Command:
         else:
             intake.setPivotGoal(PivotGoal.RETRACTED)
 
-    return Commands.run(toggle, intake).withName("ToggleIntakeDeployment")
+    return Commands.runOnce(toggle, intake).withName("ToggleIntakeDeployment")
 
 
 def runIntakeRollers(intake: IntakeSubsystem) -> Command:
