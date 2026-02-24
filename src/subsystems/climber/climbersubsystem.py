@@ -12,6 +12,7 @@ from constants.climber import (
     kClimberMinHeight,
     kClimberMaxHeight,
 )
+from util.convenientmath import clamp
 
 
 @autologgable_output
@@ -30,7 +31,9 @@ class ClimberSubsystem(Subsystem):
         Logger.processInputs("Climber", self.inputs)
 
         if self.isClosedLoop:
-            self.io.set_climber_position(self.climberGoal)
+            self.io.set_climber_position(
+                clamp(self.climberGoal, kClimberMinHeight, kClimberMaxHeight)
+            )
         Logger.recordOutput("Climber/goal", self.climberGoal)
         Logger.recordOutput("Climber/ClosedLoop", self.isClosedLoop)
 
