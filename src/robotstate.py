@@ -61,7 +61,7 @@ class RobotState:
     def hubTags(cls) -> list[int]:
         """
         Returns the april tag IDs of the hubs we are scoring on
-        This is determined by the alliance color and whether we won autonomous
+        This is determined by the alliance color
         Defaults to blue hub tags if alliance is unknown
         """
         if DriverStation.getAlliance() == DriverStation.Alliance.kRed:
