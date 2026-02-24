@@ -41,9 +41,11 @@ from subsystems.flywheel.flywheelsubsystemiotalon import FlywheelSubsystemIOTalo
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
-
-# should be uncommented for real robot, asking Phoenix for signals on motors that doesn't exist dramatically increases loop time
-# from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
+from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
+from subsystems.hood.hoodsubsystem import HoodSubsystem
+from subsystems.hood.hoodsubsystemio import HoodSubsystemIO
+from subsystems.hood.hoodsubsystemiosim import HoodSubsystemIOSim
+from subsystems.hood.hoodsubsystemiotalon import HoodSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visionsubsystem import VisionSubsystem
