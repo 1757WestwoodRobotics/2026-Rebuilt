@@ -33,6 +33,7 @@ class VisionSubsystemTurretedPoseObservation:
     fieldToTurret: Transform3d = field(default_factory=Transform3d)
     ambiguity: float = 0
     tagCount: int = 0
+    tags: List[int] = field(default_factory=list)
     averageTagDistance: float = 0
     observationType: int = ObservationType.PHOTONVISION.value
 
