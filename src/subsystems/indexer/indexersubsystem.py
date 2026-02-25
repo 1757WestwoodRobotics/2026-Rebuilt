@@ -23,13 +23,13 @@ class IndexerMotorGoal(Enum):
 
 class IndexerSubsystemGoal(Enum):
     KICK = IndexerMotorGoal.FORWARD
-    EJECT = IndexerMotorGoal.REVERSE
     HOLD = IndexerMotorGoal.NEUTRAL
+    EJECT = IndexerMotorGoal.REVERSE
 
 
 class IndexerSubsystemTarget(Enum):
-    HOLD = auto()
     KICK = auto()
+    HOLD = auto()
     EJECT = auto()
 
 
