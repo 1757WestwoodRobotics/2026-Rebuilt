@@ -14,7 +14,7 @@ class HoodSubsystemIO:
         hoodAppliedVolts: float = 0.0
         hoodSupplyAmps: float = 0.0
 
-#TODO
+    # TODO
     def updateInputs(self, inputs: HoodSubsystemIOInputs):
         pass
 
