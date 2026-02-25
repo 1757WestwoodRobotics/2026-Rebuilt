@@ -5,17 +5,17 @@ from subsystems.indexer.indexersubsystem import IndexerSubsystem, IndexerSubsyst
 
 def holdIndexer(indexer: IndexerSubsystem) -> Command:
     return cmd.run(
-        partial(indexer.setTarget, IndexerSubsystemTarget.HOLDING), indexer
+        partial(indexer.setTarget, IndexerSubsystemTarget.HOLD), indexer
     ).withName("HoldIndexer")
 
 
 def kickIndexer(indexer: IndexerSubsystem) -> Command:
     return cmd.run(
-        partial(indexer.setTarget, IndexerSubsystemTarget.SHOOT), indexer
+        partial(indexer.setTarget, IndexerSubsystemTarget.KICK), indexer
     ).withName("KickIndexer")
 
 
-def reverseIndexer(indexer: IndexerSubsystem) -> Command:
+def ejectIndexer(indexer: IndexerSubsystem) -> Command:
     return cmd.run(
         partial(indexer.setTarget, IndexerSubsystemTarget.EJECT), indexer
-    ).withName("ReverseIndexer")
+    ).withName("EjectIndexer")

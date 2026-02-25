@@ -29,8 +29,8 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         self.spindexerMotor = TalonFX(kSpindexerCANId)
         self.kickerMotor = TalonFX(kKickerCANId)
 
-        self.spindexerConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
-        self.kickerConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
+        self.spindexerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
+        self.kickerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
 
         self.spindexerConfig.current_limits = kSpindexerCurrentLimit
         self.kickerConfig.current_limits = kKickerCurrentLimit

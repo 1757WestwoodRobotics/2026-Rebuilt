@@ -25,8 +25,5 @@ kSpindexerMotor2 = DCMotor.falcon500(1)
 kKickerMotor = DCMotor.falcon500(1)
 kKickerMotor2 = DCMotor.falcon500(1)
 
-kSpindexerForwardVoltage = 6.0
-kSpindexerReverseVoltage = -6.0
-
-kKickForwardVoltage = 6.0
-kKickReverseVoltage = -6.0
+kIndexerForwardVoltage = 6.0
+kIndexerReverseVoltage = -6.0
