@@ -10,15 +10,17 @@ from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.logtracer import LogTracer
 
 from constants.indexer import (
-    kIndexerForwardVoltage,
-    kIndexerReverseVoltage,
+    kSpindexerForwardVoltage,
+    kSpindexerReverseVoltage,
+    kKickForwardVoltage,
+    kKickReverseVoltage,
 )
 
 
 class IndexerMotorGoal(Enum):
-    FORWARD = kIndexerForwardVoltage
-    NEUTRAL = 0.0
-    REVERSE = kIndexerReverseVoltage
+    FORWARD = [kSpindexerForwardVoltage, kKickForwardVoltage]
+    NEUTRAL = [0.0, 0.0]
+    REVERSE = [kSpindexerReverseVoltage, kKickReverseVoltage]
 
 
 class IndexerSubsystemGoal(Enum):
@@ -36,7 +38,8 @@ class IndexerSubsystem(Subsystem):
         self.io = io
         self.inputs = IndexerSubsystemIO.IndexerSubsystemInputs()
 
-        self.indexerMotorGoal = IndexerMotorGoal.NEUTRAL
+        self.spindexerMotorGoal = IndexerMotorGoal.NEUTRAL
+        self.kickMotorGoal = IndexerMotorGoal.NEUTRAL
 
         self.subsystemGoal = IndexerSubsystemGoal.HOLD
 
@@ -51,8 +54,9 @@ class IndexerSubsystem(Subsystem):
         LogTracer.record("SetIndexerTarget")
 
         Logger.recordOutput(
-            "Indexer/Goal/Indexer Motor Goal", self.indexerMotorGoal.value
+            "Indexer/Goal/Spindexer Motor Goal", self.spindexerMotorGoal.value
         )
+        Logger.recordOutput("Indexer/Goal/Kick Motor Goal", self.kickMotorGoal.value)
 
         LogTracer.recordTotal()
 
