@@ -54,10 +54,10 @@ class IndexerSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         match self.subsystemTarget:
-            case IndexerSubsystemTarget.HOLD:
-                self.subsystemGoal = IndexerSubsystemGoal.HOLD
             case IndexerSubsystemTarget.KICK:
                 self.subsystemGoal = IndexerSubsystemGoal.KICK
+            case IndexerSubsystemTarget.HOLD:
+                self.subsystemGoal = IndexerSubsystemGoal.HOLD
             case IndexerSubsystemTarget.EJECT:
                 self.subsystemGoal = IndexerSubsystemGoal.EJECT
 
