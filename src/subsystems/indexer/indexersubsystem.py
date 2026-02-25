@@ -10,28 +10,26 @@ from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.logtracer import LogTracer
 
 from constants.indexer import (
-    kSpindexerForwardVoltage,
-    kSpindexerReverseVoltage,
-    kKickForwardVoltage,
-    kKickReverseVoltage,
+    kIndexerForwardVoltage,
+    kIndexerReverseVoltage,
 )
 
 
 class IndexerMotorGoal(Enum):
-    FORWARD = kSpindexerForwardVoltage, kKickForwardVoltage
+    FORWARD = kIndexerForwardVoltage
     NEUTRAL = 0.0
-    REVERSE = kSpindexerReverseVoltage, kKickReverseVoltage
+    REVERSE = kIndexerReverseVoltage
 
 
 class IndexerSubsystemGoal(Enum):
     KICK = IndexerMotorGoal.FORWARD
-    REVERSE = IndexerMotorGoal.REVERSE
+    EJECT = IndexerMotorGoal.REVERSE
     HOLD = IndexerMotorGoal.NEUTRAL
 
 
 class IndexerSubsystemTarget(Enum):
-    HOLDING = auto()
-    SHOOT = auto()
+    HOLD = auto()
+    KICK = auto()
     EJECT = auto()
 
 
@@ -46,7 +44,7 @@ class IndexerSubsystem(Subsystem):
 
         self.indexerMotorGoal = IndexerMotorGoal.NEUTRAL
 
-        self.subsystemTarget = IndexerSubsystemTarget.HOLDING
+        self.subsystemTarget = IndexerSubsystemTarget.HOLD
         self.subsystemGoal = IndexerSubsystemGoal.HOLD
 
     def periodic(self) -> None:
@@ -56,23 +54,20 @@ class IndexerSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         match self.subsystemTarget:
-            case IndexerSubsystemTarget.HOLDING:
+            case IndexerSubsystemTarget.HOLD:
                 self.subsystemGoal = IndexerSubsystemGoal.HOLD
-            case IndexerSubsystemTarget.SHOOT:
+            case IndexerSubsystemTarget.KICK:
                 self.subsystemGoal = IndexerSubsystemGoal.KICK
             case IndexerSubsystemTarget.EJECT:
-                self.subsystemGoal = IndexerSubsystemGoal.REVERSE
+                self.subsystemGoal = IndexerSubsystemGoal.EJECT
 
         self.updateGoals()
-        self.io.setIndexerTarget(
-            self.spindexerMotorGoal.value, self.kickMotorGoal.value
-        )
+        self.io.setIndexerTarget(self.indexerMotorGoal.value)
         LogTracer.record("SetIndexerTarget")
 
         Logger.recordOutput(
-            "Indexer/Goal/Indexer Motor Goal", self.spindexerMotorGoal.value
+            "Indexer/Goal/Indexer Motor Goal", self.indexerMotorGoal.value
         )
-        Logger.recordOutput("Indexer/Goal/Kick Motor Goal", self.kickMotorGoal.value)
 
         LogTracer.recordTotal()
 
@@ -80,7 +75,7 @@ class IndexerSubsystem(Subsystem):
         self.subsystemTarget = target
 
     def updateGoals(self):
-        self.spindexerMotorGoal, self.kickMotorGoal = self.subsystemGoal.value
+        self.indexerMotorGoal = self.subsystemGoal.value
 
     def sysIdRoutine(self, subsystem: Subsystem) -> Command:
 
