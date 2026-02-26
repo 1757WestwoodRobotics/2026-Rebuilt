@@ -71,7 +71,7 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
             self.torque,
         )
         inputs.climberPosition = self.position.value * kClimberSpoolCircumference
-        inputs.climberSpeed = self.velocity.value
+        inputs.climberSpeed = self.velocity.value * kClimberSpoolCircumference
         inputs.climberAppliedVolts = self.applied.value
         inputs.climberSupplyAmps = self.supply.value
         inputs.climberTorqueAmps = self.torque.value
