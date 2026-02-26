@@ -20,7 +20,7 @@ from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
 from util.convenientmath import clamp
 
 
-class IntakeSubsystemIOSIM(IntakeSubsystemIOTalon):
+class IntakeSubsystemIOSim(IntakeSubsystemIOTalon):
     def __init__(self) -> None:
         super().__init__()
 
