@@ -444,7 +444,9 @@ class RobotContainer:
         self.oi.operatorController.button(3).whileTrue(
             IntakeCommands.reverseIntake(self.intake)
         )
-
+        self.oi.operatorController.button(4).whileTrue(
+            IntakeCommands.deployIntake(self.intake)
+        )
         self.oi.operatorController.button(15).onTrue(
             IntakeCommands.bumpIntakeUp(self.intake)
         )
