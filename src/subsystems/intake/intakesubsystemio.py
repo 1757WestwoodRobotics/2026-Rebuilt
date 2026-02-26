@@ -31,3 +31,8 @@ class IntakeSubsystemIO:
         Sets the target for the intake
         Roller is in volts, position is a rotation
         """
+
+    def setPivotVolts(self, volt: float) -> None:
+        """
+        Sets the pivot motor to a voltage, for open loop control
+        """
