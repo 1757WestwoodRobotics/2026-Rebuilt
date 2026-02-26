@@ -4,6 +4,7 @@ from typing import List
 from pykit.autolog import autolog
 from wpimath.geometry import Pose3d, Transform3d
 from wpiutil.wpistruct import make_wpistruct
+from wpiutil.wpistruct import uint64
 
 
 class ObservationType(Enum):
@@ -20,7 +21,7 @@ class VisionSubsystemPoseObservation:
     pose: Pose3d = field(default_factory=Pose3d)
     ambiguity: float = 0
     tagCount: int = 0
-    tags: List[int] = field(default_factory=list)
+    tagsList: uint64 = uint64(0)
     averageTagDistance: float = 0
     observationType: int = ObservationType.PHOTONVISION.value
 
@@ -33,7 +34,7 @@ class VisionSubsystemTurretedPoseObservation:
     fieldToTurret: Transform3d = field(default_factory=Transform3d)
     ambiguity: float = 0
     tagCount: int = 0
-    tags: List[int] = field(default_factory=list)
+    tagsList: uint64 = uint64(0)
     averageTagDistance: float = 0
     observationType: int = ObservationType.PHOTONVISION.value
 

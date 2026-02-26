@@ -97,12 +97,18 @@ class VisionSubsystem(Subsystem):
 
                 # here you can also factor in per-camera weighting
 
+                observedTags = []
+                tagsList = observation.tagsList
+                while tagsList > 0:
+                    observedTags.append(tagsList % 100)
+                    tagsList //= 100
+
                 self.consumer(
                     VisionObservation(
                         observation.pose.toPose2d(),
                         observation.timestamp,
                         [linearStdDev, linearStdDev, angularStdDev],
-                        observation.tags,
+                        observedTags,
                     )
                 )
             LogTracer.record(f"Camera{idx} ProcessObservations")
@@ -142,12 +148,18 @@ class VisionSubsystem(Subsystem):
                 linearStdDev = kXyStdDevCoeff * stdDevFactor
                 angularStdDev = kThetaStdDevCoeff * stdDevFactor
                 # here you can also factor in per-camera weighting
+                observedTags = []
+                tagsList = observation.tagsList
+                while tagsList > 0:
+                    observedTags.append(tagsList % 100)
+                    tagsList //= 100
+
                 self.turretedConsumer(
                     TurretedVisionObservation(
                         observation.fieldToTurret,
                         observation.timestamp,
                         [linearStdDev, linearStdDev, angularStdDev],
-                        observation.tags,
+                        observedTags,
                     )
                 )
 

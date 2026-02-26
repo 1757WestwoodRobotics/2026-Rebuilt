@@ -49,6 +49,11 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
 
                 tagIds.extend(result.multitagResult.fiducialIDsUsed)
 
+                idsCondensed = 0
+                for tagId in result.multitagResult.fiducialIDsUsed:
+                    idsCondensed *= 100
+                    idsCondensed += tagId
+
                 if not self.isTurreted:
                     poseObservations.append(
                         VisionSubsystemPoseObservation(
@@ -56,7 +61,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                             robotPose,
                             result.multitagResult.estimatedPose.ambiguity,
                             len(result.multitagResult.fiducialIDsUsed),
-                            result.multitagResult.fiducialIDsUsed,
+                            idsCondensed,
                             totalTagDistance / len(result.targets),
                             ObservationType.PHOTONVISION.value,
                         )
@@ -68,7 +73,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                             fieldToBase,  # this transform is from field to turret
                             result.multitagResult.estimatedPose.ambiguity,
                             len(result.multitagResult.fiducialIDsUsed),
-                            result.multitagResult.fiducialIDsUsed,
+                            idsCondensed,
                             totalTagDistance / len(result.targets),
                             ObservationType.PHOTONVISION.value,
                         )
@@ -98,7 +103,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 robotPose,
                                 target.poseAmbiguity,
                                 1,
-                                [target.fiducialId],
+                                target.fiducialId,
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
@@ -110,7 +115,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 fieldToBase,
                                 target.poseAmbiguity,
                                 1,
-                                [target.fiducialId],
+                                target.fiducialId,
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
