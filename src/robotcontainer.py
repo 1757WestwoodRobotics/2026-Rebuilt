@@ -451,7 +451,7 @@ class RobotContainer:
             IntakeCommands.bumpIntakeUp(self.intake)
         )
         self.oi.operatorController.button(16).onTrue(
-            IntakeCommands.bumpIntakeUp(self.intake)
+            IntakeCommands.bumpIntakeDown(self.intake)
         )
 
         RobotState.shiftTrigger().onTrue(
