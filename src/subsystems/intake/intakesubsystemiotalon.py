@@ -6,7 +6,7 @@ from phoenix6.configs.talon_fx_configs import (
     NeutralModeValue,
     Slot0Configs,
 )
-from phoenix6.controls import MotionMagicVoltage, PositionVoltage, VoltageOut
+from phoenix6.controls import MotionMagicVoltage, VoltageOut
 from phoenix6.hardware import TalonFX
 from wpimath.geometry import Rotation2d
 from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
@@ -40,11 +40,10 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
     pivotConfig: TalonFXConfiguration = TalonFXConfiguration()
     rollerConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    pivotDemand: MotionMagicVoltage = MotionMagicVoltage(0, False)
-    pivotVoltageRequest: VoltageOut = VoltageOut(0, False)
+    pivotDemand: MotionMagicVoltage = MotionMagicVoltage(0)
+    pivotVoltageRequest: VoltageOut = VoltageOut(0)
 
-    pivotRawDemand: PositionVoltage = PositionVoltage(0, 0, False)
-    rollerDemand: VoltageOut = VoltageOut(0, False)
+    rollerDemand: VoltageOut = VoltageOut(0)
 
     def __init__(self) -> None:
         self.pivotMotor = TalonFX(kPivotCANId)
