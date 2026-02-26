@@ -50,9 +50,11 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                 tagIds.extend(result.multitagResult.fiducialIDsUsed)
 
                 idsCondensed = 0
+                # this is stored in a 32 bit unsigned integer, this is OK since only 32 tags exist on the field
                 for tagId in result.multitagResult.fiducialIDsUsed:
-                    idsCondensed *= 100
-                    idsCondensed += tagId
+                    idsCondensed |= (
+                        1 << tagId - 1
+                    )  # condense the tag IDs into a single integer using bitwise OR. This allows us to store up to 32 tag IDs in a single integer, which is more efficient than storing a list of integers.
 
                 if not self.isTurreted:
                     poseObservations.append(

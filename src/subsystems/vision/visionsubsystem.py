@@ -32,7 +32,7 @@ class VisionSubsystem(Subsystem):
         for _ in io:
             self.inputs.append(VisionSubsystemIO.VisionSubsystemIOInputs())
 
-    # pylint:disable-next=too-many-locals, too-many-statements
+    # pylint:disable-next=too-many-locals, too-many-statements, too-many-branches
     def periodic(self) -> None:
         LogTracer.resetOuter("VisionSubsystem")
         for idx, (i, inp) in enumerate(zip(self.io, self.inputs)):
@@ -99,9 +99,9 @@ class VisionSubsystem(Subsystem):
 
                 observedTags = []
                 tagsList = observation.tagsList
-                while tagsList > 0:
-                    observedTags.append(tagsList % 100)
-                    tagsList //= 100
+                for tagId in range(32):
+                    if tagsList & (1 << tagId - 1):
+                        observedTags.append(tagId)
 
                 self.consumer(
                     VisionObservation(
@@ -150,9 +150,10 @@ class VisionSubsystem(Subsystem):
                 # here you can also factor in per-camera weighting
                 observedTags = []
                 tagsList = observation.tagsList
-                while tagsList > 0:
-                    observedTags.append(tagsList % 100)
-                    tagsList //= 100
+                # extract tag list from bit masks
+                for tagId in range(32):
+                    if tagsList & (1 << tagId):
+                        observedTags.append(tagId)
 
                 self.turretedConsumer(
                     TurretedVisionObservation(
