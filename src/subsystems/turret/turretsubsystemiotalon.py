@@ -31,8 +31,8 @@ from util.phoenixutil import PhoenixUtil, tryUntilOk
 class TurretSubsystemIOTalon(TurretSubsystemIO):
     turretConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    closedDemand: MotionMagicVoltage = MotionMagicVoltage(0, False)
-    openDemand: VoltageOut = VoltageOut(0, False)
+    closedDemand: MotionMagicVoltage = MotionMagicVoltage(0)
+    openDemand: VoltageOut = VoltageOut(0)
 
     def __init__(self) -> None:
         """Initialize the Talon motor with appropriate robot-specific parameters and record starting values."""
