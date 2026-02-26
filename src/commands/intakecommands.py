@@ -61,3 +61,21 @@ def bumpIntakeUp(intake: IntakeSubsystem) -> Command:
     return Commands.runOnce(
         lambda: intake.bumpPivotFudge(-kPivotBumpAmount), intake
     ).withName("BumpIntakeUp")
+
+class _DepotIntake(Command):
+    def __init__(self, intake: IntakeSubsystem) -> None:
+        super().__init__()
+        self.intake = intake
+        self.prevGoal = intake.pivotGoal
+
+    def initialize(self) -> None:
+        self.prevGoal = self.intake.pivotGoal
+
+    def execute(self) -> None:
+        self.intake.setPivotGoal(PivotGoal.DEPOT)
+
+    def end(self, _interrupted: bool) -> None:
+        self.intake.setPivotGoal(self.prevGoal)
+
+def depotIntake(intake: IntakeSubsystem) -> Command:
+    return _DepotIntake(intake).withName("DepotIntake")

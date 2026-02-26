@@ -14,6 +14,7 @@ from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
 from constants.intake import (
     kPivotRetractedPosition,
     kPivotExtendedPosition,
+    kPivotDepotPosition,
     kPivotMinAngle,
     kPivotMaxAngle,
     kRollerForwardVoltage,
@@ -27,6 +28,7 @@ from util.logtracer import LogTracer
 class PivotGoal(Enum):
     DEPLOYED = kPivotExtendedPosition
     RETRACTED = kPivotRetractedPosition
+    DEPOT = kPivotDepotPosition
 
 
 class RollerGoal(Enum):
