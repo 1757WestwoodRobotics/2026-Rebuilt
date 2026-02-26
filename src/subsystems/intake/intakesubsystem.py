@@ -135,7 +135,7 @@ class IntakeSubsystem(Subsystem):
                     loggedStateStr = "none"
             Logger.recordOutput("Intake/SysID State", loggedStateStr)
 
-        charactarizationRoutine = SysIdRoutine(
+        characterizationRoutine = SysIdRoutine(
             SysIdRoutine.Config(0.1, 4, 10, logState),
             SysIdRoutine.Mechanism(
                 self.io.setPivotVolts,
@@ -146,16 +146,16 @@ class IntakeSubsystem(Subsystem):
 
         return Commands.sequence(
             Commands.runOnce(self.setOpenLoop, self),
-            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
+            characterizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
                 partial(self.isAtGoal, PivotGoal.DEPLOYED.value)
             ),
-            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
+            characterizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
                 partial(self.isAtGoal, PivotGoal.RETRACTED.value)
             ),
-            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
+            characterizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
                 partial(self.isAtGoal, PivotGoal.DEPLOYED.value)
             ),
-            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
+            characterizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
                 partial(self.isAtGoal, PivotGoal.RETRACTED.value)
             ),
             Commands.runOnce(self.setClosedLoop, self),
