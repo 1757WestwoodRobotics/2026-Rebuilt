@@ -74,7 +74,7 @@ class ClimberSubsystem(Subsystem):
         )
 
     def sysIdRoutine(self, subsystem: Subsystem) -> Command:
-        """Model the behavior of the system (for better control) by sweeping through the max and min angles."""
+        """Model the behavior of the climber (for better control) by sweeping through the max and min heights."""
 
         def logState(state: State) -> None:
             loggedStateStr = ""
