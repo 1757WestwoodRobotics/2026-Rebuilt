@@ -32,7 +32,7 @@ from subsystems.drive.swervemoduleiosim import SwerveModuleIOSim
 from subsystems.drive.swervemoduleiotalonfx import SwerveModuleIOCTRE
 from subsystems.intake.intakesubsystem import IntakeSubsystem
 from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
-from subsystems.intake.intakesubsystemiosim import IntakeSubsystemIOSIM
+from subsystems.intake.intakesubsystemiosim import IntakeSubsystemIOSim
 from subsystems.intake.intakesubsystemiotalon import IntakeSubsystemIOTalon
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
@@ -282,7 +282,7 @@ class RobotContainer:
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
-                self.intake = IntakeSubsystem(IntakeSubsystemIOSIM())
+                self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
 
             case _:
                 self.drive = DriveSubsystem(
