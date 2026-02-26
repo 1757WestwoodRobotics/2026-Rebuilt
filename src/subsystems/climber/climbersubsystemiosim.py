@@ -11,6 +11,7 @@ from constants.climber import (
     kClimberGearRatio,
     kClimberSimInertia,
 )
+from constants.math import kRadiansPerRevolution
 from util.convenientmath import clamp
 
 
@@ -37,7 +38,9 @@ class ClimberSubsystemIOSim(ClimberSubsystemIOTalon):
             self.climberSimModel.getAngularPositionRotations() * kClimberGearRatio
         )
         climberMotorSim.set_rotor_velocity(
-            self.climberSimModel.getAngularVelocity() * kClimberGearRatio
+            self.climberSimModel.getAngularVelocity()
+            * kClimberGearRatio
+            / kRadiansPerRevolution
         )
         climberMotorSim.set_supply_voltage(
             clamp(
