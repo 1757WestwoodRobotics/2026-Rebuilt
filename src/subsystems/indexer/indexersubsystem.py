@@ -1,10 +1,8 @@
 from enum import Enum, auto
 
-from commands2 import Subsystem, Command, cmd
-from commands2.sysid import SysIdRoutine
+from commands2 import Subsystem
 from pykit.autolog import autologgable_output
 from pykit.logger import Logger
-from wpilib.sysid import State
 
 from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.logtracer import LogTracer
