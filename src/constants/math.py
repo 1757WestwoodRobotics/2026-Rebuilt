@@ -39,5 +39,5 @@ kRPMPerAngularVelocity = (1 / kRadiansPerRevolution) * kSecondsPerMinute
 kGravity = 9.802  # new york gravity
 """m / s / s"""
 
-kKilogramToLbs = 0.454
+kKilogramsPerLb = 0.454
 """kg/lb"""

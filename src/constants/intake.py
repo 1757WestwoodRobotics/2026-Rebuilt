@@ -3,11 +3,11 @@ from wpimath.trajectory import TrapezoidProfileRadians
 from wpimath.geometry import Rotation2d
 from wpimath.system.plant import DCMotor
 
-from .math import kKilogramToLbs, kMetersPerInch
+from .math import kKilogramsPerLb, kMetersPerInch
 
 kPivotMotor = DCMotor.krakenX60FOC(1)
 
-kPivotMass = 7 * kKilogramToLbs  # kg
+kPivotMass = 7 * kKilogramsPerLb  # kg
 kPivotGearRatio = 64 / 1  # dimensionless
 kPivotArmLength = 4.843 * kMetersPerInch  # meters
 
