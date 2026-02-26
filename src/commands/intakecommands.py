@@ -7,6 +7,7 @@ from subsystems.intake.intakesubsystem import (
     PivotGoal,
     RollerGoal,
 )
+from constants.intake import kPivotBumpAmount
 
 
 def reverseIntake(intake: IntakeSubsystem) -> Command:
@@ -49,3 +50,14 @@ def runIntakeRollers(intake: IntakeSubsystem) -> Command:
         .finallyDo(lambda _interrupted: intake.setRollerGoal(RollerGoal.NEUTRAL))
         .withName("RunIntakeRollers")
     )
+
+
+def bumpIntakeDown(intake: IntakeSubsystem) -> Command:
+    return Commands.runOnce(
+        lambda: intake.bumpPivotFudge(kPivotBumpAmount), intake
+    ).withName("BumpIntakeDown")
+
+def bumpIntakeUp(intake: IntakeSubsystem) -> Command:
+    return Commands.runOnce(
+        lambda: intake.bumpPivotFudge(-kPivotBumpAmount), intake
+    ).withName("BumpIntakeUp")

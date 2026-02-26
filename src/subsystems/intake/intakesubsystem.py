@@ -66,6 +66,7 @@ class IntakeSubsystem(Subsystem):
         self.isClosedLoop = True
         self.pivotGoal = PivotGoal.RETRACTED
         self.rollerGoal = RollerGoal.NEUTRAL
+        self.pivotFudge = Rotation2d() # fudge factor, ideally stays at 0
 
     def periodic(self) -> None:
         LogTracer.resetOuter("IntakeSubsystem Periodic")
@@ -76,13 +77,17 @@ class IntakeSubsystem(Subsystem):
         if self.isClosedLoop:
             self.io.setIntakeTarget(
                 self.rollerGoal.value,
-                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle),
+                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle) + self.pivotFudge,
             )
         LogTracer.record("SetIntakeTarget")
 
         Logger.recordOutput("Intake/Roller Goal", self.rollerGoal.name)
         Logger.recordOutput("Intake/Pivot Goal", self.pivotGoal.name)
+        Logger.recordOutput("Intake/Pivot/Fudge", self.pivotFudge)
         LogTracer.recordTotal()
+
+    def bumpPivotFudge(self, bumpAmount: Rotation2d) -> None:
+        self.pivotFudge += bumpAmount
 
     def setSubsystemGoal(self, goal: IntakeSubsystemGoal):
         self.rollerGoal, self.pivotGoal = goal.value
@@ -92,6 +97,7 @@ class IntakeSubsystem(Subsystem):
 
     def setPivotGoal(self, goal: PivotGoal):
         self.pivotGoal = goal
+
 
     @autolog_output(key="Intake/at target")
     def isAtTarget(self) -> bool:

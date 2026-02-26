@@ -445,6 +445,13 @@ class RobotContainer:
             IntakeCommands.reverseIntake(self.intake)
         )
 
+        self.oi.operatorController.button(15).onTrue(
+            IntakeCommands.bumpIntakeUp(self.intake)
+        )
+        self.oi.operatorController.button(16).onTrue(
+            IntakeCommands.bumpIntakeUp(self.intake)
+        )
+
         RobotState.shiftTrigger().onTrue(
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
         ).onFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
