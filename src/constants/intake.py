@@ -34,6 +34,7 @@ kPivotConstraints = TrapezoidProfileRadians.Constraints(
 # Positive angle is extended, negative angle is retracted
 kPivotMinAngle = Rotation2d()
 kPivotMaxAngle = Rotation2d.fromDegrees(125.5)
+kPivotStartAngle = Rotation2d()
 
 kPivotTolerance = Rotation2d.fromDegrees(2)
 
@@ -59,3 +60,5 @@ kRollerCurrentLimit = (
     .with_supply_current_limit(60)
     .with_supply_current_limit_enable(True)
 )
+
+kPivotBumpAmount = Rotation2d.fromDegrees(5)
