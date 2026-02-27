@@ -29,3 +29,8 @@ class TurretSubsystemIO:
     def set_turret_volts(self, volts: float):
         # sets the turret voltage in volts
         pass
+
+    def set_turret_position(self, position: Rotation2d):
+        # sets the current position of the turret in radians
+        # used for startup, or "re-zeroing"
+        pass
