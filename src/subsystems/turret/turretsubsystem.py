@@ -56,18 +56,19 @@ class TurretSubsystem(Subsystem):
     def setTurretGoal(self, goal: Rotation2d) -> None:
         self.turretGoal = goal
 
+    @autolog_output(key="Turret/at mim")
     def isAtMin(self) -> bool:
         return (
             self.inputs.turretPosition.radians()
-            <= (kTurretMinAngle + kTurretTolerance).radians()
+            <= kTurretMinAngle.radians() + kTurretTolerance.radians()
         )
 
+    @autolog_output(key="Turret/at max")
     def isAtMax(self) -> bool:
         return (
             self.inputs.turretPosition.radians()
-            >= (kTurretMaxAngle - kTurretTolerance).radians()
+            >= kTurretMaxAngle.radians() - kTurretTolerance.radians()
         )
-
     def isAtorBeyondGoal(self, goal: Rotation2d) -> bool:
         """Determine whether turret is at or beyond a goal (within a small tolerance)."""
         if np.sign(goal.radians()) > 0:
