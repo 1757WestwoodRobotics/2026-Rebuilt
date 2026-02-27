@@ -45,7 +45,7 @@ kPivotCurrentLimit = (
 )
 
 kRollerMotor = DCMotor.krakenX60FOC(1)
-kRollerGearRatio = 18 / 24
+kRollerGearRatio = 24 / 18
 
 kPivotRetractedPosition = Rotation2d()
 kPivotDepotPosition = Rotation2d.fromDegrees(120)
