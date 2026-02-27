@@ -10,7 +10,12 @@ from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from util.convenientmath import clampRotation
 from util.logtracer import LogTracer
 
-from constants.turret import kTurretMinAngle, kTurretMaxAngle, kTurretTolerance
+from constants.turret import (
+    kTurretMinAngle,
+    kTurretMaxAngle,
+    kTurretTolerance,
+    kTurretStartingAngle,
+)
 
 
 @autologgable_output
@@ -19,6 +24,7 @@ class TurretSubsystem(Subsystem):
         Subsystem.__init__(self)
         self.setName(type(self).__name__)
         self.io = io
+        self.io.set_turret_position(kTurretStartingAngle)
         self.inputs = (
             TurretSubsystemIO.TurretSubsystemIOInputs()
         )  # initialize IO inputs
@@ -69,6 +75,7 @@ class TurretSubsystem(Subsystem):
             self.inputs.turretPosition.radians()
             >= kTurretMaxAngle.radians() - kTurretTolerance.radians()
         )
+
     def isAtorBeyondGoal(self, goal: Rotation2d) -> bool:
         """Determine whether turret is at or beyond a goal (within a small tolerance)."""
         if np.sign(goal.radians()) > 0:
