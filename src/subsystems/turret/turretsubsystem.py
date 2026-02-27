@@ -119,7 +119,7 @@ class TurretSubsystem(Subsystem):
             Logger.recordOutput("Turret/SysID State", loggedStateStr)
 
         characterizationRoutine = SysIdRoutine(
-            SysIdRoutine.Config(0.5, 6, 10, logState),
+            SysIdRoutine.Config(0.1, 4, 10, logState),
             SysIdRoutine.Mechanism(
                 self.io.set_turret_volts,
                 (lambda _: None),

@@ -13,12 +13,12 @@ kTurretMaxAcceleration = Rotation2d.fromDegrees(360)  # per second squared
 kTurretTolerance = Rotation2d.fromDegrees(1.0)
 
 kTurretCanId = 9
-kTurretPGain = 0.1
+kTurretPGain = 89.321
 kTurretIGain = 0.0
-kTurretDGain = 0.0
-kTurretSGain = 0.0
-kTurretVGain = 0.0
-kTurretAGain = 0.0
+kTurretDGain = 0.80233
+kTurretSGain = 0.015852
+kTurretVGain = 0.32494
+kTurretAGain = 0.0039108
 
 kTurretCurrentLimit = (
     CurrentLimitsConfigs()
