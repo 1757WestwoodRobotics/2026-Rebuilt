@@ -30,5 +30,6 @@ kTurretSimMotor = DCMotor.krakenX44FOC(1)
 kTurretSimInertia = 0.005  # kg m^2
 
 kTurretLocation = Transform3d(
-    Translation3d(0.25, 0.25, 0.25), Rotation3d()
-)  # FILL IN LATER
+    Translation3d(-0.102, 0.178, 0.368),
+    Rotation3d(),  # In cad this is the center of the top most plate on the turret
+)
