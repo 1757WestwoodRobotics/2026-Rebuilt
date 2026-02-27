@@ -74,10 +74,10 @@ kRobotToCamera2Transform = (
 kTurretToCameraTransform = Transform3d(
     Pose3d(),
     Pose3d(
-        0.1,
-        0.0,
-        0.1,
-        Rotation3d.fromDegrees(15, 0.0, 0.0),
+        0.166,
+        0,
+        0.028,
+        Rotation3d.fromDegrees(0.0, 30.0, 0.0),
     ),
 )
 
