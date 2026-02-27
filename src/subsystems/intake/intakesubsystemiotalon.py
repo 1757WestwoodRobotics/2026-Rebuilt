@@ -27,6 +27,7 @@ from constants.intake import (
     kPivotMaxAcceleration,
     kPivotMinAngle,
     kPivotMaxAngle,
+    kRollerGearRatio,
     kRollerCurrentLimit,
 )
 from constants.math import kRadiansPerRevolution
@@ -73,6 +74,7 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
         tryUntilOk(5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig))
 
         self.rollerConfig.current_limits = kRollerCurrentLimit
+        self.rollerConfig.feedback.sensor_to_mechanism_ratio = kRollerGearRatio
         tryUntilOk(5, lambda: self.rollerMotor.configurator.apply(self.rollerConfig))
 
         self.pivotPosition = self.pivotMotor.get_position()
