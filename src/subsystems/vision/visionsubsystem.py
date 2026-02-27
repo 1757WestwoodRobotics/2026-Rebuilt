@@ -100,8 +100,10 @@ class VisionSubsystem(Subsystem):
                 observedTags = []
                 tagsList = observation.tagsList
                 for tagId in range(32):
-                    if tagsList & (1 << tagId - 1):
-                        observedTags.append(tagId)
+                    if tagsList & (1 << tagId):
+                        observedTags.append(
+                            tagId + 1
+                        )  # need to add 1 since tag IDs are 1 indexed but our bitmask is 0 indexed
 
                 self.consumer(
                     VisionObservation(
@@ -153,7 +155,7 @@ class VisionSubsystem(Subsystem):
                 # extract tag list from bit masks
                 for tagId in range(32):
                     if tagsList & (1 << tagId):
-                        observedTags.append(tagId)
+                        observedTags.append(tagId + 1)
 
                 self.turretedConsumer(
                     TurretedVisionObservation(
