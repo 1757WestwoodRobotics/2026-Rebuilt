@@ -22,8 +22,8 @@ kKickerGearRatio = 50 / 24
 
 kSpindexerMotor = DCMotor.falcon500(1)
 kSpindexerMotor2 = DCMotor.falcon500(1)
-kKickerMotor = DCMotor.falcon500(1)
-kKickerMotor2 = DCMotor.falcon500(1)
+kKickerMotorLower = DCMotor.falcon500(1)
+kKickerMotorUpper = DCMotor.falcon500(1)
 
 kSpindexerForwardVoltage = 6.0
 kSpindexerReverseVoltage = -6.0
