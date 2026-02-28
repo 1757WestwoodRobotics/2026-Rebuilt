@@ -7,8 +7,8 @@ from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
 from constants.math import kRadiansPerRevolution
 from constants.indexer import (
     kKickerGearRatio,
-    kKickerMotor,
-    kKickerMotor2,
+    kKickerMotorLower,
+    kKickerMotorUpper,
     kSpindexerGearRatio,
     kSpindexerMotor,
     kSpindexerMotor2,
@@ -27,9 +27,9 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         )
 
         self.kickerSimModel = DCMotorSim(
-            LinearSystemId.DCMotorSystem(kKickerMotor, 0.04, kKickerGearRatio),
-            kKickerMotor,
-            kKickerMotor2,
+            LinearSystemId.DCMotorSystem(kKickerMotorLower, 0.04, kKickerGearRatio),
+            kKickerMotorLower,
+            kKickerMotorUpper,
         )
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:
@@ -73,7 +73,7 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         )
         kickerMotorSim.set_supply_voltage(
             clamp(
-                simVoltage - kickerMotorSim.supply_current * kKickerMotor.R,
+                simVoltage - kickerMotorSim.supply_current * kKickerMotorLower.R,
                 0,
                 simVoltage,
             )
