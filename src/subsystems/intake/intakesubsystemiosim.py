@@ -10,6 +10,7 @@ from constants.intake import (
     kPivotGearRatio,
     kPivotMinAngle,
     kPivotMaxAngle,
+    kPivotStartAngle,
     kPivotMotor,
     kPivotArmLength,
     kRollerMotor,
@@ -36,7 +37,7 @@ class IntakeSubsystemIOSim(IntakeSubsystemIOTalon):
             kPivotMinAngle.radians(),
             kPivotMaxAngle.radians(),
             True,
-            kPivotMinAngle.radians(),
+            kPivotStartAngle.radians(),
         )
         self.rollerSimModel = DCMotorSim(
             LinearSystemId.DCMotorSystem(kRollerMotor, 0.04, kRollerGearRatio),

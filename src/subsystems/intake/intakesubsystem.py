@@ -17,6 +17,7 @@ from constants.intake import (
     kPivotDepotPosition,
     kPivotMinAngle,
     kPivotMaxAngle,
+    kPivotStartAngle,
     kRollerForwardVoltage,
     kRollerReverseVoltage,
     kPivotTolerance,
@@ -63,6 +64,7 @@ class IntakeSubsystem(Subsystem):
         Subsystem.__init__(self)
         self.setName(type(self).__name__)
         self.io = io
+        self.io.setIntakeAngle(kPivotStartAngle)
         self.inputs = IntakeSubsystemIO.IntakeSubsystemInputs()
 
         self.isClosedLoop = True

@@ -26,6 +26,12 @@ class IntakeSubsystemIO:
     def updateInputs(self, inputs: IntakeSubsystemInputs):
         pass
 
+    def setIntakeAngle(self, position: Rotation2d) -> None:
+        """
+        Sets the current angle for the intake pivot
+        Useful for initialization
+        """
+
     def setIntakeTarget(self, roller: float, position: Rotation2d) -> None:
         """
         Sets the target for the intake
