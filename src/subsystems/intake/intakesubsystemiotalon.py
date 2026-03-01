@@ -32,7 +32,7 @@ from constants.intake import (
 )
 from constants.math import kRadiansPerRevolution
 
-from constants import kRobotUpdateFrequency
+from constants import kRobotUpdateFrequency, kRioCANBus
 from util.convenientmath import clampRotation
 from util.phoenixutil import PhoenixUtil, tryUntilOk
 
@@ -103,7 +103,7 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
             self.rollerSupply,
         )
         PhoenixUtil.registerSignals(
-            "",
+            kRioCANBus,
             self.pivotPosition,
             self.pivotVelocity,
             self.pivotApplied,

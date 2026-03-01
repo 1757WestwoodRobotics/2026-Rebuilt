@@ -1,4 +1,4 @@
-from phoenix6 import BaseStatusSignal
+from phoenix6 import BaseStatusSignal, CANBus
 from phoenix6.configs.talon_fx_configs import Slot0Configs, TalonFXConfiguration
 from phoenix6.controls import PositionVoltage, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
@@ -59,7 +59,12 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
             self.torque,
         )
         PhoenixUtil.registerSignals(
-            "", self.position, self.velocity, self.applied, self.supply, self.torque
+            CANBus(),
+            self.position,
+            self.velocity,
+            self.applied,
+            self.supply,
+            self.torque,
         )
 
     def updateInputs(self, inputs: ClimberSubsystemIO.ClimberSubsystemIOInputs):

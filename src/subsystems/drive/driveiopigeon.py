@@ -3,7 +3,7 @@ from phoenix6.configs.pigeon2_configs import Pigeon2Configuration
 from phoenix6.hardware.pigeon2 import Pigeon2
 from subsystems.drive.driveio import DriveIO
 
-from constants.drive import kPigeonCANId, kCANivoreName
+from constants.drive import kPigeonCANId, kCANivoreCANBus
 from constants.math import kRadiansPerDegree
 from constants import kRobotUpdateFrequency
 from util.phoenixutil import PhoenixUtil, tryUntilOk
@@ -18,7 +18,7 @@ class DriveIOPigeon(DriveIO):
         super().__init__()
 
         print("Starting Pigeon")
-        self.gyro = Pigeon2(kPigeonCANId, kCANivoreName)
+        self.gyro = Pigeon2(kPigeonCANId, kCANivoreCANBus)
         tryUntilOk(5, lambda: self.gyro.configurator.apply(self.gyroConfig, 0.25))
         tryUntilOk(5, lambda: self.gyro.configurator.set_yaw(0, 0.25))
         self.yaw_position = self.gyro.get_yaw()
@@ -28,7 +28,9 @@ class DriveIOPigeon(DriveIO):
             kRobotUpdateFrequency, self.yaw_position, self.yaw_velocity
         )
 
-        PhoenixUtil.registerSignals(kCANivoreName, self.yaw_position, self.yaw_velocity)
+        PhoenixUtil.registerSignals(
+            kCANivoreCANBus, self.yaw_position, self.yaw_velocity
+        )
 
         self.gyro.optimize_bus_utilization()
         print("Finished Pigeon")
