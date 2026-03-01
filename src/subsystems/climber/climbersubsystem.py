@@ -59,6 +59,10 @@ class ClimberSubsystem(Subsystem):
     def isAtGoal(self, goal: float) -> bool:
         return abs(self.inputs.climberPosition - goal) <= kClimberPositionTolerance
 
+    @property
+    def position(self) -> float:
+        return self.inputs.climberPosition
+
     @autolog_output(key="Climber/at target")
     def atTarget(self) -> bool:
         return self.isAtGoal(self.climberGoal)
