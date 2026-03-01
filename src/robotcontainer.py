@@ -196,6 +196,7 @@ class RobotContainer:
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
+                self.hood = HoodSubsystem(HoodSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -290,6 +291,7 @@ class RobotContainer:
                 self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOSim())
+                self.hood = HoodSubsystem(HoodSubsystemIOSim())
 
             case _:
                 self.drive = DriveSubsystem(
@@ -310,6 +312,7 @@ class RobotContainer:
                 self.climber = ClimberSubsystem(ClimberSubsystemIO())
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIO())
+                self.hood = HoodSubsystem(HoodSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
