@@ -19,10 +19,10 @@ kMetersPerFoot = kMetersPerInch * kInchesPerFoot
 kRadiansPerRevolution = 2 * math.pi
 """radians / revolution"""
 
-kDegeersPerRevolution = 360
+kDegreesPerRevolution = 360
 """degrees / revolution"""
 
-kRadiansPerDegree = kRadiansPerRevolution / kDegeersPerRevolution
+kRadiansPerDegree = kRadiansPerRevolution / kDegreesPerRevolution
 """radians / degree"""
 
 kMillisecondsPerSecond = 1000 / 1
