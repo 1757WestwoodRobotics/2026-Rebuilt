@@ -70,7 +70,7 @@ class RobotState:
             return kBlueHubAprilTags
 
     @classmethod
-    def setAutonomousStartingLogation(cls, location: Pose2d):
+    def setAutonomousStartingLocation(cls, location: Pose2d):
         cls.targetAutonomousStartingLocation = location
 
     @classmethod

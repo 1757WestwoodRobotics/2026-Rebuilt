@@ -342,7 +342,7 @@ class RobotContainer:
             if isinstance(newAuto, PathPlannerAuto):
                 # pylint: disable-next=protected-access
                 startingLocation = FlipUtil.fieldPose(newAuto._startingPose)
-                RobotState.setAutonomousStartingLogation(startingLocation)
+                RobotState.setAutonomousStartingLocation(startingLocation)
 
         self.chooser.onChange(changeStart)
 
