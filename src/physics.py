@@ -79,7 +79,7 @@ class PhysicsEngine:
         self.driveSim = SwerveDriveSim(driveSubsystem)
 
         RobotState.registerSimPoseResetConsumer(self.driveSim.resetPose)
-        RobotState.registerSimPoseRecieverConsumer(self.driveSim.getSimPose)
+        RobotState.registerSimPoseReceiverConsumer(self.driveSim.getSimPose)
 
         self.sim_initialized = False
 
