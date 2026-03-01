@@ -1,4 +1,4 @@
-from phoenix6 import BaseStatusSignal, CANBus
+from phoenix6 import BaseStatusSignal
 from phoenix6.configs.talon_fx_configs import (
     MotionMagicConfigs,
     Slot0Configs,
@@ -24,7 +24,7 @@ from constants.turret import (
     kTurretAGain,
 )
 from constants.math import kRadiansPerRevolution
-from constants import kRobotUpdateFrequency
+from constants import kRobotUpdateFrequency, kRioCANBus
 from util.phoenixutil import PhoenixUtil, tryUntilOk
 
 
@@ -75,7 +75,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
             self.supply,
         )
         PhoenixUtil.registerSignals(
-            CANBus(), self.position, self.velocity, self.applied, self.supply
+            kRioCANBus, self.position, self.velocity, self.applied, self.supply
         )
 
     def updateInputs(self, inputs: TurretSubsystemIO.TurretSubsystemIOInputs):
