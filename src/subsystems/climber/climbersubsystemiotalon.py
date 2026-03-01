@@ -1,10 +1,10 @@
-from phoenix6 import BaseStatusSignal, CANBus
+from phoenix6 import BaseStatusSignal
 from phoenix6.configs.talon_fx_configs import Slot0Configs, TalonFXConfiguration
 from phoenix6.controls import PositionVoltage, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
 from subsystems.climber.climbersubsystemio import ClimberSubsystemIO
 
-from constants import kRobotUpdateFrequency
+from constants import kRobotUpdateFrequency, kRioCANBus
 from constants.climber import (
     kClimberCANId,
     kClimberCurrentLimit,
@@ -59,7 +59,7 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
             self.torque,
         )
         PhoenixUtil.registerSignals(
-            CANBus(),
+            kRioCANBus,
             self.position,
             self.velocity,
             self.applied,

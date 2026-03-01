@@ -27,10 +27,13 @@ Swerve Module Layout:
 from enum import Enum
 import os
 
+from phoenix6 import CANBus
 from wpilib import RobotBase
 
 kRobotUpdatePeriod = 1 / 50
 kRobotUpdateFrequency = 1 / kRobotUpdatePeriod
+
+kRioCANBus = CANBus()
 
 
 class RobotModes(Enum):
