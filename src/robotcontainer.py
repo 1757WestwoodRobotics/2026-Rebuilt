@@ -1,3 +1,4 @@
+from math import cos
 import os
 
 from pykit.logger import Logger
@@ -83,6 +84,7 @@ from constants.drive import (
     kSteerGearingRatioMk5i,
 )
 from constants import RobotModes, kRobotMode
+from util.convenientmath import map_range
 from util.fliputil import FlipUtil
 from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
 
@@ -367,7 +369,16 @@ class RobotContainer:
         LoggedTunableNumber.updateAll()
         AutoUpdateGroup.updateAll()
         self.updateAlerts()
-        Logger.recordOutput("Component Poses", RobotMechanism.getPoses())
+        Logger.recordOutput(
+            "Component Poses",
+            RobotMechanism.getPoses(
+                self.turret.position,
+                Rotation2d.fromDegrees(
+                    map_range(cos(wpilib.Timer.getTimestamp() / 2), -1, 1, 0, 125.5)
+                ),
+                self.climber.position,
+            ),
+        )
 
     def configureButtonBindings(self) -> None:
         """

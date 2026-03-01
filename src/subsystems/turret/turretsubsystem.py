@@ -62,6 +62,10 @@ class TurretSubsystem(Subsystem):
     def setTurretGoal(self, goal: Rotation2d) -> None:
         self.turretGoal = goal
 
+    @property
+    def position(self) -> Rotation2d:
+        return self.inputs.turretPosition
+
     @autolog_output(key="Turret/at min")
     def isAtMin(self) -> bool:
         return (
