@@ -81,7 +81,6 @@ from constants.drive import (
     kBackRightAbsoluteEncoderOffset,
     kDriveGearingRatio,
     kSteerGearingRatioMk5i,
-    kSteerGearingRatioMk5n,
 )
 from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
@@ -224,7 +223,7 @@ class RobotContainer:
                                 kDriveGearingRatio,
                                 kBackLeftSteerMotorId,
                                 kBackLeftSteerInverted,
-                                kSteerGearingRatioMk5n,
+                                kSteerGearingRatioMk5i,
                                 kBackLeftSteerEncoderId,
                                 kBackLeftAbsoluteEncoderOffset,
                                 kCANivoreName,
@@ -238,7 +237,7 @@ class RobotContainer:
                                 kDriveGearingRatio,
                                 kBackRightSteerMotorId,
                                 kBackRightSteerInverted,
-                                kSteerGearingRatioMk5n,
+                                kSteerGearingRatioMk5i,
                                 kBackRightSteerEncoderId,
                                 kBackRightAbsoluteEncoderOffset,
                                 kCANivoreName,
