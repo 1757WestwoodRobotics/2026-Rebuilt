@@ -69,6 +69,30 @@ class HoodSubsystem(Subsystem):
         """
         return abs(self.inputs.hoodPosition - goal.radians()) < kHoodTolerance.radians()
 
+    def isAtMin(self) -> bool:
+        """
+        Returns whether the hood is at the minimum position
+        """
+        return self.isAtGoal(kHoodMinAngle)
+
+    def isAtMax(self) -> bool:
+        """
+        Returns whether the hood is at the maximum position
+        """
+        return self.isAtGoal(kHoodMaxAngle)
+
+    def isBeyondGoal(self) -> bool:
+        """
+        Returns whether the hood is beyond the goal position (i.e. if the hood is above the goal when the goal is above the current position, or if the hood is below the goal when the goal is below the current position)
+        """
+        return (
+            self.inputs.hoodPosition
+            > self.hoodGoal.radians() + kHoodTolerance.radians()
+        ) or (
+            self.inputs.hoodPosition
+            < self.hoodGoal.radians() - kHoodTolerance.radians()
+        )
+
     @autolog_output(key="Hood/at target")
     def atTarget(self) -> bool:
         """
