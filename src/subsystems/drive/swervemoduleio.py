@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from phoenix6 import CANBus
 from pykit.autolog import autolog
 from wpimath.geometry import Rotation2d
 
@@ -13,7 +14,7 @@ class SwerveModuleConfigParams:
     steerMotorID: int
     steerMotorInverted: bool
     steerGearing: float
-    canbus: str = ""
+    canbus: CANBus = CANBus()
 
     # pylint:disable-next=too-many-arguments, too-many-positional-arguments
     def __init__(
@@ -26,7 +27,7 @@ class SwerveModuleConfigParams:
         steerGearing: float,
         swerveEncoderID: int,
         swerveEncoderOffset: float,
-        canbus: str = "",
+        canbus: CANBus = CANBus(),
     ) -> None:
         self.driveMotorID = driveMotorID
         self.driveMotorInverted = driveMotorInverted

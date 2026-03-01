@@ -1,5 +1,6 @@
 import math
 
+from phoenix6 import CANBus
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
 from wpimath.geometry import Translation2d
 
@@ -134,7 +135,7 @@ kBackRightModuleName = "back_right"
 
 
 # CANivore
-kCANivoreName = "canivore"
+kCANivoreCANBus = CANBus("canivore")
 
 # Motors
 kFrontLeftDriveMotorId = 32

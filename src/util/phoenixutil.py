@@ -1,5 +1,5 @@
 from typing import Callable
-from phoenix6 import BaseStatusSignal, StatusSignal
+from phoenix6 import BaseStatusSignal, CANBus, StatusSignal
 
 from phoenix6.status_code import StatusCode
 
@@ -12,16 +12,16 @@ def tryUntilOk(attempts: int, command: Callable[[], StatusCode]):
 
 
 class PhoenixUtil:
-    registered_signals: dict[str, list[StatusSignal]] = {}
+    registered_signals: dict[CANBus, list[StatusSignal]] = {}
 
     @classmethod
-    def registerSignal(cls, canbus: str, signal: StatusSignal):
+    def registerSignal(cls, canbus: CANBus, signal: StatusSignal):
         if canbus not in cls.registered_signals:
             cls.registered_signals[canbus] = []
         cls.registered_signals[canbus].append(signal)
 
     @classmethod
-    def registerSignals(cls, canbus: str, *signals: StatusSignal):
+    def registerSignals(cls, canbus: CANBus, *signals: StatusSignal):
         for signal in signals:
             cls.registerSignal(canbus, signal)
 
