@@ -51,7 +51,7 @@ class RobotState:
     )
 
     simResetPoseConsumers: list[Callable[[Pose2d], None]] = []
-    simPoseRecieverConsumers: list[Callable[[], Pose2d]] = []
+    simPoseReceiverConsumers: list[Callable[[], Pose2d]] = []
 
     robotFieldVelocity: ChassisSpeeds = ChassisSpeeds()
 
@@ -293,8 +293,8 @@ class RobotState:
 
     @classmethod
     def getSimPose(cls) -> Pose2d:
-        if len(cls.simPoseRecieverConsumers) == 1:
-            return cls.simPoseRecieverConsumers[0]()
+        if len(cls.simPoseReceiverConsumers) == 1:
+            return cls.simPoseReceiverConsumers[0]()
         print("This is not supposed to happen")
         return cls.getFieldPose()
 
@@ -307,5 +307,5 @@ class RobotState:
         )
 
     @classmethod
-    def registerSimPoseRecieverConsumer(cls, consumer: Callable[[], Pose2d]) -> None:
-        cls.simPoseRecieverConsumers.append(consumer)
+    def registerSimPoseReceiverConsumer(cls, consumer: Callable[[], Pose2d]) -> None:
+        cls.simPoseReceiverConsumers.append(consumer)
