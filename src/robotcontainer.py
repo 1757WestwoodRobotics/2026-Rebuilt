@@ -363,9 +363,7 @@ class RobotContainer:
             self.drive.getAngularVelocity(),
             self.drive.getFieldRelativeSpeeds(),
             self.drive.getModulePositions(),
-            Rotation2d(
-                wpilib.Timer.getTimestamp() / 20
-            ),  # Simulated turret rotation, just go spin
+            self.turret.position(),
         )
         LoggedTunableNumber.updateAll()
         AutoUpdateGroup.updateAll()
