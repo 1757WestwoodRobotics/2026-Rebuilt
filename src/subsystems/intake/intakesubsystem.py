@@ -103,6 +103,10 @@ class IntakeSubsystem(Subsystem):
     def setPivotGoal(self, goal: PivotGoal):
         self.pivotGoal = goal
 
+    @property
+    def position(self) -> Rotation2d:
+        return Rotation2d(self.inputs.pivotPosition)
+
     @autolog_output(key="Intake/at target")
     def isAtTarget(self) -> bool:
         return (

@@ -372,7 +372,7 @@ class RobotContainer:
             self.drive.getAngularVelocity(),
             self.drive.getFieldRelativeSpeeds(),
             self.drive.getModulePositions(),
-            self.turret.position(),
+            self.turret.position,
         )
         LoggedTunableNumber.updateAll()
         AutoUpdateGroup.updateAll()
@@ -381,9 +381,7 @@ class RobotContainer:
             "Component Poses",
             RobotMechanism.getPoses(
                 self.turret.position,
-                Rotation2d.fromDegrees(
-                    map_range(cos(wpilib.Timer.getTimestamp() / 2), -1, 1, 0, 125.5)
-                ),
+                self.intake.position,
                 self.climber.position,
             ),
         )
