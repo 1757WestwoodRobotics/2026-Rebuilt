@@ -40,6 +40,7 @@ from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
 from subsystems.flywheel.flywheelsubsystemio import FlywheelSubsystemIO
 from subsystems.flywheel.flywheelsubsystemiosim import FlywheelSubsystemIOSim
 from subsystems.flywheel.flywheelsubsystemiotalon import FlywheelSubsystemIOTalon
+from subsystems.leds.ledsubsystem import LEDSubsystem
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
@@ -205,6 +206,7 @@ class RobotContainer:
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
                 self.hood = HoodSubsystem(HoodSubsystemIOTalon())
+                self.leds = LEDSubsystem()
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -301,6 +303,7 @@ class RobotContainer:
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOSim())
                 self.hood = HoodSubsystem(HoodSubsystemIOSim())
+                self.leds = LEDSubsystem()
 
             case _:
                 self.drive = DriveSubsystem(
@@ -323,6 +326,7 @@ class RobotContainer:
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIO())
                 self.hood = HoodSubsystem(HoodSubsystemIO())
+                self.leds = LEDSubsystem()
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
