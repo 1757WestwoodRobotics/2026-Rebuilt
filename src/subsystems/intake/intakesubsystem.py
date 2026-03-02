@@ -65,7 +65,7 @@ class IntakeSubsystem(Subsystem):
         self.setName(type(self).__name__)
         self.io = io
         self.io.setIntakeAngle(kPivotStartAngle)
-        self.inputs = IntakeSubsystemIO.IntakeSubsystemInputs()
+        self.inputs = IntakeSubsystemIO.IntakeSubsystemIOInputs()
 
         self.isClosedLoop = True
         self.pivotGoal = PivotGoal.RETRACTED

@@ -7,7 +7,7 @@ class IntakeSubsystemIO:
 
     @autolog
     @dataclass
-    class IntakeSubsystemInputs:
+    class IntakeSubsystemIOInputs:
         pivotConnected: bool = False
         rollerConnected: bool = False
 
@@ -23,7 +23,7 @@ class IntakeSubsystemIO:
         rollerAppliedVolts: float = 0
         rollerSupplyAmps: float = 0
 
-    def updateInputs(self, inputs: IntakeSubsystemInputs):
+    def updateInputs(self, inputs: IntakeSubsystemIOInputs) -> None:
         pass
 
     def setIntakeAngle(self, position: Rotation2d) -> None:

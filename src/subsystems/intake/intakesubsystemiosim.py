@@ -44,7 +44,7 @@ class IntakeSubsystemIOSim(IntakeSubsystemIOTalon):
             kRollerMotor,
         )
 
-    def updateInputs(self, inputs: IntakeSubsystemIO.IntakeSubsystemInputs) -> None:
+    def updateInputs(self, inputs: IntakeSubsystemIO.IntakeSubsystemIOInputs) -> None:
         pivotMotorSim = self.pivotMotor.sim_state
         rollerMotorSim = self.rollerMotor.sim_state
 
