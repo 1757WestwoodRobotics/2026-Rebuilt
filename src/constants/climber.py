@@ -16,7 +16,7 @@ kSpoolDiameter = 0.75 * kMetersPerInch
 
 kClimberSpoolCircumference = kSpoolDiameter * pi
 
-kClimberPGain = 0.1
+kClimberPGain = 10
 kClimberIGain = 0.0
 kClimberDGain = 0.0
 kClimberSGain = 0.0
