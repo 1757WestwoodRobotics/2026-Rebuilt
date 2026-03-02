@@ -141,6 +141,37 @@ class RobotState:
         return autoWinner == DriverStation.getAlliance()
 
     @classmethod
+    def hubAboutToChange(cls) -> bool:
+        """
+        Returns true during 3 seconds before a hub change, which happens at 110, 85, 60, and 35 seconds remaining
+        """
+        time = DriverStation.getMatchTime()
+        if time <= 0:
+            return False  # safety net for negative time, assume its not about to change (testing)
+        return (
+            (
+                kEndgameDuration + kShiftDuration * 4 + 3
+                >= time
+                >= kEndgameDuration + kShiftDuration * 4
+            )
+            or (
+                kEndgameDuration + kShiftDuration * 3 + 3
+                >= time
+                >= kEndgameDuration + kShiftDuration * 3
+            )
+            or (
+                kEndgameDuration + kShiftDuration * 2 + 3
+                >= time
+                >= kEndgameDuration + kShiftDuration * 2
+            )
+            or (
+                kEndgameDuration + kShiftDuration + 3
+                >= time
+                >= kEndgameDuration + kShiftDuration
+            )
+        )
+
+    @classmethod
     def hubActive(cls) -> bool:
         """
         Returns true if the active hub is the one we are scoring on
@@ -261,6 +292,7 @@ class RobotState:
         )
         Logger.recordOutput("Auto/StartingPose", cls.targetAutonomousStartingLocation)
         Logger.recordOutput("Game/WonAuto", cls.didWinAuto())
+        Logger.recordOutput("Game/HubAboutToChange", cls.hubAboutToChange())
         Logger.recordOutput("Game/HubActive", cls.hubActive())
 
         if not RobotBase.isReal():
