@@ -7,7 +7,7 @@ from phoenix6.configs.talon_fx_configs import (
     Slot0Configs,
 )
 from phoenix6.controls import MotionMagicVoltage, VoltageOut
-from phoenix6.hardware import TalonFX
+from phoenix6.hardware.talon_fx import TalonFX
 from wpimath.geometry import Rotation2d
 from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
 
