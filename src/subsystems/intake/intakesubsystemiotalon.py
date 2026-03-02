@@ -114,7 +114,7 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
             self.rollerSupply,
         )
 
-    def updateInputs(self, inputs: IntakeSubsystemIO.IntakeSubsystemInputs):
+    def updateInputs(self, inputs: IntakeSubsystemIO.IntakeSubsystemIOInputs):
         inputs.pivotConnected = BaseStatusSignal.is_all_good(
             self.pivotPosition,
             self.pivotVelocity,
