@@ -70,6 +70,8 @@ class _DepotIntake(Command):
         self.intake = intake
         self.prevGoal = intake.pivotGoal
 
+        self.addRequirements(intake)
+
     def initialize(self) -> None:
         self.prevGoal = self.intake.pivotGoal
 
