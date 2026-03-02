@@ -17,7 +17,7 @@ kFlywheelCurrentLimit = (
     .with_supply_current_limit_enable(True)
 )
 
-kFlywheelGearing = 1.0  # dimentionless
+kFlywheelGearing = 24 / 24  # dimensionless
 kFlywheelTolerance = 5  # rad/s
 
 kFlywheelSimMotor = DCMotor.krakenX60FOC(1)
