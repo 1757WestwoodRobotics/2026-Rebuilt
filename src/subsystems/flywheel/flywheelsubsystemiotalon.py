@@ -67,21 +67,21 @@ class FlywheelSubsystemIOTalon(FlywheelSubsystemIO):
         self.flywheelPosition = self.motor.get_position()
         self.flywheelVelocity = self.motor.get_velocity()
 
-        self.flywheelApplid = self.motor.get_motor_voltage()
+        self.flywheelApplied = self.motor.get_motor_voltage()
         self.flywheelSupply = self.motor.get_supply_current()
 
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.flywheelPosition,
             self.flywheelVelocity,
-            self.flywheelApplid,
+            self.flywheelApplied,
             self.flywheelSupply,
         )
         PhoenixUtil.registerSignals(
             kRioCANBus,
             self.flywheelPosition,
             self.flywheelVelocity,
-            self.flywheelApplid,
+            self.flywheelApplied,
             self.flywheelSupply,
         )
 
@@ -91,14 +91,14 @@ class FlywheelSubsystemIOTalon(FlywheelSubsystemIO):
         inputs.flywheelConnected = BaseStatusSignal.is_all_good(
             self.flywheelPosition,
             self.flywheelVelocity,
-            self.flywheelApplid,
+            self.flywheelApplied,
             self.flywheelSupply,
         )
 
         inputs.flywheelPosition = self.flywheelPosition.value * kRadiansPerRevolution
         inputs.flywheelSpeed = self.flywheelVelocity.value * kRadiansPerRevolution
 
-        inputs.flywheelApplidVolts = self.flywheelApplid.value
+        inputs.flywheelAppliedVolts = self.flywheelApplied.value
         inputs.flywheelSupplyAmps = self.flywheelSupply.value
 
     def set_speed(self, speed: float):
