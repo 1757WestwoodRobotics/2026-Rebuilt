@@ -9,12 +9,18 @@ from pykit.logger import Logger
 from wpilib.sysid import State
 from wpimath.geometry import Rotation2d
 
+from robotstate import RobotState
 from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
 
+from constants.turret import (
+    kTurretStartingAngle,
+    kTurretSafetyTolerance,
+)
 from constants.intake import (
     kPivotRetractedPosition,
     kPivotExtendedPosition,
     kPivotDepotPosition,
+    kPivotSafePosition,
     kPivotMinAngle,
     kPivotMaxAngle,
     kPivotStartAngle,
@@ -79,10 +85,21 @@ class IntakeSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         if self.isClosedLoop:
+            goalAngle = (
+                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle)
+                + self.pivotFudge
+            )
+            if (
+                abs(
+                    RobotState.turretRotation.radians() - kTurretStartingAngle.radians()
+                )
+                > kTurretSafetyTolerance.radians()
+                and goalAngle.radians() > kPivotSafePosition.radians()
+            ):
+                goalAngle = kPivotSafePosition
             self.io.setIntakeTarget(
                 self.rollerGoal.value,
-                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle)
-                + self.pivotFudge,
+                goalAngle,
             )
         LogTracer.record("SetIntakeTarget")
 

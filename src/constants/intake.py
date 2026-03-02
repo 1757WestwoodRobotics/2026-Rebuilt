@@ -48,6 +48,13 @@ kRollerMotor = DCMotor.krakenX60FOC(1)
 kRollerGearRatio = 24 / 18
 
 kPivotRetractedPosition = Rotation2d.fromDegrees(125.5)
+
+kPivotSafePosition = Rotation2d.fromDegrees(100)
+# A position that the intake can go to while it waits for the turret to rotate to a safe position.
+# This is necessary because the turret can hit the intake if the intake is extended while the turret is rotating.
+kPivotDangerZoneStart = Rotation2d.fromDegrees(70)
+# the position at which the turret should go to a fixed position to avoid hitting the intake
+
 kPivotDepotPosition = Rotation2d.fromDegrees(5)
 kPivotExtendedPosition = Rotation2d()
 

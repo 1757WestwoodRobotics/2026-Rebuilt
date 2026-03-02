@@ -6,10 +6,12 @@ from pykit.logger import Logger
 from wpilib.sysid import State
 from wpimath.geometry import Rotation2d
 
+from robotstate import RobotState
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from util.convenientmath import clampRotation
 from util.logtracer import LogTracer
 
+from constants.intake import kPivotDangerZoneStart
 from constants.turret import (
     kTurretMinAngle,
     kTurretMaxAngle,
@@ -39,11 +41,13 @@ class TurretSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         if self.isClosedLoop:
-            self.io.set_turret_angle(
-                clampRotation(
-                    self.turretGoal, kTurretMinAngle, kTurretMaxAngle
-                )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
-            )
+            goalAngle = clampRotation(
+                self.turretGoal, kTurretMinAngle, kTurretMaxAngle
+            )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
+
+            if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
+                goalAngle = kTurretStartingAngle
+            self.io.set_turret_angle(goalAngle)
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Turret/goal", self.turretGoal)
         Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
