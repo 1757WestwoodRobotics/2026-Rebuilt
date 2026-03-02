@@ -25,6 +25,7 @@ class RobotState:
     headingOffset: Rotation2d = Rotation2d()
     robotHeading: Rotation2d = Rotation2d()
     turretRotation: Rotation2d = Rotation2d()
+    intakeRotation: Rotation2d = Rotation2d()
 
     modulePositions: tuple[
         SwerveModulePosition,
@@ -196,9 +197,11 @@ class RobotState:
             SwerveModulePosition,
         ],
         turretRotation: Rotation2d,
+        intakeRotation: Rotation2d,
     ) -> None:
         LogTracer.resetOuter("RobotState")
         cls.turretRotation = turretRotation
+        cls.intakeRotation = intakeRotation
         cls.robotHeading = heading
         cls.modulePositions = modulePositions
         cls.odometry.update(heading, modulePositions)

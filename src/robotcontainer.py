@@ -1,4 +1,3 @@
-from math import cos
 import os
 
 from pykit.logger import Logger
@@ -6,7 +5,7 @@ from pykit.alertlogger import AlertLogger
 from pykit.networktables.loggeddashboardchooser import LoggedDashboardChooser
 
 import wpilib
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.geometry import Pose2d
 import commands2
 import commands2.cmd as Commands
 from pathplannerlib.auto import PathPlannerAuto
@@ -89,7 +88,6 @@ from constants.drive import (
     kSteerGearingRatioMk5i,
 )
 from constants import RobotModes, kRobotMode
-from util.convenientmath import map_range
 from util.fliputil import FlipUtil
 from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
 
@@ -373,6 +371,7 @@ class RobotContainer:
             self.drive.getFieldRelativeSpeeds(),
             self.drive.getModulePositions(),
             self.turret.position,
+            self.intake.position,
         )
         LoggedTunableNumber.updateAll()
         AutoUpdateGroup.updateAll()
