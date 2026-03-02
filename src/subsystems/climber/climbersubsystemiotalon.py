@@ -1,6 +1,6 @@
 from phoenix6 import BaseStatusSignal
 from phoenix6.configs.talon_fx_configs import Slot0Configs, TalonFXConfiguration
-from phoenix6.controls import PositionTorqueCurrentFOC, VoltageOut
+from phoenix6.controls import PositionVoltage, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
 from subsystems.climber.climbersubsystemio import ClimberSubsystemIO
 
@@ -23,7 +23,7 @@ from util.phoenixutil import PhoenixUtil, tryUntilOk
 class ClimberSubsystemIOTalon(ClimberSubsystemIO):
     config: TalonFXConfiguration = TalonFXConfiguration()
 
-    closedDemand: PositionTorqueCurrentFOC = PositionTorqueCurrentFOC(0)
+    closedDemand: PositionVoltage = PositionVoltage(0)
     openDemand: VoltageOut = VoltageOut(0)
 
     def __init__(self) -> None:
