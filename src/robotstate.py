@@ -2,10 +2,18 @@ from typing import Callable
 from commands2.button import Trigger
 from pykit.logger import Logger
 from wpilib import RobotBase, DriverStation
-from wpimath.geometry import Pose2d, Pose3d, Rotation2d, Rotation3d, Transform3d
+from wpimath.geometry import (
+    Pose2d,
+    Pose3d,
+    Rotation2d,
+    Rotation3d,
+    Transform3d,
+    Translation2d,
+)
 from wpimath.kinematics import ChassisSpeeds, SwerveDrive4Odometry, SwerveModulePosition
 
 from util.convenientmath import pose3dFrom2d
+from util.fliputil import FlipUtil
 from util.robotposeestimator import (
     OdometryObservation,
     TurretObservation,
@@ -17,10 +25,11 @@ from util.logtracer import LogTracer
 from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
 from constants.auto import kAutoDistanceTolerance, kAutoRotationTolerance
-from constants.field import kEndgameDuration, kShiftDuration
+from constants.field import kEndgameDuration, kShiftDuration, kCloseHubLocation
 from constants.vision import kRedHubAprilTags, kBlueHubAprilTags
 
 
+# pylint: disable-next=too-many-public-methods
 class RobotState:
     headingOffset: Rotation2d = Rotation2d()
     robotHeading: Rotation2d = Rotation2d()
@@ -267,6 +276,20 @@ class RobotState:
     @classmethod
     def getHubPose(cls) -> Pose2d:
         return cls.hubEstimator.estimatedPose
+
+    @classmethod
+    def hubLocation(cls) -> Translation2d:
+        """
+        Returns the global location of the hub as a Transform2d from the origin, based on the alliance color
+        """
+        return FlipUtil.fieldTranslation(kCloseHubLocation)
+
+    @classmethod
+    def distanceToHub(cls) -> float:
+        """
+        Returns the distance from the robot to the hub in meters, based on the hub estimator
+        """
+        return cls.hubLocation().distance(cls.getHubPose().translation())
 
     @classmethod
     def getRotation(cls) -> Rotation2d:

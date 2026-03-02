@@ -16,6 +16,7 @@ from commands.defensestate import DefenseState
 import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
+import commands.flywheelcommands as FlywheelCommands
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -33,6 +34,10 @@ from subsystems.intake.intakesubsystem import IntakeSubsystem
 from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
 from subsystems.intake.intakesubsystemiosim import IntakeSubsystemIOSim
 from subsystems.intake.intakesubsystemiotalon import IntakeSubsystemIOTalon
+from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
+from subsystems.flywheel.flywheelsubsystemio import FlywheelSubsystemIO
+from subsystems.flywheel.flywheelsubsystemiosim import FlywheelSubsystemIOSim
+from subsystems.flywheel.flywheelsubsystemiotalon import FlywheelSubsystemIOTalon
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
@@ -188,6 +193,7 @@ class RobotContainer:
                 self.turret = TurretSubsystem(TurretSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
+                self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -281,6 +287,7 @@ class RobotContainer:
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
+                self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOSim())
 
             case _:
                 self.drive = DriveSubsystem(
@@ -300,6 +307,7 @@ class RobotContainer:
                 self.turret = TurretSubsystem(TurretSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIO())
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
+                self.flywheel = FlywheelSubsystem(FlywheelSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
@@ -338,6 +346,9 @@ class RobotContainer:
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
         self.chooser.addOption("Climb SysID", self.climber.sysIdRoutine(self.climber))
         self.chooser.addOption("Intake SysID", self.intake.sysIdRoutine(self.intake))
+        self.chooser.addOption(
+            "Flywheel SysID", self.flywheel.sysIdRoutine(self.flywheel)
+        )
 
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
@@ -400,12 +411,16 @@ class RobotContainer:
                 self.oi.driverRotation,
             )
         )
+
         self.oi.driverController.rightBumper().whileTrue(
             AngleAlignDrive(
                 self.drive,
                 lambda: self.oi.driverY() * kNormalSpeedMultiplier,
                 lambda: self.oi.driverX() * kNormalSpeedMultiplier,
             ).repeatedly()
+        )
+        self.oi.driverController.rightTrigger().whileTrue(
+            FlywheelCommands.shootWithDistance(self.flywheel, RobotState.distanceToHub)
         )
 
         self.oi.driverController.povDown().onTrue(
