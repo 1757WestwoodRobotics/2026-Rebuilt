@@ -66,10 +66,14 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
         )
         self.pivotConfig.motion_magic = (
             MotionMagicConfigs()
-            .with_motion_magic_expo_k_v(kPivotKv)
-            .with_motion_magic_expo_k_a(kPivotKa)
-            .with_motion_magic_acceleration(kPivotMaxAcceleration)
-            .with_motion_magic_cruise_velocity(kPivotMaxVelocity)
+            .with_motion_magic_expo_k_v(kPivotKv * kRadiansPerRevolution)
+            .with_motion_magic_expo_k_a(kPivotKa * kRadiansPerRevolution)
+            .with_motion_magic_acceleration(
+                kPivotMaxAcceleration / kRadiansPerRevolution
+            )
+            .with_motion_magic_cruise_velocity(
+                kPivotMaxVelocity / kRadiansPerRevolution
+            )
         )
         tryUntilOk(5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig))
 
