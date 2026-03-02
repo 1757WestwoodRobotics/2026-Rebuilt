@@ -328,6 +328,7 @@ class RobotContainer:
             LoggedDashboardChooser("Autonomous")
         )
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
+        self.chooser.addOption("Climb SysID", self.climber.sysIdRoutine(self.climber))
 
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
