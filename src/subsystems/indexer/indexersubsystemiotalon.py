@@ -9,52 +9,93 @@ from util.phoenixutil import tryUntilOk, PhoenixUtil
 
 from constants import kRobotUpdateFrequency
 from constants.indexer import (
-    kKickerCANId,
+    kKickerLowerCANId,
+    kKickerUpperCANId,
     kKickerCurrentLimit,
     kKickerGearRatio,
-    kSpindexerCANId,
+    kSpindexer1CANId,
+    kSpindexer2CANId,
     kSpindexerCurrentLimit,
     kSpindexerGearRatio,
 )
 
 
 class IndexerSubsystemIOTalon(IndexerSubsystemIO):
-    spindexerConfig: TalonFXConfiguration = TalonFXConfiguration()
-    kickerConfig: TalonFXConfiguration = TalonFXConfiguration()
+    spindexer1Config: TalonFXConfiguration = TalonFXConfiguration()
+    spindexer2Config: TalonFXConfiguration = TalonFXConfiguration()
+    kickerLowerConfig: TalonFXConfiguration = TalonFXConfiguration()
+    kickerUpperConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    spindexerDemand: VoltageOut = VoltageOut(0, False)
-    kickerDemand: VoltageOut = VoltageOut(0, False)
+    spindexer1Demand: VoltageOut = VoltageOut(0, False)
+    spindexer2Demand: VoltageOut = VoltageOut(0, False)
+    kickerLowerDemand: VoltageOut = VoltageOut(0, False)
+    kickerUpperDemand: VoltageOut = VoltageOut(0, False)
 
     def __init__(self) -> None:
-        self.spindexerMotor = TalonFX(kSpindexerCANId)
-        self.kickerMotor = TalonFX(kKickerCANId)
+        self.spindexer1Motor = TalonFX(kSpindexer1CANId)
+        self.spindexer2Motor = TalonFX(kSpindexer2CANId)
+        self.kickerLowerMotor = TalonFX(kKickerLowerCANId)
+        self.kickerUpperMotor = TalonFX(kKickerUpperCANId)
 
-        self.spindexerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
-        self.kickerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
+        self.spindexer1Config.motor_output.neutral_mode = NeutralModeValue.COAST
+        self.spindexer2Config.motor_output.neutral_mode = NeutralModeValue.COAST
+        self.kickerLowerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
+        self.kickerUpperConfig.motor_output.neutral_mode = NeutralModeValue.COAST
 
-        self.spindexerConfig.current_limits = kSpindexerCurrentLimit
-        self.kickerConfig.current_limits = kKickerCurrentLimit
+        self.spindexer1Config.current_limits = kSpindexerCurrentLimit
+        self.spindexer2Config.current_limits = kSpindexerCurrentLimit
+        self.kickerLowerConfig.current_limits = kKickerCurrentLimit
+        self.kickerUpperConfig.current_limits = kKickerCurrentLimit
 
-        self.spindexerConfig.feedback.sensor_to_mechanism_ratio = kSpindexerGearRatio
-        self.kickerConfig.feedback.sensor_to_mechanism_ratio = kKickerGearRatio
+        self.spindexer1Config.feedback.sensor_to_mechanism_ratio = kSpindexerGearRatio
+        self.spindexer2Config.feedback.sensor_to_mechanism_ratio = kSpindexerGearRatio
+        self.kickerLowerConfig.feedback.sensor_to_mechanism_ratio = kKickerGearRatio
+        self.kickerUpperConfig.feedback.sensor_to_mechanism_ratio = kKickerGearRatio
 
         tryUntilOk(
             5,
-            lambda: self.spindexerMotor.configurator.apply(self.spindexerConfig, 0.25),
+            lambda: self.spindexer1Motor.configurator.apply(
+                self.spindexer1Config, 0.25
+            ),
         )
         tryUntilOk(
-            5, lambda: self.kickerMotor.configurator.apply(self.kickerConfig, 0.25)
+            5,
+            lambda: self.spindexer2Motor.configurator.apply(
+                self.spindexer2Config, 0.25
+            ),
+        )
+        tryUntilOk(
+            5,
+            lambda: self.kickerLowerMotor.configurator.apply(
+                self.kickerUpperConfig, 0.25
+            ),
+        )
+        tryUntilOk(
+            5,
+            lambda: self.kickerUpperMotor.configurator.apply(
+                self.kickerUpperConfig, 0.25
+            ),
         )
 
-        self.spindexerPosition = self.spindexerMotor.get_position()
-        self.spindexerVelocity = self.spindexerMotor.get_velocity()
-        self.spindexerSupply = self.spindexerMotor.get_supply_current()
-        self.spindexerApplied = self.spindexerMotor.get_motor_voltage()
+        self.spindexerPosition = self.spindexer1Motor.get_position()
+        self.spindexerVelocity = self.spindexer1Motor.get_velocity()
+        self.spindexerSupply = self.spindexer1Motor.get_supply_current()
+        self.spindexerApplied = self.spindexer1Motor.get_motor_voltage()
 
-        self.kickerPosition = self.kickerMotor.get_position()
-        self.kickerVelocity = self.kickerMotor.get_velocity()
-        self.kickerSupply = self.kickerMotor.get_supply_current()
-        self.kickerApplied = self.kickerMotor.get_motor_voltage()
+        self.spindexerPosition = self.spindexer2Motor.get_position()
+        self.spindexerVelocity = self.spindexer2Motor.get_velocity()
+        self.spindexerSupply = self.spindexer2Motor.get_supply_current()
+        self.spindexerApplied = self.spindexer2Motor.get_motor_voltage()
+
+        self.kickerPosition = self.kickerLowerMotor.get_position()
+        self.kickerVelocity = self.kickerLowerMotor.get_velocity()
+        self.kickerSupply = self.kickerLowerMotor.get_supply_current()
+        self.kickerApplied = self.kickerLowerMotor.get_motor_voltage()
+
+        self.kickerPosition = self.kickerUpperMotor.get_position()
+        self.kickerVelocity = self.kickerUpperMotor.get_velocity()
+        self.kickerSupply = self.kickerUpperMotor.get_supply_current()
+        self.kickerApplied = self.kickerUpperMotor.get_motor_voltage()
 
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
