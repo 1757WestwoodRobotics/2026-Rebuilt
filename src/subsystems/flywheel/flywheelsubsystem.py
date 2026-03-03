@@ -21,7 +21,7 @@ class FlywheelSubsystemState(Enum):
 class FlywheelSubsystem(Subsystem):
     """
     Flywheel subsystem class.
-    Controlls just the motor used for the flywheel
+    Controls just the motor used for the flywheel
     """
 
     def __init__(self, io: FlywheelSubsystemIO) -> None:

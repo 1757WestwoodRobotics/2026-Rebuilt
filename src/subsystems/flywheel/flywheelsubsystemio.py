@@ -13,7 +13,7 @@ class FlywheelSubsystemIO:
         flywheelSpeed: float = 0.0
         flywheelPosition: float = 0.0
 
-        flywheelApppliedVolts: float = 0.0
+        flywheelAppliedVolts: float = 0.0
         flywheelSupplyAmps: float = 0.0
 
     def updateInputs(self, inputs: FlywheelSubsystemIOInputs):
