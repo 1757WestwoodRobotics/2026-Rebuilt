@@ -31,7 +31,7 @@ kPivotConstraints = TrapezoidProfileRadians.Constraints(
     kPivotMaxVelocity, kPivotMaxAcceleration
 )
 
-# Positive angle is upwards, 0 angle is horizontal, and negative angle is downwards
+# Positive angle is upwards, 0 angle is horizontal, and positive is upwards
 kPivotMinAngle = Rotation2d()
 kPivotMaxAngle = Rotation2d.fromDegrees(125.5)
 kPivotStartAngle = Rotation2d.fromDegrees(125.5)
