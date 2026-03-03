@@ -4,7 +4,7 @@ from phoenix6.configs.talon_fx_configs import (
     TalonFXConfiguration,
 )
 from phoenix6.controls import MotionMagicVoltage, VoltageOut
-from phoenix6.hardware.core.core_talon_fx import BaseStatusSignal
+from phoenix6 import BaseStatusSignal
 from phoenix6.hardware.talon_fx import TalonFX
 from subsystems.hood.hoodsubsystemio import HoodSubsystemIO
 

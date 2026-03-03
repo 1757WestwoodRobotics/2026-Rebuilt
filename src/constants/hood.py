@@ -10,7 +10,7 @@ kHoodMaxAcceleration = Rotation2d.fromDegrees(360)
 
 kHoodGearRatio = (4 / 1) * (360 / 13)
 
-kTurretCanId = 8
+kHoodCANId = 8
 
 kHoodPGain = 0.1
 kHoodIGain = 0.1

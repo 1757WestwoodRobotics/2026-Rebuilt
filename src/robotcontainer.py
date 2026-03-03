@@ -192,7 +192,7 @@ class RobotContainer:
                         ),
                     ],
                 )
-                self.turret = TurretSubsystem(TurretSubsystemIO())
+                self.turret = TurretSubsystem(TurretSubsystemIOTalon())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
