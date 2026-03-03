@@ -148,27 +148,11 @@ class RobotState:
         time = DriverStation.getMatchTime()
         if time <= 0:
             return False  # safety net for negative time, assume its not about to change (testing)
-        return (
-            (
-                kEndgameDuration + kShiftDuration * 4 + 3
-                >= time
-                >= kEndgameDuration + kShiftDuration * 4
-            )
-            or (
-                kEndgameDuration + kShiftDuration * 3 + 3
-                >= time
-                >= kEndgameDuration + kShiftDuration * 3
-            )
-            or (
-                kEndgameDuration + kShiftDuration * 2 + 3
-                >= time
-                >= kEndgameDuration + kShiftDuration * 2
-            )
-            or (
-                kEndgameDuration + kShiftDuration + 3
-                >= time
-                >= kEndgameDuration + kShiftDuration
-            )
+        return any(
+            kEndgameDuration + kShiftDuration * i + 3
+            >= time
+            >= kEndgameDuration + kShiftDuration * i
+            for i in range(0, 5)
         )
 
     @classmethod
