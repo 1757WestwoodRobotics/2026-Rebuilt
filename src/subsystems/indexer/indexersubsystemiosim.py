@@ -10,7 +10,7 @@ from constants.indexer import (
     kKickerMotorLower,
     kKickerMotorUpper,
     kSpindexerGearRatio,
-    kSpindexerMotor,
+    kSpindexerMotor1,
     kSpindexerMotor2,
 )
 from constants import kRobotUpdatePeriod
@@ -21,14 +21,18 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
     def __init__(self) -> None:
         super().__init__()
         self.spindexerSimModel = DCMotorSim(
-            LinearSystemId.DCMotorSystem(kSpindexerMotor, 0.04, kSpindexerGearRatio),
-            kSpindexerMotor,
+            LinearSystemId.DCMotorSystem(kSpindexerMotor1, 0.04, kSpindexerGearRatio),
+            kSpindexerMotor1,
             kSpindexerMotor2,
         )
 
-        self.kickerSimModel = DCMotorSim(
+        self.kickerLowerSimModel = DCMotorSim(
             LinearSystemId.DCMotorSystem(kKickerMotorLower, 0.04, kKickerGearRatio),
             kKickerMotorLower,
+        )
+
+        self.kickerUpperSimModel = DCMotorSim(
+            LinearSystemId.DCMotorSystem(kKickerMotorUpper, 0.04, kKickerGearRatio),
             kKickerMotorUpper,
         )
 
@@ -42,10 +46,12 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         kickerAppliedVoltage = clamp(kickerMotorSim.motor_voltage, -12.0, 12.0)
 
         self.spindexerSimModel.setInputVoltage(spindexerAppliedVoltage)
-        self.kickerSimModel.setInputVoltage(kickerAppliedVoltage)
+        self.kickerLowerSimModel.setInputVoltage(kickerAppliedVoltage)
+        self.kickerUpperSimModel.setInputVoltage(kickerAppliedVoltage)
 
         self.spindexerSimModel.update(kRobotUpdatePeriod)
-        self.kickerSimModel.update(kRobotUpdatePeriod)
+        self.kickerLowerSimModel.update(kRobotUpdatePeriod)
+        self.kickerUpperSimModel.update(kRobotUpdatePeriod)
 
         spindexerMotorSim.set_raw_rotor_position(
             self.spindexerSimModel.getAngularPositionRotations() * kSpindexerGearRatio
@@ -57,17 +63,17 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         )
         spindexerMotorSim.set_supply_voltage(
             clamp(
-                simVoltage - spindexerMotorSim.supply_current * kSpindexerMotor.R,
+                simVoltage - spindexerMotorSim.supply_current * kSpindexerMotor1.R,
                 0,
                 simVoltage,
             )
         )
 
         kickerMotorSim.set_raw_rotor_position(
-            self.kickerSimModel.getAngularPositionRotations() * kKickerGearRatio
+            self.kickerLowerSimModel.getAngularPositionRotations() * kKickerGearRatio
         )
         kickerMotorSim.set_rotor_velocity(
-            self.kickerSimModel.getAngularVelocity()
+            self.kickerLowerSimModel.getAngularVelocity()
             * kKickerGearRatio
             / kRadiansPerRevolution
         )
