@@ -73,6 +73,7 @@ class FlywheelSubsystem(Subsystem):
         self.state = (
             FlywheelSubsystemState.FIRING
         )  # need to set to firing to prevent periodic from stopping the flywheel
+        self.setClosedLoop(False)
         self.io.set_volts(volts)
 
     def setGoal(self, goal: float) -> None:
@@ -80,6 +81,7 @@ class FlywheelSubsystem(Subsystem):
         Sets the shooter goal in rad/s
         """
         self.state = FlywheelSubsystemState.FIRING
+        self.setClosedLoop(True)
         self.goal = goal
 
     def flywheelIdle(self) -> None:
