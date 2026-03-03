@@ -1,5 +1,4 @@
 from os import path
-import wpilib
 from wpimath.geometry import Pose3d, Rotation2d, Rotation3d, Transform3d
 from robotpy_apriltag import AprilTagFieldLayout
 
@@ -89,7 +88,13 @@ kThetaStdDevCoeff = 0.06  # radians
 kTargetName = "Target"
 
 kApriltagFieldLayout = AprilTagFieldLayout(
-    path.join(wpilib.getDeployDirectory(), "apriltags", "2026-rebuilt-andymark.json")
+    path.join(
+        path.dirname(__file__),
+        "..",
+        "deploy",
+        "apriltags",
+        "2026-rebuilt-andymark.json",
+    )
 )
 kApriltagPositionDict = {
     1: Pose3d(
