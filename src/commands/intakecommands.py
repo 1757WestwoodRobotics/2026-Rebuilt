@@ -11,9 +11,15 @@ from constants.intake import kPivotBumpAmount
 
 
 def reverseIntake(intake: IntakeSubsystem) -> Command:
-    return Commands.run(
-        partial(intake.setSubsystemGoal, IntakeSubsystemGoal.REVERSED), intake
-    ).withName("ReverseIntake")
+    return (
+        Commands.run(
+            partial(intake.setSubsystemGoal, IntakeSubsystemGoal.REVERSED), intake
+        )
+        .finallyDo(
+            lambda _interrupted: intake.setSubsystemGoal(IntakeSubsystemGoal.EXTENDED)
+        )
+        .withName("ReverseIntake")
+    )
 
 
 def deployIntake(intake: IntakeSubsystem) -> Command:
