@@ -4,4 +4,9 @@ to test basic functionality of just about any robot.
 """
 
 # pylint:disable-next=unused-import
-from pyfrc.tests import test_practice
+from pyfrc.tests import (
+    test_autonomous,
+    test_disabled,
+    test_operator_control,
+    test_practice,
+)
