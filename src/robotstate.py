@@ -280,7 +280,7 @@ class RobotState:
     @classmethod
     def hubLocation(cls) -> Translation2d:
         """
-        Returns the global location of the hub as a Transform2d from the origin, based on the alliance color
+        Returns the global field-space location of the hub as a Translation2d from the origin, based on the alliance color
         """
         return FlipUtil.fieldTranslation(kCloseHubLocation)
 
