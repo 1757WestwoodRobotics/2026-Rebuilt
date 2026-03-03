@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pykit.autolog import autolog
 from wpimath.geometry import Rotation2d
 
@@ -11,7 +11,7 @@ class IntakeSubsystemIO:
         pivotConnected: bool = False
         rollerConnected: bool = False
 
-        pivotPosition: float = 0  # rad
+        pivotPosition: Rotation2d = field(default_factory=Rotation2d)
         pivotVelocity: float = 0  # rad / s
 
         pivotAppliedVolts: float = 0

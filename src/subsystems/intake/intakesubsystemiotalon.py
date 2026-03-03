@@ -128,7 +128,9 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
             self.rollerSupply,
         )
 
-        inputs.pivotPosition = self.pivotPosition.value * kRadiansPerRevolution
+        inputs.pivotPosition = Rotation2d(
+            self.pivotPosition.value * kRadiansPerRevolution
+        )
         inputs.pivotVelocity = self.pivotVelocity.value * kRadiansPerRevolution
         inputs.rollerPosition = self.rollerPosition.value * kRadiansPerRevolution
         inputs.rollerVelocity = self.rollerVelocity.value * kRadiansPerRevolution

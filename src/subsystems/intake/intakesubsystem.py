@@ -122,18 +122,19 @@ class IntakeSubsystem(Subsystem):
 
     @property
     def position(self) -> Rotation2d:
-        return Rotation2d(self.inputs.pivotPosition)
+        return self.inputs.pivotPosition
 
     @autolog_output(key="Intake/at target")
     def isAtTarget(self) -> bool:
         return (
-            abs(self.inputs.pivotPosition - self.pivotGoal.value.radians())
+            abs(self.inputs.pivotPosition.radians() - self.pivotGoal.value.radians())
             < kPivotTolerance.radians()
         )
 
     def isAtGoal(self, goal: Rotation2d) -> bool:
         return (
-            abs(self.inputs.pivotPosition - goal.radians()) < kPivotTolerance.radians()
+            abs(self.inputs.pivotPosition.radians() - goal.radians())
+            < kPivotTolerance.radians()
         )
 
     def setOpenLoop(self) -> None:
