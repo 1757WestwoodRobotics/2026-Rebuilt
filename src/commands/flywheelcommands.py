@@ -3,6 +3,8 @@ from commands2 import Command, cmd
 
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
 
+from constants.shooting import kShootingMap
+
 
 def fireAtSpeed(flywheel: FlywheelSubsystem, speed: Callable[[], float]) -> Command:
     """
@@ -23,7 +25,8 @@ def shootWithDistance(
     """
 
     def calculateSpeed():
-        # Placeholder for actual distance to speed calculation
-        return distance() * 0.1  # Example conversion factor
+        return float(
+            kShootingMap(distance())
+        )  # pykit doesn't support numpy variables, so we need to convert the output of the interp function to a float
 
     return fireAtSpeed(flywheel, calculateSpeed).withName("ShootWithDistance")
