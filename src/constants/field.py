@@ -8,6 +8,9 @@ kFieldLength = 54 * kMetersPerFoot + 3.2 * kMetersPerInch
 kFieldWidth = 26 * kMetersPerFoot + 5.7 * kMetersPerInch
 """meters"""
 
+kHubHeight = 1.8288
+"""meters"""
+
 kCloseHubLocation = Translation2d(
     kFieldLength / 3.5761, kFieldWidth / 2
 )  # Location of Blue target (flipped when necessary)
