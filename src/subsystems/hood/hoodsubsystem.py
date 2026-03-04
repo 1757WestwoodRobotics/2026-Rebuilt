@@ -83,7 +83,7 @@ class HoodSubsystem(Subsystem):
 
     def isBeyondGoal(self) -> bool:
         """
-        Returns whether the hood is beyond the goal position (i.e. if the hood is above the goal when the goal is above the current position, or if the hood is below the goal when the goal is below the current position)
+        Returns whether the hood is beyond target position
         """
         return (
             self.inputs.hoodPosition
