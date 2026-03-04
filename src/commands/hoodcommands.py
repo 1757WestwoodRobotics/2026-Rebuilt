@@ -8,7 +8,6 @@ from subsystems.hood.hoodsubsystem import HoodSubsystem
 from constants.hood import (
     kHoodMinAngle,
     kHoodMaxAngle,
-    kHoodTolerance,
     kHoodFudgeAmount,
 )
 from constants.field import kCloseHubLocation, kHubHeight
@@ -69,3 +68,21 @@ def autoAngleFromHub(hood: HoodSubsystem) -> Command:
         hood.setHoodGoal(hoodAngle)
 
     return Commands.run(aimHood, hood).withName("autoAngleFromHub")
+
+
+def moveToMin(hood: HoodSubsystem) -> Command:
+    """
+    Move hood to minimum angle
+    """
+    return Commands.run(lambda: hood.setHoodGoal(kHoodMinAngle), hood).withName(
+        "moveToMin"
+    )
+
+
+def moveToMax(hood: HoodSubsystem) -> Command:
+    """
+    Move hood to maximum angle
+    """
+    return Commands.run(lambda: hood.setHoodGoal(kHoodMaxAngle), hood).withName(
+        "moveToMax"
+    )
