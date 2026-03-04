@@ -77,7 +77,7 @@ class IndexerSubsystem(Subsystem):
         self.spindexer1MotorGoal = Spindexer1MotorGoal.NEUTRAL
         self.spindexer2MotorGoal = Spindexer2MotorGoal.NEUTRAL
         self.kickLowerMotorGoal = KickLowerMotorGoal.NEUTRAL
-        self.kicUpperMotorGoal = KickUpperMotorGoal.NEUTRAL
+        self.kickUpperMotorGoal = KickUpperMotorGoal.NEUTRAL
 
         self.subsystemGoal = IndexerSubsystemGoal.HOLD
 
@@ -92,9 +92,17 @@ class IndexerSubsystem(Subsystem):
         LogTracer.record("SetIndexerTarget")
 
         Logger.recordOutput(
-            "Indexer/Goal/Spindexer Motor Goal", self.spindexerMotorGoal.value
+            "Indexer/Goal/Spindexer1 Motor Goal", self.spindexer1MotorGoal.value
         )
-        Logger.recordOutput("Indexer/Goal/Kick Motor Goal", self.kickMotorGoal.value)
+        Logger.recordOutput(
+            "Indexer/Goal/Spindexer2 Motor Goal", self.spindexer2MotorGoal.value
+        )
+        Logger.recordOutput(
+            "Indexer/Goal/Kick Lower Motor Goal", self.kickLowerMotorGoal.value
+        )
+        Logger.recordOutput(
+            "Indexer/Goal/Kick Upper Motor Goal", self.kickUpperMotorGoal.value
+        )
 
         LogTracer.recordTotal()
 
