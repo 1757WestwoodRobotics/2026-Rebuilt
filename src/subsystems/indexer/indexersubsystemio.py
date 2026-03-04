@@ -8,20 +8,30 @@ class IndexerSubsystemIO:
     @autolog
     @dataclass
     class IndexerSubsystemInputs:
-        spindexerConnected: bool = False
-        kickConnected: bool = False
+        spindexer1Connected: bool = False
+        spindexer2Connected: bool = False
+        kickLowerConnected: bool = False
+        kickUpperConnected: bool = False
 
-        spindexPosition: float = 0  # radians
-        indexVelocity: float = 0  # rad / s
+        spindexer1Position: float = 0  # radians
+        spindexer2Position: float = 0
+        spindex1Velocity: float = 0  # rad / s
+        spindex2Velocity: float = 0
 
-        kickPosition: float = 0  # rad
-        kickVelocity: float = 0  # rad / s
+        kickLowerPosition: float = 0  # rad
+        kickUpperPosition: float = 0
+        kickLowerVelocity: float = 0  # rad / s
+        kickUpperVelocity: float = 0
 
-        spindexAppliedVolts: float = 0
-        spindexSupplyAmps: float = 0
+        spindex1AppliedVolts: float = 0
+        spindex2AppliedVolts: float = 0
+        spindex1SupplyAmps: float = 0
+        spindex2SupplyAmps: float = 0
 
-        kickAppliedVolts: float = 0
-        kickSupplyAmps: float = 0
+        kickLowerAppliedVolts: float = 0
+        kickUpperAppliedVolts: float = 0
+        kickLowerSupplyAmps: float = 0
+        kickUpperSupplyAmps: float = 0
 
     def updateInputs(self, inputs: IndexerSubsystemInputs):
         pass
