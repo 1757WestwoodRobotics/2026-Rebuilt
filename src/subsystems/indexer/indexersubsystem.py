@@ -48,19 +48,19 @@ class IndexerSubsystemGoal(Enum):
     KICK = (
         Spindexer1MotorGoal.FORWARD,
         Spindexer2MotorGoal.FORWARD,
-        KickUpperMotorGoal.FORWARD,
+        KickLowerMotorGoal.FORWARD,
         KickUpperMotorGoal.FORWARD,
     )
     HOLD = (
         Spindexer1MotorGoal.NEUTRAL,
         Spindexer2MotorGoal.NEUTRAL,
-        KickUpperMotorGoal.NEUTRAL,
+        KickLowerMotorGoal.NEUTRAL,
         KickUpperMotorGoal.NEUTRAL,
     )
     EJECT = (
         Spindexer1MotorGoal.REVERSE,
         Spindexer2MotorGoal.REVERSE,
-        KickUpperMotorGoal.REVERSE,
+        KickLowerMotorGoal.REVERSE,
         KickUpperMotorGoal.REVERSE,
     )
 
