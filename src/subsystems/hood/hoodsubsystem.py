@@ -13,6 +13,8 @@ from constants.hood import (
     kHoodMinAngle,
     kHoodMaxAngle,
     kHoodTolerance,
+    kHoodMaxVelocity,
+    kHoodMaxAcceleration,
 )
 
 
@@ -92,6 +94,18 @@ class HoodSubsystem(Subsystem):
             self.inputs.hoodPosition
             < self.hoodGoal.radians() - kHoodTolerance.radians()
         )
+
+    def getMaxVelocity(self) -> Rotation2d:
+        """
+        Returns the maximum velocity the hood can achieve.
+        """
+        return kHoodMaxVelocity
+
+    def getMaxAcceleration(self) -> Rotation2d:
+        """
+        Returns the maximum acceleration the hood can achieve.
+        """
+        return kHoodMaxAcceleration
 
     @autolog_output(key="Hood/at target")
     def atTarget(self) -> bool:
