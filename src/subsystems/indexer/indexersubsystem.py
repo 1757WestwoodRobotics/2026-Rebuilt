@@ -88,7 +88,7 @@ class IndexerSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         self.updateGoals()
-        self.io.setIndexerTarget(self.indexerMotorGoal.value)
+        self.io.setIndexerTarget(self.indexerMotorGoal)
         LogTracer.record("SetIndexerTarget")
 
         Logger.recordOutput(
