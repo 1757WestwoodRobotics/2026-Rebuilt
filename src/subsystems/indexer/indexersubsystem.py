@@ -87,8 +87,14 @@ class IndexerSubsystem(Subsystem):
         Logger.processInputs("Indexer", self.inputs)
         LogTracer.record("UpdateInputs")
 
-        self.updateGoals()
-        self.io.setIndexerTarget(self.indexerMotorGoal)
+        #        self.updateGoals()
+        self.io.setIndexerTarget(
+            self.spindexer1MotorGoal.value,
+            self.spindexer2MotorGoal.value,
+            self.kickLowerMotorGoal.value,
+            self.kickUpperMotorGoal.value,
+        )
+
         LogTracer.record("SetIndexerTarget")
 
         Logger.recordOutput(
@@ -107,40 +113,46 @@ class IndexerSubsystem(Subsystem):
         LogTracer.recordTotal()
 
     def setTarget(self, goal: IndexerSubsystemGoal) -> None:
-        self.subsystemGoal = goal
+        (
+            self.spindexer1MotorGoal,
+            self.spindexer2MotorGoal,
+            self.kickLowerMotorGoal,
+            self.kickUpperMotorGoal,
+        ) = goal.value
 
-    def updateGoals(self):
-        self.indexerMotorGoal = self.subsystemGoal.value
 
-    # def sysIdRoutine(self, subsystem: Subsystem) -> Command:
+#    def updateGoals(self):
+#       self.indexerMotorGoal = self.subsystemGoal.value
 
-    #     def logState(state: State) -> None:
-    #         loggedStateStr = ""
-    #         match state:
-    #             case State.kQuasistaticForward:
-    #                 loggedStateStr = "quasistatic-forward"
-    #             case State.kQuasistaticReverse:
-    #                 loggedStateStr = "quasistatic-reverse"
-    #             case State.kDynamicForward:
-    #                 loggedStateStr = "dynamic-forward"
-    #             case State.kDynamicReverse:
-    #                 loggedStateStr = "dynamic-reverse"
-    #             case State.kNone:
-    #                 loggedStateStr = "none"
-    #         Logger.recordOutput("Indexer/SysID State", loggedStateStr)
+# def sysIdRoutine(self, subsystem: Subsystem) -> Command:
 
-    #     charactarizationRoutine = SysIdRoutine(
-    #         SysIdRoutine.Config(0.5, 6, 10, logState),
-    #         SysIdRoutine.Mechanism(
-    #             self.io.setIndexerTarget,
-    #             (lambda _: None),
-    #             subsystem,
-    #         ),
-    #     )
+#     def logState(state: State) -> None:
+#         loggedStateStr = ""
+#         match state:
+#             case State.kQuasistaticForward:
+#                 loggedStateStr = "quasistatic-forward"
+#             case State.kQuasistaticReverse:
+#                 loggedStateStr = "quasistatic-reverse"
+#             case State.kDynamicForward:
+#                 loggedStateStr = "dynamic-forward"
+#             case State.kDynamicReverse:
+#                 loggedStateStr = "dynamic-reverse"
+#             case State.kNone:
+#                 loggedStateStr = "none"
+#         Logger.recordOutput("Indexer/SysID State", loggedStateStr)
 
-    #     return cmd.sequence(
-    #         charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward),
-    #         charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse),
-    #         charactarizationRoutine.dynamic(SysIdRoutine.Direction.kForward),
-    #         charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse),
-    #     )
+#     charactarizationRoutine = SysIdRoutine(
+#         SysIdRoutine.Config(0.5, 6, 10, logState),
+#         SysIdRoutine.Mechanism(
+#             self.io.setIndexerTarget,
+#             (lambda _: None),
+#             subsystem,
+#         ),
+#     )
+
+#     return cmd.sequence(
+#         charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward),
+#         charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse),
+#         charactarizationRoutine.dynamic(SysIdRoutine.Direction.kForward),
+#         charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse),
+#     )
