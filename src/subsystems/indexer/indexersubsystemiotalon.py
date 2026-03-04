@@ -184,8 +184,18 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         inputs.kickUpperAppliedVolts = self.kickerUpperApplied.value
         inputs.kickUpperSupplyAmps = self.kickerUpperSupply.value
 
-    def setIndexerTarget(self, spindexer: float, kicker: float) -> None:
-        self.spindexer1Motor.set_control(self.spindexer1Demand.with_output(spindexer))
-        self.spindexer2Motor.set_control(self.spindexer2Demand.with_output(spindexer))
-        self.kickerLowerMotor.set_control(self.kickerLowerDemand.with_output(kicker))
-        self.kickerLowerMotor.set_control(self.kickerUpperDemand.with_output(kicker))
+    def setIndexerTarget(
+        self,
+        spindexer1: float,
+        spindexer2: float,
+        kickerLower: float,
+        kickerUpper: float,
+    ) -> None:
+        self.spindexer1Motor.set_control(self.spindexer1Demand.with_output(spindexer1))
+        self.spindexer2Motor.set_control(self.spindexer2Demand.with_output(spindexer2))
+        self.kickerLowerMotor.set_control(
+            self.kickerLowerDemand.with_output(kickerLower)
+        )
+        self.kickerUpperMotor.set_control(
+            self.kickerUpperDemand.with_output(kickerUpper)
+        )
