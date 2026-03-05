@@ -8,6 +8,8 @@ from constants.led import (
     kEstopAnim,
     kPrepFlashAnim,
     kPrepAnim,
+    kShootingFlashAnim,
+    kShootingAnim,
 )
 from constants.drive import kCANivoreCANBus
 from robotstate import RobotState
@@ -32,11 +34,19 @@ class LEDSubsystem(Subsystem):
         if DriverStation.isEStopped():
             self.candle.set_control(kEstopAnim)
         elif DriverStation.isDisabled():
-            self.candle.set_control(kDisabledAnim)
-        else:
-            # this section is missing the checks for what the total shooter combo-system is doing
-            if RobotState.hubAboutToChange():
-                self.candle.set_control(kPrepFlashAnim)
+            if RobotState.brownoutFlag:
+                self.candle.set_control(kEstopAnim)
             else:
-                self.candle.set_control(kPrepAnim)
+                self.candle.set_control(kDisabledAnim)
+        else:
+            if RobotState.hubAboutToChange():
+                if RobotState.readyToShoot():
+                    self.candle.set_control(kShootingFlashAnim)
+                else:
+                    self.candle.set_control(kPrepFlashAnim)
+            else:
+                if RobotState.readyToShoot():
+                    self.candle.set_control(kShootingAnim)
+                else:
+                    self.candle.set_control(kPrepAnim)
         LogTracer.recordTotal()

@@ -51,6 +51,8 @@ class TurretSubsystem(Subsystem):
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Turret/goal", self.turretGoal)
         Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
+        RobotState.turretAtAngle = self.atTarget()
+
         LogTracer.recordTotal()
 
     def setClosedLoop(self, closedLoop: bool) -> None:

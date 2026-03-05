@@ -6,6 +6,7 @@ from pykit.logger import Logger
 from wpilib import DriverStation
 from wpilib.sysid import State
 
+from robotstate import RobotState
 from subsystems.flywheel.flywheelsubsystemio import FlywheelSubsystemIO
 from util.logtracer import LogTracer
 
@@ -48,6 +49,7 @@ class FlywheelSubsystem(Subsystem):
 
         LogTracer.record("Closed Loop Control")
 
+        RobotState.flywheelAtSpeed = self.isAtGoal()
         Logger.recordOutput("Flywheel/goal", self.goal)
         Logger.recordOutput("Flywheel/ClosedLoop", self.isClosedLoop)
         Logger.recordOutput("Flywheel/State", self.state.name)
