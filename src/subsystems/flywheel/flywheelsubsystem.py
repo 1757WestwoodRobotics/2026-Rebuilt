@@ -58,6 +58,10 @@ class FlywheelSubsystem(Subsystem):
         Sets whether the flywheel is in closed loop control or not
         """
         self.isClosedLoop = closedLoop
+        if not closedLoop:
+            self.state = (
+                FlywheelSubsystemState.FIRING
+            )  # need to set to firing to prevent periodic from stopping the flywheel
 
     def stop(self) -> None:
         """
