@@ -1,5 +1,4 @@
 from phoenix6.controls import (
-    EmptyAnimation,
     RainbowAnimation,
     SolidColor,
     StrobeAnimation,
@@ -9,9 +8,6 @@ from phoenix6.signals.rgbw_color import RGBWColor
 kCANdleCANId = 21
 kCANdleOnboardLedCount = 8
 kCANdleExternalLedCount = 64
-
-kEmpty0Anim = EmptyAnimation(0)
-kEmpty1Anim = EmptyAnimation(1)
 
 kDisabledAnim = RainbowAnimation(0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0)
 
