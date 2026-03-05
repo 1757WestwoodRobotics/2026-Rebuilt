@@ -67,6 +67,18 @@ class RobotState:
 
     targetAutonomousStartingLocation: Pose2d = Pose2d()
 
+    flywheelAtSpeed: bool = False
+    turretAtAngle: bool = False
+
+    brownoutFlag: bool = False
+
+    @classmethod
+    def readyToShoot(cls) -> bool:
+        """
+        Returns true if the robot is ready to shoot, which is determined by whether the flywheel is at speed and the turret is facing the hub
+        """
+        return cls.flywheelAtSpeed and cls.turretAtAngle
+
     @classmethod
     def hubTags(cls) -> list[int]:
         """
@@ -282,6 +294,12 @@ class RobotState:
         if not RobotBase.isReal():
             Logger.recordOutput("Robot/SimPose", cls.getSimPose())
             Logger.recordOutput("Robot/SimTurretPose", cls.getSimTurretPose())
+
+        cls.brownoutFlag = (
+            cls.brownoutFlag
+            or DriverStation.getBatteryVoltage()
+            < 7.0  # brownout threshold is around 6.5V, add some buffer
+        )
 
         LogTracer.recordTotal()
 
