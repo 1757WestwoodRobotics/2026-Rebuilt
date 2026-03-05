@@ -17,7 +17,6 @@ import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
 import commands.indexercommands as IndexerCommands  # module, not class
-import commands.indexercommands as IndexerCommands  # module, not class
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -41,10 +40,6 @@ from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
 
 # should be uncommented for real robot, asking Phoenix for signals on motors that doesn't exist dramatically increases loop time
 # from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
-from subsystems.indexer.indexersubsystem import IndexerSubsystem
-from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
-from subsystems.indexer.indexersubsystemiosim import IndexerSubsystemIOSIM
-from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
 from subsystems.indexer.indexersubsystem import IndexerSubsystem
 from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from subsystems.indexer.indexersubsystemiosim import IndexerSubsystemIOSIM
@@ -199,7 +194,6 @@ class RobotContainer:
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
-                self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -350,7 +344,6 @@ class RobotContainer:
             LoggedDashboardChooser("Autonomous")
         )
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
-        self.chooser.addOption("Indexer SysID", self.indexer.sysIdRoutine(self.indexer))
         self.chooser.addOption("Climb SysID", self.climber.sysIdRoutine(self.climber))
         self.chooser.addOption("Intake SysID", self.intake.sysIdRoutine(self.intake))
 
