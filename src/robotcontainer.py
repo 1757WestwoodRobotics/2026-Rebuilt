@@ -409,6 +409,8 @@ class RobotContainer:
                 self.oi.driverRotation,
             )
         )
+
+        # Driver Controller (Xbox) Section
         self.oi.driverController.rightBumper().whileTrue(
             AngleAlignDrive(
                 self.drive,
@@ -425,6 +427,17 @@ class RobotContainer:
 
         self.oi.driverController.x().whileTrue(DefenseState(self.drive))
 
+        self.oi.driverController.leftBumper().onTrue(
+            IntakeCommands.toggleIntakeDeployment(self.intake)
+        )
+        self.oi.driverController.leftTrigger().whileTrue(
+            IntakeCommands.runIntakeRollers(self.intake)
+        )
+
+        # Operator Controller (Farm Box) Section
+        # these buttons come from our strategy spreadsheet,
+        # they are magic numbers but all buttons are labeled properly on the controller
+
         self.oi.operatorController.button(1).onTrue(
             ClimbCommands.deployClimber(self.climber)
         )
@@ -438,15 +451,6 @@ class RobotContainer:
             ClimbCommands.bumpDown(self.climber).repeatedly()
         )
 
-        self.oi.driverController.leftBumper().onTrue(
-            IntakeCommands.toggleIntakeDeployment(self.intake)
-        )
-        self.oi.driverController.rightTrigger().whileTrue(
-            IntakeCommands.runIntakeRollers(self.intake)
-        )
-
-        # these buttons come from our strategy spreadsheet,
-        # they are magic numbers but all buttons are labeled properly on the controller
         self.oi.operatorController.button(3).whileTrue(
             IntakeCommands.reverseIntake(self.intake)
         )
