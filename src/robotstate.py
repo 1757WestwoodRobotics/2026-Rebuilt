@@ -155,11 +155,12 @@ class RobotState:
     @classmethod
     def hubAboutToChange(cls) -> bool:
         """
-        Returns true during 3 seconds before a hub change, which happens at 110, 85, 60, and 35 seconds remaining
+        Returns true during 3 seconds before a hub change, which happens at
+        2:10, 1:45, 1:20, 55, and 30 seconds remaining
         """
         time = DriverStation.getMatchTime()
         if time <= 0:
-            return False  # safety net for negative time, assume its not about to change (testing)
+            return False  # safety net for negative time, assume it's not about to change (testing)
         return any(
             kEndgameDuration + kShiftDuration * i + 3
             >= time
