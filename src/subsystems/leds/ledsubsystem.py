@@ -9,7 +9,7 @@ from constants.led import (
     kPrepFlashAnim,
     kPrepAnim,
 )
-from constants.drive import kCANivoreName
+from constants.drive import kCANivoreCANBus
 from robotstate import RobotState
 from util.logtracer import LogTracer
 
@@ -25,7 +25,7 @@ class LEDSubsystem(Subsystem):
         Subsystem.__init__(self)
         self.setName(type(self).__name__)
 
-        self.candle = CANdle(kCANdleCANId, kCANivoreName)
+        self.candle = CANdle(kCANdleCANId, kCANivoreCANBus)
 
     def periodic(self) -> None:
         LogTracer.resetOuter("LEDSubsystem.periodic")
