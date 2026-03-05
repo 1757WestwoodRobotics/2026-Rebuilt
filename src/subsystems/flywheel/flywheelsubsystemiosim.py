@@ -48,7 +48,7 @@ class FlywheelSubsystemIOSim(FlywheelSubsystemIOTalon):
                 simVoltage
                 - self.flywheelSimModel.getCurrentDraw() * kFlywheelSimMotor.R,
                 0,
-                12.0,
+                simVoltage,
             )
         )
 
