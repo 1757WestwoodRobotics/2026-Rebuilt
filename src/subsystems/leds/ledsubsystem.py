@@ -29,24 +29,30 @@ class LEDSubsystem(Subsystem):
 
         self.candle = CANdle(kCANdleCANId, kCANivoreCANBus)
 
+        self._last_control = None
+
     def periodic(self) -> None:
         LogTracer.resetOuter("LEDSubsystem.periodic")
         if DriverStation.isEStopped():
-            self.candle.set_control(kEstopAnim)
+            desired_control = kEstopAnim
         elif DriverStation.isDisabled():
             if RobotState.brownoutFlag:
-                self.candle.set_control(kEstopAnim)
+                desired_control = kEstopAnim
             else:
-                self.candle.set_control(kDisabledAnim)
+                desired_control = kDisabledAnim
         else:
             if RobotState.hubAboutToChange():
                 if RobotState.readyToShoot():
-                    self.candle.set_control(kShootingFlashAnim)
+                    desired_control = kShootingFlashAnim
                 else:
-                    self.candle.set_control(kPrepFlashAnim)
+                    desired_control = kPrepFlashAnim
             else:
                 if RobotState.readyToShoot():
-                    self.candle.set_control(kShootingAnim)
+                    desired_control = kShootingAnim
                 else:
-                    self.candle.set_control(kPrepAnim)
+                    desired_control = kPrepAnim
+        # Only send a new control if it has changed to reduce CAN bus usage
+        if desired_control is not self._last_control:
+            self.candle.set_control(desired_control)
+            self._last_control = desired_control
         LogTracer.recordTotal()
