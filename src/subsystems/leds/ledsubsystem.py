@@ -10,6 +10,7 @@ from constants.led import (
     kPrepAnim,
     kShootingFlashAnim,
     kShootingAnim,
+    kBrownoutAnim,
 )
 from constants.drive import kCANivoreCANBus
 from robotstate import RobotState
@@ -37,7 +38,7 @@ class LEDSubsystem(Subsystem):
             desired_control = kEstopAnim
         elif DriverStation.isDisabled():
             if RobotState.brownoutFlag:
-                desired_control = kEstopAnim
+                desired_control = kBrownoutAnim
             else:
                 desired_control = kDisabledAnim
         else:
