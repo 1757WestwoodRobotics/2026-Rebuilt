@@ -16,6 +16,12 @@ kEstopAnim = StrobeAnimation(
     0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0, RGBWColor(255, 0, 0), 10
 )
 
+# orange
+kBrownoutColor = RGBWColor(255, 64, 0)
+kBrownoutAnim = StrobeAnimation(
+    0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0, kBrownoutColor, 10
+)
+
 # yellow
 kPrepColor = RGBWColor(255, 208, 0)
 kPrepAnim = SolidColor(0, kCANdleOnboardLedCount + kCANdleExternalLedCount, kPrepColor)
