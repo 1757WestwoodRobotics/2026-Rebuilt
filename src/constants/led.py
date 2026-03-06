@@ -9,31 +9,23 @@ kCANdleCANId = 21
 kCANdleOnboardLedCount = 8
 kCANdleExternalLedCount = 64
 
-kDisabledAnim = RainbowAnimation(0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0)
+kCANdleTotalLedCount = kCANdleOnboardLedCount + kCANdleExternalLedCount
+
+kDisabledAnim = RainbowAnimation(0, kCANdleTotalLedCount, 0)
 
 # red
-kEstopAnim = StrobeAnimation(
-    0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0, RGBWColor(255, 0, 0), 10
-)
+kEstopAnim = StrobeAnimation(0, kCANdleTotalLedCount, 0, RGBWColor(255, 0, 0), 10)
 
 # orange
 kBrownoutColor = RGBWColor(255, 64, 0)
-kBrownoutAnim = StrobeAnimation(
-    0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0, kBrownoutColor, 10
-)
+kBrownoutAnim = StrobeAnimation(0, kCANdleTotalLedCount, 0, kBrownoutColor, 10)
 
 # yellow
 kPrepColor = RGBWColor(255, 208, 0)
-kPrepAnim = SolidColor(0, kCANdleOnboardLedCount + kCANdleExternalLedCount, kPrepColor)
-kPrepFlashAnim = StrobeAnimation(
-    0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0, kPrepColor, 10
-)
+kPrepAnim = SolidColor(0, kCANdleTotalLedCount, kPrepColor)
+kPrepFlashAnim = StrobeAnimation(0, kCANdleTotalLedCount, 0, kPrepColor, 10)
 
 # green
 kShootingColor = RGBWColor(0, 255, 0)
-kShootingAnim = SolidColor(
-    0, kCANdleOnboardLedCount + kCANdleExternalLedCount, kShootingColor
-)
-kShootingFlashAnim = StrobeAnimation(
-    0, kCANdleOnboardLedCount + kCANdleExternalLedCount, 0, kShootingColor, 10
-)
+kShootingAnim = SolidColor(0, kCANdleTotalLedCount, kShootingColor)
+kShootingFlashAnim = StrobeAnimation(0, kCANdleTotalLedCount, 0, kShootingColor, 10)
