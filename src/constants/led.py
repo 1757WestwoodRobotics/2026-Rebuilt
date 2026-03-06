@@ -9,9 +9,15 @@ kCANdleCANId = 21
 kCANdleOnboardLedCount = 8
 kCANdleExternalLedCount = 64
 
+kAutoMaxFadeTime = 5.0
+kAutoFadeDuration = 2.5  # nominally 3.0, reality is closer to 2.5 seconds in between
+
 kCANdleTotalLedCount = kCANdleOnboardLedCount + kCANdleExternalLedCount
 
 kDisabledAnim = RainbowAnimation(0, kCANdleTotalLedCount, 0)
+
+# blue
+kAutoOutColor = RGBWColor(0, 0, 255)
 
 # red
 kEstopAnim = StrobeAnimation(0, kCANdleTotalLedCount, 0, RGBWColor(255, 0, 0), 10)
