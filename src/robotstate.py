@@ -292,6 +292,7 @@ class RobotState:
         Logger.recordOutput("Game/WonAuto", cls.didWinAuto())
         Logger.recordOutput("Game/HubAboutToChange", cls.hubAboutToChange())
         Logger.recordOutput("Game/HubActive", cls.hubActive())
+        Logger.recordOutput("Game/HubDistance", cls.distanceToHub())
 
         if not RobotBase.isReal():
             Logger.recordOutput("Robot/SimPose", cls.getSimPose())
