@@ -22,6 +22,7 @@ from constants.turret import (
     kTurretSGain,
     kTurretVGain,
     kTurretAGain,
+    kTurretInvertedValue,
 )
 from constants.math import kRadiansPerRevolution
 from constants import kRobotUpdateFrequency, kRioCANBus
@@ -60,6 +61,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
                 kTurretMaxVelocity.radians() / kRadiansPerRevolution
             )
         )
+        self.turretConfig.motor_output.inverted = kTurretInvertedValue
         tryUntilOk(5, lambda: self.motor.configurator.apply(self.turretConfig))
 
         self.position = self.motor.get_position()
