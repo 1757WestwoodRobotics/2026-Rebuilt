@@ -36,6 +36,7 @@ from subsystems.intake.intakesubsystemiosim import IntakeSubsystemIOSim
 from subsystems.intake.intakesubsystemiotalon import IntakeSubsystemIOTalon
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
+from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
 
 # should be uncommented for real robot, asking Phoenix for signals on motors that doesn't exist dramatically increases loop time
@@ -190,7 +191,7 @@ class RobotContainer:
                         ),
                     ],
                 )
-                self.turret = TurretSubsystem(TurretSubsystemIO())
+                self.turret = TurretSubsystem(TurretSubsystemIOTalon())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())

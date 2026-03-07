@@ -39,8 +39,8 @@ class IndexerSubsystemIO:
     def setIndexerTarget(
         self,
         spindexer1: float,
-        spindexer2: float,
-        kickerLower: float,
+        # spindexer2: float,
+        # kickerLower: float,
         kickerUpper: float,
     ):
         """

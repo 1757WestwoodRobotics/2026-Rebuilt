@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 from commands2 import Subsystem
 from pykit.autolog import autologgable_output
@@ -10,10 +10,10 @@ from util.logtracer import LogTracer
 from constants.indexer import (
     kSpindexer1ForwardVoltage,
     kSpindexer1ReverseVoltage,
-    kSpindexer2ForwardVoltage,
-    kSpindexer2ReverseVoltage,
-    kKickLowerForwardVoltage,
-    kKickLowerReverseVoltage,
+    # kSpindexer2ForwardVoltage,
+    # kSpindexer2ReverseVoltage,
+    # kKickLowerForwardVoltage,
+    # kKickLowerReverseVoltage,
     kKickUpperForwardVoltage,
     kKickUpperReverseVoltage,
 )
@@ -25,11 +25,11 @@ class Spindexer1MotorGoal(Enum):
     REVERSE = kSpindexer1ReverseVoltage
 
 
-class Spindexer2MotorGoal(Enum):
-    # wanted to make two even though they are the exact same so as to be able to change them later
-    FORWARD = kSpindexer2ForwardVoltage
-    NEUTRAL = 0
-    REVERSE = kSpindexer2ReverseVoltage
+# class Spindexer2MotorGoal(Enum):
+#     # wanted to make two even though they are the exact same so as to be able to change them later
+#     FORWARD = kSpindexer2ForwardVoltage
+#     NEUTRAL = 0
+#     REVERSE = kSpindexer2ReverseVoltage
 
 
 class KickUpperMotorGoal(Enum):
@@ -38,29 +38,29 @@ class KickUpperMotorGoal(Enum):
     REVERSE = kKickUpperReverseVoltage
 
 
-class KickLowerMotorGoal(Enum):
-    FORWARD = kKickLowerForwardVoltage
-    NEUTRAL = 0
-    REVERSE = kKickLowerReverseVoltage
+# class KickLowerMotorGoal(Enum):
+#     FORWARD = kKickLowerForwardVoltage
+#     NEUTRAL = 0
+#     REVERSE = kKickLowerReverseVoltage
 
 
 class IndexerSubsystemGoal(Enum):
     KICK = (
         Spindexer1MotorGoal.FORWARD,
-        Spindexer2MotorGoal.FORWARD,
-        KickLowerMotorGoal.FORWARD,
+        # Spindexer2MotorGoal.FORWARD,
+        # KickLowerMotorGoal.FORWARD,
         KickUpperMotorGoal.FORWARD,
     )
     HOLD = (
         Spindexer1MotorGoal.NEUTRAL,
-        Spindexer2MotorGoal.NEUTRAL,
-        KickLowerMotorGoal.NEUTRAL,
+        # Spindexer2MotorGoal.NEUTRAL,
+        # KickLowerMotorGoal.NEUTRAL,
         KickUpperMotorGoal.NEUTRAL,
     )
     EJECT = (
         Spindexer1MotorGoal.REVERSE,
-        Spindexer2MotorGoal.REVERSE,
-        KickLowerMotorGoal.REVERSE,
+        # Spindexer2MotorGoal.REVERSE,
+        # KickLowerMotorGoal.REVERSE,
         KickUpperMotorGoal.REVERSE,
     )
 
@@ -75,8 +75,8 @@ class IndexerSubsystem(Subsystem):
         self.inputs = IndexerSubsystemIO.IndexerSubsystemInputs()
 
         self.spindexer1MotorGoal = Spindexer1MotorGoal.NEUTRAL
-        self.spindexer2MotorGoal = Spindexer2MotorGoal.NEUTRAL
-        self.kickLowerMotorGoal = KickLowerMotorGoal.NEUTRAL
+        # self.spindexer2MotorGoal = Spindexer2MotorGoal.NEUTRAL
+        # self.kickLowerMotorGoal = KickLowerMotorGoal.NEUTRAL
         self.kickUpperMotorGoal = KickUpperMotorGoal.NEUTRAL
 
         self.subsystemGoal = IndexerSubsystemGoal.HOLD
@@ -90,8 +90,8 @@ class IndexerSubsystem(Subsystem):
         #        self.updateGoals()
         self.io.setIndexerTarget(
             self.spindexer1MotorGoal.value,
-            self.spindexer2MotorGoal.value,
-            self.kickLowerMotorGoal.value,
+            # self.spindexer2MotorGoal.value,
+            # self.kickLowerMotorGoal.value,
             self.kickUpperMotorGoal.value,
         )
 
@@ -100,12 +100,12 @@ class IndexerSubsystem(Subsystem):
         Logger.recordOutput(
             "Indexer/Goal/Spindexer1 Motor Goal", self.spindexer1MotorGoal.value
         )
-        Logger.recordOutput(
-            "Indexer/Goal/Spindexer2 Motor Goal", self.spindexer2MotorGoal.value
-        )
-        Logger.recordOutput(
-            "Indexer/Goal/Kick Lower Motor Goal", self.kickLowerMotorGoal.value
-        )
+        # Logger.recordOutput(
+        #     "Indexer/Goal/Spindexer2 Motor Goal", self.spindexer2MotorGoal.value
+        # )
+        # Logger.recordOutput(
+        #     "Indexer/Goal/Kick Lower Motor Goal", self.kickLowerMotorGoal.value
+        # )
         Logger.recordOutput(
             "Indexer/Goal/Kick Upper Motor Goal", self.kickUpperMotorGoal.value
         )
@@ -115,8 +115,8 @@ class IndexerSubsystem(Subsystem):
     def setTarget(self, goal: IndexerSubsystemGoal) -> None:
         (
             self.spindexer1MotorGoal,
-            self.spindexer2MotorGoal,
-            self.kickLowerMotorGoal,
+            # self.spindexer2MotorGoal,
+            # self.kickLowerMotorGoal,
             self.kickUpperMotorGoal,
         ) = goal.value
 
