@@ -55,7 +55,6 @@ from subsystems.hood.hoodsubsystemio import HoodSubsystemIO
 from subsystems.hood.hoodsubsystemiosim import HoodSubsystemIOSim
 from subsystems.hood.hoodsubsystemiotalon import HoodSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
-from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visioniophoton import VisionSubsystemIOPhotonVision
 from subsystems.vision.visionsubsystem import VisionSubsystem
 from subsystems.drive.driveio import DriveIO
@@ -63,8 +62,6 @@ from subsystems.drive.driveio import DriveIO
 from operatorinterface import OperatorInterface
 
 from constants.vision import (
-    kRobotToCamera1Transform,
-    kRobotToCamera2Transform,
     kTurretToCameraTransform,
 )
 from constants.field import kAutoDuration

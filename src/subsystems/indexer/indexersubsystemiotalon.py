@@ -18,7 +18,7 @@ from constants.indexer import (
     kSpindexer2CANId,
     kSpindexerCurrentLimit,
     kSpindexerGearRatio,
-    kSpindexerInvertedValue
+    kSpindexerInvertedValue,
 )
 
 
