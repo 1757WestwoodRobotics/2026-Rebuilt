@@ -159,16 +159,16 @@ class HoodSubsystem(Subsystem):
         return cmd.sequence(
             cmd.runOnce(lambda: self.setClosedLoop(False), self),
             characterizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
-                lambda: self.isAtGoal(kHoodMaxAngle)
+                self.isAtMax
             ),
             characterizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
-                lambda: self.isAtGoal(kHoodMinAngle)
+                self.isAtMin
             ),
             characterizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
-                lambda: self.isAtGoal(kHoodMaxAngle)
+                self.isAtMax
             ),
             characterizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
-                lambda: self.isAtGoal(kHoodMinAngle)
+                self.isAtMin
             ),
             cmd.runOnce(lambda: self.setClosedLoop(True), self),
         )
