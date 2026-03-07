@@ -446,7 +446,9 @@ class RobotContainer:
                     self.flywheel, RobotState.distanceToHub
                 ),
                 HoodCommands.angleHoodWithDistance(self.hood, RobotState.distanceToHub),
-                IndexerCommands.kickIndexer(self.indexer),
+                commands2.cmd.waitUntil(RobotState.readyToShoot).andThen(
+                    IndexerCommands.kickIndexer(self.indexer)
+                ),
             )
         )
 
