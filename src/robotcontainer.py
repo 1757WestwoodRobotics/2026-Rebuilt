@@ -497,6 +497,13 @@ class RobotContainer:
             IntakeCommands.bumpIntakeDown(self.intake)
         )
 
+        self.oi.operatorController.button(5).whileTrue(
+            IndexerCommands.kickIndexer(self.indexer)
+        )
+        self.oi.operatorController.button(10).whileTrue(
+            IndexerCommands.ejectIndexer(self.indexer)
+        )
+
         RobotState.shiftTrigger().onTrue(
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
         ).onFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
