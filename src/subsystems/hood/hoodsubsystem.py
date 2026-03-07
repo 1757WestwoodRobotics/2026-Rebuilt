@@ -148,7 +148,7 @@ class HoodSubsystem(Subsystem):
             Logger.recordOutput("Hood/SysID State", loggedStateStr)
 
         characterizationRoutine = SysIdRoutine(
-            SysIdRoutine.Config(0.5, 6, 10, logState),
+            SysIdRoutine.Config(0.1, 4, 10, logState),
             SysIdRoutine.Mechanism(
                 self.io.set_hood_volts,
                 (lambda _: None),
