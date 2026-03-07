@@ -86,10 +86,13 @@ class HoodSubsystemIOTalon(HoodSubsystemIO):
         inputs.hoodAppliedVolts = self.applied.value
         inputs.hoodSupplyAmps = self.supply.value
 
-    def set_hood_position(self, position: float):
+    def set_hood_target(self, position: Rotation2d):
         self.motor.set_control(
-            self.closedDemand.with_position(position / kRadiansPerRevolution)
+            self.closedDemand.with_position(position.radians() / kRadiansPerRevolution)
         )
+
+    def set_hood_position(self, position: Rotation2d):
+        self.motor.set_position(position.radians() / kRadiansPerRevolution)
 
     def set_hood_volts(self, volts: float):
         self.motor.set_control(self.openDemand.with_output(volts))
