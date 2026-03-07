@@ -16,6 +16,7 @@ from commands.defensestate import DefenseState
 import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
+import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
 import commands.hoodcommands as HoodCommands
 
@@ -41,8 +42,12 @@ from subsystems.flywheel.flywheelsubsystemiosim import FlywheelSubsystemIOSim
 from subsystems.flywheel.flywheelsubsystemiotalon import FlywheelSubsystemIOTalon
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
-from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
 from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
+from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
+from subsystems.indexer.indexersubsystem import IndexerSubsystem
+from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
+from subsystems.indexer.indexersubsystemiosim import IndexerSubsystemIOSIM
+from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
 from subsystems.hood.hoodsubsystem import HoodSubsystem
 from subsystems.hood.hoodsubsystemio import HoodSubsystemIO
 from subsystems.hood.hoodsubsystemiosim import HoodSubsystemIOSim
@@ -197,6 +202,7 @@ class RobotContainer:
                 self.turret = TurretSubsystem(TurretSubsystemIOTalon())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
                 self.hood = HoodSubsystem(HoodSubsystemIOTalon())
 
@@ -290,6 +296,7 @@ class RobotContainer:
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIOSIM())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOSim())
@@ -311,6 +318,7 @@ class RobotContainer:
                     [VisionSubsystemIO(), VisionSubsystemIO()],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
+                self.indexer = IndexerSubsystem(IndexerSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIO())
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIO())
@@ -378,6 +386,7 @@ class RobotContainer:
         self.configureButtonBindings()
 
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
+        self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
 
@@ -419,6 +428,7 @@ class RobotContainer:
             )
         )
 
+        # Driver Controller (Xbox) Section
         self.oi.driverController.rightBumper().whileTrue(
             AngleAlignDrive(
                 self.drive,
@@ -443,6 +453,17 @@ class RobotContainer:
 
         self.oi.driverController.x().whileTrue(DefenseState(self.drive))
 
+        self.oi.driverController.leftBumper().onTrue(
+            IntakeCommands.toggleIntakeDeployment(self.intake)
+        )
+        self.oi.driverController.leftTrigger().whileTrue(
+            IntakeCommands.runIntakeRollers(self.intake)
+        )
+
+        # Operator Controller (Farm Box) Section
+        # these buttons come from our strategy spreadsheet,
+        # they are magic numbers but all buttons are labeled properly on the controller
+
         self.oi.operatorController.button(1).onTrue(
             ClimbCommands.deployClimber(self.climber)
         )
@@ -456,15 +477,6 @@ class RobotContainer:
             ClimbCommands.bumpDown(self.climber).repeatedly()
         )
 
-        self.oi.driverController.leftBumper().onTrue(
-            IntakeCommands.toggleIntakeDeployment(self.intake)
-        )
-        self.oi.driverController.rightTrigger().whileTrue(
-            IntakeCommands.runIntakeRollers(self.intake)
-        )
-
-        # these buttons come from our strategy spreadsheet,
-        # they are magic numbers but all buttons are labeled properly on the controller
         self.oi.operatorController.button(3).whileTrue(
             IntakeCommands.reverseIntake(self.intake)
         )
