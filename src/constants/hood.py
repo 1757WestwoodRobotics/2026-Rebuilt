@@ -8,6 +8,8 @@ kHoodTolerance = Rotation2d.fromDegrees(1)
 kHoodMaxVelocity = Rotation2d.fromDegrees(90)
 kHoodMaxAcceleration = Rotation2d.fromDegrees(360)
 
+kHoodFudgeAmount = Rotation2d.fromDegrees(1)
+
 kHoodGearRatio = (4 / 1) * (360 / 13)
 
 kHoodCANId = 8

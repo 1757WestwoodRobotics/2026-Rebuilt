@@ -1,7 +1,8 @@
+import math
+
 from commands2 import Command
 from commands2 import cmd as Commands
 from wpimath.geometry import Rotation2d
-import math
 
 from robotstate import RobotState
 from subsystems.hood.hoodsubsystem import HoodSubsystem
