@@ -17,6 +17,7 @@ from constants.led import (
     kAutoMaxFadeTime,
     kAutoOutColor,
     kCANdleTotalLedCount,
+    kEmptyOne,
 )
 from constants.drive import kCANivoreCANBus
 from robotstate import RobotState
@@ -47,9 +48,9 @@ class LEDSubsystem(Subsystem):
             self.lastEnabledAuto = DriverStation.isAutonomous()
             self.lastEnabledTime = Timer.getFPGATimestamp()
 
-        desired_control_2: Union[EmptyAnimation, SolidColor] = EmptyAnimation(
-            1
-        )  # prep a slot 1 empty animation
+        desired_control_2: Union[EmptyAnimation, SolidColor] = (
+            kEmptyOne  # prep a slot 1 empty animation
+        )
         if DriverStation.isEStopped():
             desired_control = kEstopAnim
         elif DriverStation.isDisabled():

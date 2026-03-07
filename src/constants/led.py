@@ -1,4 +1,5 @@
 from phoenix6.controls import (
+    EmptyAnimation,
     RainbowAnimation,
     SolidColor,
     StrobeAnimation,
@@ -11,6 +12,8 @@ kCANdleExternalLedCount = 64
 
 kAutoMaxFadeTime = 5.0
 kAutoFadeDuration = 2.5  # nominally 3.0, reality is closer to 2.5 seconds in between
+
+kEmptyOne = EmptyAnimation(1)
 
 kCANdleTotalLedCount = kCANdleOnboardLedCount + kCANdleExternalLedCount
 
