@@ -1,4 +1,5 @@
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
+from phoenix6.signals import InvertedValue
 from wpimath.trajectory import TrapezoidProfileRadians
 from wpimath.geometry import Rotation2d
 from wpimath.system.plant import DCMotor
@@ -25,8 +26,8 @@ kPivotKv = 1.1902
 kPivotKa = 0.011424
 kPivotKg = 0.036956
 
-kPivotMaxVelocity = 4.0  # rad / sec
-kPivotMaxAcceleration = 4.0  # rad / sec ^2
+kPivotMaxVelocity = 10.0  # rad / sec
+kPivotMaxAcceleration = 10.0  # rad / sec ^2
 kPivotConstraints = TrapezoidProfileRadians.Constraints(
     kPivotMaxVelocity, kPivotMaxAcceleration
 )
@@ -62,6 +63,8 @@ kRollerCANId = 2
 
 kRollerForwardVoltage = 6.0
 kRollerReverseVoltage = -6.0
+
+kRollerInvertedValue = InvertedValue.CLOCKWISE_POSITIVE
 
 kRollerCurrentLimit = (
     CurrentLimitsConfigs()
