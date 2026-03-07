@@ -19,6 +19,7 @@ import commands.climbcommands as ClimbCommands  # module, not class
 import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
 import commands.hoodcommands as HoodCommands
+import commands.overridecommands as OverrideCommands
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -103,6 +104,7 @@ from constants.drive import (
 )
 from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
+from util.helpfultriggerwrappers import NetworkTableButton
 from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
 
 if kRobotMode == RobotModes.SIMULATION:  # required since opencv can't go on rio
@@ -387,6 +389,7 @@ class RobotContainer:
         # Put the chooser on the dashboard
         self.oi = OperatorInterface()
         self.configureButtonBindings()
+        self.configureOverrides()
 
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
         self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
@@ -507,6 +510,17 @@ class RobotContainer:
         RobotState.shiftTrigger().onTrue(
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
         ).onFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
+
+    def configureOverrides(self) -> None:
+        """
+        Configures commands that are for override and manual mode vaues
+        """
+        NetworkTableButton("Override/Flywheel").whileTrue(
+            OverrideCommands.overrideFlywheel(self.flywheel)
+        )
+        NetworkTableButton("Override/Hood").whileTrue(
+            OverrideCommands.overrideHood(self.hood)
+        )
 
     def updateAlerts(self):
         self.driverDisconnected.set(
