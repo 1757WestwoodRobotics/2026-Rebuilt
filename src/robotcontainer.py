@@ -430,9 +430,7 @@ class RobotContainer:
                 self.oi.driverRotation,
             )
         )
-        self.hood.setDefaultCommand(
-            HoodCommands.moveToMin(self.hood)
-        )
+        self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
 
         # Driver Controller (Xbox) Section
         self.oi.driverController.rightBumper().whileTrue(
@@ -448,6 +446,7 @@ class RobotContainer:
                     self.flywheel, RobotState.distanceToHub
                 ),
                 HoodCommands.angleHoodWithDistance(self.hood, RobotState.distanceToHub),
+                IndexerCommands.kickIndexer(self.indexer),
             )
         )
 
