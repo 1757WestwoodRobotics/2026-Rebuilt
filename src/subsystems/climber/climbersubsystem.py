@@ -25,6 +25,7 @@ class ClimberSubsystem(Subsystem):
         self.inputs = ClimberSubsystemIO.ClimberSubsystemIOInputs()
         self.isClosedLoop = True
         self.climberGoal = 0.0
+        self.climberFudge = 0.0
 
     def periodic(self) -> None:
         """Run ongoing subsystem periodic process."""
@@ -36,6 +37,7 @@ class ClimberSubsystem(Subsystem):
         if self.isClosedLoop:
             self.io.set_climber_position(
                 clamp(self.climberGoal, kClimberMinHeight, kClimberMaxHeight)
+                + self.climberFudge
             )
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Climber/goal", self.climberGoal)
@@ -54,7 +56,7 @@ class ClimberSubsystem(Subsystem):
         self.climberGoal = goal
 
     def bumpClimberGoal(self, bumpAmount: float) -> None:
-        self.climberGoal += bumpAmount
+        self.climberFudge += bumpAmount
 
     def isAtGoal(self, goal: float) -> bool:
         return abs(self.inputs.climberPosition - goal) <= kClimberPositionTolerance

@@ -50,6 +50,8 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
         self.supply = self.motor.get_supply_current()
         self.torque = self.motor.get_torque_current()
 
+        self.motor.set_position(0)
+
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.position,
