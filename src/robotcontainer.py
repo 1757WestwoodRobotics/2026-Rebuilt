@@ -17,6 +17,7 @@ import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
+import commands.hoodcommands as HoodCommands
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -426,7 +427,12 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            FlywheelCommands.shootWithDistance(self.flywheel, RobotState.distanceToHub)
+            commands2.cmd.parallel(
+                FlywheelCommands.shootWithDistance(
+                    self.flywheel, RobotState.distanceToHub
+                ),
+                HoodCommands.angleHoodWithDistance(self.hood, RobotState.distanceToHub),
+            )
         )
 
         self.oi.driverController.povDown().onTrue(

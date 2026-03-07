@@ -39,7 +39,7 @@ class HoodSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         if self.isClosedLoop:
-            self.io.set_hood_position(
+            self.io.set_hood_target(
                 Rotation2d(
                     clamp(
                         self.hoodGoal.radians() + self.hoodFudge.radians(),
