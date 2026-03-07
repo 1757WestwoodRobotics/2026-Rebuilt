@@ -67,12 +67,14 @@ class HoodSubsystem(Subsystem):
 
     def setHoodRawVolts(self, volts: float) -> None:
         Logger.recordOutput("Hood/RawVolts", volts)
+        self.setClosedLoop(False)
         self.io.set_hood_volts(volts)
 
     def setHoodGoal(self, goal: Rotation2d) -> None:
         """
         Sets the hood goal position in radians
         """
+        self.setClosedLoop(True)
         self.hoodGoal = goal
 
     def isAtGoal(self, goal: Rotation2d) -> bool:

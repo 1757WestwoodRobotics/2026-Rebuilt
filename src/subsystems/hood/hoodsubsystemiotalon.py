@@ -3,7 +3,7 @@ from phoenix6.configs.talon_fx_configs import (
     Slot0Configs,
     TalonFXConfiguration,
 )
-from phoenix6.controls import MotionMagicVoltage, PositionVoltage, VoltageOut
+from phoenix6.controls import PositionVoltage, VoltageOut
 from phoenix6 import BaseStatusSignal
 from phoenix6.hardware.talon_fx import TalonFX
 from wpimath.geometry import Rotation2d

@@ -2,6 +2,7 @@ from typing import Callable
 
 from commands2 import Command
 from commands2 import cmd as Commands
+from wpimath.geometry import Rotation2d
 
 from subsystems.hood.hoodsubsystem import HoodSubsystem
 from constants.hood import (
@@ -31,6 +32,17 @@ def bumpHoodDown(hood: HoodSubsystem) -> Command:
     )
 
 
+def angleHood(hood: HoodSubsystem, angle: Callable[[], Rotation2d]) -> Command:
+    """
+    Hood angle adjustment based on network input
+    """
+
+    def aimHood():
+        hood.setHoodGoal(angle())
+
+    return Commands.run(aimHood, hood).withName("autoAngleFromNetwork")
+
+
 def angleHoodWithDistance(
     hood: HoodSubsystem, distance: Callable[[], float]
 ) -> Command:
@@ -38,11 +50,10 @@ def angleHoodWithDistance(
     Hood angle adjustment based on distance to the hub
     """
 
-    def aimHood():
-        hood.setClosedLoop(True)
-        hood.setHoodGoal(kHoodAngleMap(distance()))
+    def hoodAngle():
+        return kHoodAngleMap(distance())
 
-    return Commands.run(aimHood, hood).withName("autoAngleFromHub")
+    return angleHood(hood, hoodAngle).withName("autoAngleFromHub")
 
 
 def moveToMin(hood: HoodSubsystem) -> Command:
