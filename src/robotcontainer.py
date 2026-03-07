@@ -56,6 +56,7 @@ from subsystems.hood.hoodsubsystemiosim import HoodSubsystemIOSim
 from subsystems.hood.hoodsubsystemiotalon import HoodSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
+from subsystems.vision.visioniophoton import VisionSubsystemIOPhotonVision
 from subsystems.vision.visionsubsystem import VisionSubsystem
 from subsystems.drive.driveio import DriveIO
 
@@ -190,16 +191,9 @@ class RobotContainer:
                     RobotState.addVisionMeasurement,
                     RobotState.addTurretedVisionMeasurement,
                     [
-                        VisionSubsystemIOLimelight(
-                            "limelight-br",
-                            kRobotToCamera1Transform,
-                            RobotState.getRotation,
-                        ),
-                        VisionSubsystemIOLimelight(
-                            "limelight-fl",
-                            kRobotToCamera2Transform,
-                            RobotState.getRotation,
-                        ),
+                        VisionSubsystemIOPhotonVision(
+                            "TURRET_CAM", kTurretToCameraTransform, True
+                        )
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOTalon())
@@ -278,21 +272,7 @@ class RobotContainer:
                     [
                         # pylint: disable-next=possibly-used-before-assignment
                         VisionSubsystemIOPhotonSim(
-                            "camera-br",
-                            kRobotToCamera1Transform,
-                            # pylint: disable-next=unnecessary-lambda
-                            lambda: RobotState.getSimPose(),
-                        ),
-                        # pylint: disable-next=possibly-used-before-assignment
-                        VisionSubsystemIOPhotonSim(
-                            "camera-fl",
-                            kRobotToCamera2Transform,
-                            # pylint: disable-next=unnecessary-lambda
-                            lambda: RobotState.getSimPose(),
-                        ),
-                        # pylint: disable-next=possibly-used-before-assignment
-                        VisionSubsystemIOPhotonSim(
-                            "camera-turret",
+                            "TURRET_CAM",
                             kTurretToCameraTransform,
                             RobotState.getSimTurretPose,
                             True,
@@ -319,7 +299,7 @@ class RobotContainer:
                 self.vision = VisionSubsystem(
                     RobotState.addVisionMeasurement,
                     RobotState.addTurretedVisionMeasurement,
-                    [VisionSubsystemIO(), VisionSubsystemIO()],
+                    [VisionSubsystemIO()],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
                 self.indexer = IndexerSubsystem(IndexerSubsystemIO())
