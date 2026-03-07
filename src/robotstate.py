@@ -69,6 +69,7 @@ class RobotState:
 
     flywheelAtSpeed: bool = False
     turretAtAngle: bool = False
+    hoodAtAngle: bool = False
 
     brownoutFlag: bool = False
 
@@ -77,7 +78,7 @@ class RobotState:
         """
         Returns true if the robot is ready to shoot, which is determined by whether the flywheel is at speed and the turret is facing the hub
         """
-        return cls.flywheelAtSpeed and cls.turretAtAngle
+        return cls.flywheelAtSpeed and cls.turretAtAngle and cls.hoodAtAngle
 
     @classmethod
     def hubTags(cls) -> list[int]:

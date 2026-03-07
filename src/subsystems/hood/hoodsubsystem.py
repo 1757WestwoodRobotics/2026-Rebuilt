@@ -5,6 +5,7 @@ from pykit.logger import Logger
 from wpilib.sysid import State
 from wpimath.geometry import Rotation2d
 
+from robotstate import RobotState
 from subsystems.hood.hoodsubsystemio import HoodSubsystemIO
 from util.convenientmath import clamp
 from util.logtracer import LogTracer
@@ -52,6 +53,7 @@ class HoodSubsystem(Subsystem):
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Hood/goal", self.hoodGoal)
         Logger.recordOutput("Hood/ClosedLoop", self.isClosedLoop)
+        RobotState.hoodAtAngle = self.atTarget()
         LogTracer.recordTotal()
 
     def bumpAngle(self, bumpAmount: Rotation2d) -> None:
