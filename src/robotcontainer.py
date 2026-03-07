@@ -17,6 +17,8 @@ import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.climbcommands as ClimbCommands  # module, not class
 import commands.indexercommands as IndexerCommands  # module, not class
+import commands.flywheelcommands as FlywheelCommands
+import commands.hoodcommands as HoodCommands
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -34,17 +36,22 @@ from subsystems.intake.intakesubsystem import IntakeSubsystem
 from subsystems.intake.intakesubsystemio import IntakeSubsystemIO
 from subsystems.intake.intakesubsystemiosim import IntakeSubsystemIOSim
 from subsystems.intake.intakesubsystemiotalon import IntakeSubsystemIOTalon
+from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
+from subsystems.flywheel.flywheelsubsystemio import FlywheelSubsystemIO
+from subsystems.flywheel.flywheelsubsystemiosim import FlywheelSubsystemIOSim
+from subsystems.flywheel.flywheelsubsystemiotalon import FlywheelSubsystemIOTalon
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
 from subsystems.turret.turretsubsystemiosim import TurretSubsystemIOSim
-
-# should be uncommented for real robot, asking Phoenix for signals on motors that doesn't exist dramatically increases loop time
-# from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
 from subsystems.indexer.indexersubsystem import IndexerSubsystem
 from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from subsystems.indexer.indexersubsystemiosim import IndexerSubsystemIOSIM
 from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
+from subsystems.hood.hoodsubsystem import HoodSubsystem
+from subsystems.hood.hoodsubsystemio import HoodSubsystemIO
+from subsystems.hood.hoodsubsystemiosim import HoodSubsystemIOSim
+from subsystems.hood.hoodsubsystemiotalon import HoodSubsystemIOTalon
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniolimelight import VisionSubsystemIOLimelight
 from subsystems.vision.visionsubsystem import VisionSubsystem
@@ -110,6 +117,7 @@ class RobotContainer:
     subsystems, commands, and button mappings) should be declared here.
     """
 
+    # pylint: disable-next=too-many-statements
     def __init__(self) -> None:
         # The robot's subsystems
         match kRobotMode:
@@ -195,6 +203,8 @@ class RobotContainer:
                 self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
+                self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
+                self.hood = HoodSubsystem(HoodSubsystemIOTalon())
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
@@ -289,6 +299,8 @@ class RobotContainer:
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOSIM())
                 self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
+                self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOSim())
+                self.hood = HoodSubsystem(HoodSubsystemIOSim())
 
             case _:
                 self.drive = DriveSubsystem(
@@ -309,6 +321,8 @@ class RobotContainer:
                 self.indexer = IndexerSubsystem(IndexerSubsystemIO())
                 self.climber = ClimberSubsystem(ClimberSubsystemIO())
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
+                self.flywheel = FlywheelSubsystem(FlywheelSubsystemIO())
+                self.hood = HoodSubsystem(HoodSubsystemIO())
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
@@ -347,6 +361,9 @@ class RobotContainer:
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
         self.chooser.addOption("Climb SysID", self.climber.sysIdRoutine(self.climber))
         self.chooser.addOption("Intake SysID", self.intake.sysIdRoutine(self.intake))
+        self.chooser.addOption(
+            "Flywheel SysID", self.flywheel.sysIdRoutine(self.flywheel)
+        )
 
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
@@ -418,6 +435,14 @@ class RobotContainer:
                 lambda: self.oi.driverY() * kNormalSpeedMultiplier,
                 lambda: self.oi.driverX() * kNormalSpeedMultiplier,
             ).repeatedly()
+        )
+        self.oi.driverController.rightTrigger().whileTrue(
+            commands2.cmd.parallel(
+                FlywheelCommands.shootWithDistance(
+                    self.flywheel, RobotState.distanceToHub
+                ),
+                HoodCommands.angleHoodWithDistance(self.hood, RobotState.distanceToHub),
+            )
         )
 
         self.oi.driverController.povDown().onTrue(
