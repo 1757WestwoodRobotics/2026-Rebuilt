@@ -390,6 +390,7 @@ class RobotContainer:
 
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
         self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
+        self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
 
@@ -430,7 +431,6 @@ class RobotContainer:
                 self.oi.driverRotation,
             )
         )
-        self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
 
         # Driver Controller (Xbox) Section
         self.oi.driverController.rightBumper().whileTrue(
