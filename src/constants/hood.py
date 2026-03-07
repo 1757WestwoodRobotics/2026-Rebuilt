@@ -15,7 +15,7 @@ kHoodGearRatio = (4 / 1) * (360 / 13)
 kHoodCANId = 8
 
 kHoodPGain = 0.1
-kHoodIGain = 0.1
+kHoodIGain = 0.0
 kHoodDGain = 0.0
 kHoodSGain = 0.0
 kHoodVGain = 0.0

@@ -111,6 +111,7 @@ class RobotContainer:
     subsystems, commands, and button mappings) should be declared here.
     """
 
+    # pylint: disable-next=too-many-statements
     def __init__(self) -> None:
         # The robot's subsystems
         match kRobotMode:

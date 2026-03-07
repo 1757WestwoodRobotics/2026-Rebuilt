@@ -28,6 +28,7 @@ class HoodSubsystem(Subsystem):
 
         self.isClosedLoop = True
         self.hoodGoal = Rotation2d()
+        self.hoodFudge = Rotation2d()
 
     def periodic(self) -> None:
         LogTracer.resetOuter("HoodSubsystem Periodic")
@@ -38,7 +39,7 @@ class HoodSubsystem(Subsystem):
         if self.isClosedLoop:
             self.io.set_hood_position(
                 clamp(
-                    self.hoodGoal.radians(),
+                    self.hoodGoal.radians() + self.hoodFudge.radians(),
                     kHoodMinAngle.radians(),
                     kHoodMaxAngle.radians(),
                 )
@@ -48,6 +49,9 @@ class HoodSubsystem(Subsystem):
         Logger.recordOutput("Hood/goal", self.hoodGoal)
         Logger.recordOutput("Hood/ClosedLoop", self.isClosedLoop)
         LogTracer.recordTotal()
+
+    def bumpAngle(self, bumpAmount: Rotation2d) -> None:
+        self.hoodFudge += bumpAmount
 
     def setClosedLoop(self, closedLoop: bool) -> None:
         """
@@ -69,7 +73,10 @@ class HoodSubsystem(Subsystem):
         """
         Returns whether the hood is at the given goal position
         """
-        return abs(self.inputs.hoodPosition - goal.radians()) < kHoodTolerance.radians()
+        return (
+            abs(self.inputs.hoodPosition.radians() - goal.radians())
+            < kHoodTolerance.radians()
+        )
 
     def isAtMin(self) -> bool:
         """
@@ -88,10 +95,10 @@ class HoodSubsystem(Subsystem):
         Returns whether the hood is beyond target position
         """
         return (
-            self.inputs.hoodPosition
+            self.inputs.hoodPosition.radians()
             > self.hoodGoal.radians() + kHoodTolerance.radians()
         ) or (
-            self.inputs.hoodPosition
+            self.inputs.hoodPosition.radians()
             < self.hoodGoal.radians() - kHoodTolerance.radians()
         )
 
@@ -130,7 +137,7 @@ class HoodSubsystem(Subsystem):
                     loggedStateStr = "none"
             Logger.recordOutput("Hood/SysID State", loggedStateStr)
 
-        charactarizationRoutine = SysIdRoutine(
+        characterizationRoutine = SysIdRoutine(
             SysIdRoutine.Config(0.5, 6, 10, logState),
             SysIdRoutine.Mechanism(
                 self.io.set_hood_volts,
@@ -141,16 +148,16 @@ class HoodSubsystem(Subsystem):
 
         return cmd.sequence(
             cmd.runOnce(lambda: self.setClosedLoop(False), self),
-            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
+            characterizationRoutine.quasistatic(SysIdRoutine.Direction.kForward).until(
                 lambda: self.isAtGoal(kHoodMaxAngle)
             ),
-            charactarizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
+            characterizationRoutine.quasistatic(SysIdRoutine.Direction.kReverse).until(
                 lambda: self.isAtGoal(kHoodMinAngle)
             ),
-            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
+            characterizationRoutine.dynamic(SysIdRoutine.Direction.kForward).until(
                 lambda: self.isAtGoal(kHoodMaxAngle)
             ),
-            charactarizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
+            characterizationRoutine.dynamic(SysIdRoutine.Direction.kReverse).until(
                 lambda: self.isAtGoal(kHoodMinAngle)
             ),
             cmd.runOnce(lambda: self.setClosedLoop(True), self),
