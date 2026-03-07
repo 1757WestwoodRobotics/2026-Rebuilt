@@ -60,12 +60,6 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         )
         tryUntilOk(
             5,
-            lambda: self.spindexer2Motor.configurator.apply(
-                self.spindexer2Config, 0.25
-            ),
-        )
-        tryUntilOk(
-            5,
             lambda: self.kickerLowerMotor.configurator.apply(
                 self.kickerUpperConfig, 0.25
             ),
