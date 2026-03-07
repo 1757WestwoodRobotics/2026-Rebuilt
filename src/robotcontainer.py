@@ -366,6 +366,7 @@ class RobotContainer:
         self.chooser.addOption(
             "Flywheel SysID", self.flywheel.sysIdRoutine(self.flywheel)
         )
+        self.chooser.addOption("Hood SysID", self.hood.sysIdRoutine(self.hood))
 
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
@@ -428,6 +429,9 @@ class RobotContainer:
                 lambda: self.oi.driverX() * kTurboSpeedMultiplier,
                 self.oi.driverRotation,
             )
+        )
+        self.hood.setDefaultCommand(
+            HoodCommands.moveToMin(self.hood)
         )
 
         # Driver Controller (Xbox) Section

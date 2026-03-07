@@ -82,6 +82,7 @@ class HoodSubsystem(Subsystem):
             < kHoodTolerance.radians()
         )
 
+    @autolog_output(key="Hood/atMin")
     def isAtMin(self) -> bool:
         """
         Returns whether the hood is at or beyond the minimum position
@@ -91,6 +92,7 @@ class HoodSubsystem(Subsystem):
             <= kHoodMinAngle.radians() + kHoodTolerance.radians()
         )
 
+    @autolog_output(key="Hood/atMax")
     def isAtMax(self) -> bool:
         """
         Returns whether the hood is at or beyond the maximum position
@@ -148,7 +150,7 @@ class HoodSubsystem(Subsystem):
             Logger.recordOutput("Hood/SysID State", loggedStateStr)
 
         characterizationRoutine = SysIdRoutine(
-            SysIdRoutine.Config(0.1, 4, 10, logState),
+            SysIdRoutine.Config(0.1, 1, 10, logState),
             SysIdRoutine.Mechanism(
                 self.io.set_hood_volts,
                 (lambda _: None),

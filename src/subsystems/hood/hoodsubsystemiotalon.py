@@ -3,7 +3,7 @@ from phoenix6.configs.talon_fx_configs import (
     Slot0Configs,
     TalonFXConfiguration,
 )
-from phoenix6.controls import MotionMagicVoltage, VoltageOut
+from phoenix6.controls import MotionMagicVoltage, PositionVoltage, VoltageOut
 from phoenix6 import BaseStatusSignal
 from phoenix6.hardware.talon_fx import TalonFX
 from wpimath.geometry import Rotation2d
@@ -21,6 +21,7 @@ from constants.hood import (
     kHoodSGain,
     kHoodVGain,
     kHoodAGain,
+    kHoodInvertedValue,
 )
 from constants.math import kRadiansPerRevolution
 from constants import kRobotUpdateFrequency, kRioCANBus
@@ -30,7 +31,7 @@ from util.phoenixutil import PhoenixUtil, tryUntilOk
 class HoodSubsystemIOTalon(HoodSubsystemIO):
     hoodConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    closedDemand: MotionMagicVoltage = MotionMagicVoltage(0)
+    closedDemand: PositionVoltage = PositionVoltage(0)
     openDemand: VoltageOut = VoltageOut(0)
 
     def __init__(self) -> None:
@@ -58,6 +59,7 @@ class HoodSubsystemIOTalon(HoodSubsystemIO):
                 kHoodMaxVelocity.radians() / kRadiansPerRevolution
             )
         )
+        self.hoodConfig.motor_output.inverted = kHoodInvertedValue
         tryUntilOk(5, lambda: self.motor.configurator.apply(self.hoodConfig))
 
         self.position = self.motor.get_position()
