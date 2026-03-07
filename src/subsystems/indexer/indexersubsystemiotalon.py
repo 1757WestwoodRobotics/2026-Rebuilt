@@ -18,6 +18,7 @@ from constants.indexer import (
     kSpindexer2CANId,
     kSpindexerCurrentLimit,
     kSpindexerGearRatio,
+    kSpindexerInvertedValue
 )
 
 
@@ -40,6 +41,8 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         self.spindexer2Config.motor_output.neutral_mode = NeutralModeValue.COAST
         self.kickerLowerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
         self.kickerUpperConfig.motor_output.neutral_mode = NeutralModeValue.COAST
+
+        self.spindexer1Config.motor_output.inverted = kSpindexerInvertedValue
 
         self.spindexer1Config.current_limits = kSpindexerCurrentLimit
         self.spindexer2Config.current_limits = kSpindexerCurrentLimit

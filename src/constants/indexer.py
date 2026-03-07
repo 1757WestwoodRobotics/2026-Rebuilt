@@ -1,4 +1,5 @@
 from phoenix6.configs.talon_fx_configs import CurrentLimitsConfigs
+from phoenix6.signals import InvertedValue
 from wpimath.system.plant import DCMotor
 
 kSpindexer1CANId = 3
@@ -11,6 +12,7 @@ kSpindexerCurrentLimit = (
     .with_supply_current_limit(30)
     .with_supply_current_limit_enable(True)
 )
+kSpindexerInvertedValue = InvertedValue.CLOCKWISE_POSITIVE
 kKickerCurrentLimit = (
     CurrentLimitsConfigs()
     .with_supply_current_limit(30)
