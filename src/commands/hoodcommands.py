@@ -19,7 +19,7 @@ def bumpHoodUp(hood: HoodSubsystem) -> Command:
     """
     Manual hood increment up
     """
-    return Commands.runOnce(lambda: hood.bumpAngle(kHoodFudgeAmount)).withName(
+    return Commands.runOnce(lambda: hood.bumpAngle(kHoodFudgeAmount), hood).withName(
         "bumpHoodUp"
     )
 
@@ -28,7 +28,7 @@ def bumpHoodDown(hood: HoodSubsystem) -> Command:
     """
     Manual hood increment down
     """
-    return Commands.runOnce(lambda: hood.bumpAngle(-kHoodFudgeAmount)).withName(
+    return Commands.runOnce(lambda: hood.bumpAngle(-kHoodFudgeAmount), hood).withName(
         "bumpHoodDown"
     )
 

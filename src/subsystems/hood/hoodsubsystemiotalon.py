@@ -6,6 +6,7 @@ from phoenix6.configs.talon_fx_configs import (
 from phoenix6.controls import MotionMagicVoltage, VoltageOut
 from phoenix6 import BaseStatusSignal
 from phoenix6.hardware.talon_fx import TalonFX
+from wpimath.geometry import Rotation2d
 from subsystems.hood.hoodsubsystemio import HoodSubsystemIO
 
 from constants.hood import (
@@ -22,15 +23,15 @@ from constants.hood import (
     kHoodAGain,
 )
 from constants.math import kRadiansPerRevolution
-from constants import kRobotUpdateFrequency
+from constants import kRobotUpdateFrequency, kRioCANBus
 from util.phoenixutil import PhoenixUtil, tryUntilOk
 
 
 class HoodSubsystemIOTalon(HoodSubsystemIO):
     hoodConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    closedDemand: MotionMagicVoltage = MotionMagicVoltage(0, False)
-    openDemand: VoltageOut = VoltageOut(0, False)
+    closedDemand: MotionMagicVoltage = MotionMagicVoltage(0)
+    openDemand: VoltageOut = VoltageOut(0)
 
     def __init__(self) -> None:
         self.motor = TalonFX(kHoodCANId)
@@ -62,27 +63,27 @@ class HoodSubsystemIOTalon(HoodSubsystemIO):
         self.position = self.motor.get_position()
         self.velocity = self.motor.get_velocity()
 
-        self.appled = self.motor.get_motor_voltage()
+        self.applied = self.motor.get_motor_voltage()
         self.supply = self.motor.get_supply_current()
 
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.position,
             self.velocity,
-            self.appled,
+            self.applied,
             self.supply,
         )
         PhoenixUtil.registerSignals(
-            "", self.position, self.velocity, self.appled, self.supply
+            kRioCANBus, self.position, self.velocity, self.applied, self.supply
         )
 
     def updateInputs(self, inputs: HoodSubsystemIO.HoodSubsystemIOInputs) -> None:
         inputs.hoodConnected = BaseStatusSignal.is_all_good(
-            self.position, self.velocity, self.appled, self.supply
+            self.position, self.velocity, self.applied, self.supply
         )
-        inputs.hoodPosition = self.position.value * kRadiansPerRevolution
+        inputs.hoodPosition = Rotation2d.fromRotations(self.position.value)
         inputs.hoodSpeed = self.velocity.value * kRadiansPerRevolution
-        inputs.hoodAppliedVolts = self.appled.value
+        inputs.hoodAppliedVolts = self.applied.value
         inputs.hoodSupplyAmps = self.supply.value
 
     def set_hood_position(self, position: float):
