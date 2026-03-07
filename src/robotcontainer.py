@@ -303,7 +303,6 @@ class RobotContainer:
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOSim())
                 self.hood = HoodSubsystem(HoodSubsystemIOSim())
-                self.leds = LEDSubsystem()
 
             case _:
                 self.drive = DriveSubsystem(
@@ -326,7 +325,6 @@ class RobotContainer:
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIO())
                 self.hood = HoodSubsystem(HoodSubsystemIO())
-                self.leds = LEDSubsystem()
 
         # Alerts
         AlertLogger.registerGroup("Alerts")
