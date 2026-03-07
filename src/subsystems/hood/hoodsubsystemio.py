@@ -18,7 +18,11 @@ class HoodSubsystemIO:
     def updateInputs(self, inputs: HoodSubsystemIOInputs):
         pass
 
-    def set_hood_position(self, position: float):
+    def set_hood_target(self, position: Rotation2d):
+        # Code to set the hood target in radians
+        pass
+
+    def set_hood_position(self, position: Rotation2d):
         # Code to set the hood position in radians
         pass
 

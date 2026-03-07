@@ -12,6 +12,7 @@ from util.logtracer import LogTracer
 from constants.hood import (
     kHoodMinAngle,
     kHoodMaxAngle,
+    kHoodStartAngle,
     kHoodTolerance,
     kHoodMaxVelocity,
     kHoodMaxAcceleration,
@@ -24,6 +25,7 @@ class HoodSubsystem(Subsystem):
         Subsystem.__init__(self)
         self.setName(type(self).__name__)
         self.io = io
+        self.io.set_hood_position(kHoodStartAngle)
         self.inputs = HoodSubsystemIO.HoodSubsystemIOInputs()
 
         self.isClosedLoop = True
@@ -38,10 +40,12 @@ class HoodSubsystem(Subsystem):
 
         if self.isClosedLoop:
             self.io.set_hood_position(
-                clamp(
-                    self.hoodGoal.radians() + self.hoodFudge.radians(),
-                    kHoodMinAngle.radians(),
-                    kHoodMaxAngle.radians(),
+                Rotation2d(
+                    clamp(
+                        self.hoodGoal.radians() + self.hoodFudge.radians(),
+                        kHoodMinAngle.radians(),
+                        kHoodMaxAngle.radians(),
+                    )
                 )
             )
 
