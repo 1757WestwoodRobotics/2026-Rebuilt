@@ -7,11 +7,9 @@ from subsystems.indexer.indexersubsystemiotalon import IndexerSubsystemIOTalon
 from constants.math import kRadiansPerRevolution
 from constants.indexer import (
     kKickerGearRatio,
-    # kKickerMotorLower,
-    kKickerMotorUpper,
+    kKickerSystem,
     kSpindexerGearRatio,
-    kSpindexerMotor1,
-    # kSpindexerMotor2,
+    kSpindexerSystem,
 )
 from constants import kRobotUpdatePeriod
 from util.convenientmath import clamp
@@ -21,23 +19,13 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
     def __init__(self) -> None:
         super().__init__()
         self.spindexer1SimModel = DCMotorSim(
-            LinearSystemId.DCMotorSystem(kSpindexerMotor1, 0.04, kSpindexerGearRatio),
-            kSpindexerMotor1,
+            LinearSystemId.DCMotorSystem(kSpindexerSystem, 0.04, kSpindexerGearRatio),
+            kSpindexerSystem,
         )
 
-        # self.spindexer2SimModel = DCMotorSim(
-        #     LinearSystemId.DCMotorSystem(kKickerMotorUpper, 0.04, kSpindexerGearRatio),
-        #     kSpindexerMotor2,
-        # )
-
-        # self.kickerLowerSimModel = DCMotorSim(
-        #     LinearSystemId.DCMotorSystem(kKickerMotorLower, 0.04, kKickerGearRatio),
-        #     kKickerMotorLower,
-        # )
-
         self.kickerUpperSimModel = DCMotorSim(
-            LinearSystemId.DCMotorSystem(kKickerMotorUpper, 0.04, kKickerGearRatio),
-            kKickerMotorUpper,
+            LinearSystemId.DCMotorSystem(kKickerSystem, 0.04, kKickerGearRatio),
+            kKickerSystem,
         )
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:
@@ -49,22 +37,14 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         simVoltage = RobotController.getInputVoltage()
 
         spindexer1AppliedVoltage = clamp(spindexer1MotorSim.motor_voltage, -12.0, 12.0)
-        # spindexer2AppliedVoltage = clamp(spindexer2MotorSim.motor_voltage, -12.0, 12.0)
-        # kickerLowerAppliedVoltage = clamp(
-        #     kickerLowerMotorSim.motor_voltage, -12.0, 12.0
-        # )
         kickerUpperAppliedVoltage = clamp(
             kickerUpperMotorSim.motor_voltage, -12.0, 12.0
         )
 
         self.spindexer1SimModel.setInputVoltage(spindexer1AppliedVoltage)
-        # self.spindexer2SimModel.setInputVoltage(spindexer2AppliedVoltage)
-        # self.kickerLowerSimModel.setInputVoltage(kickerLowerAppliedVoltage)
         self.kickerUpperSimModel.setInputVoltage(kickerUpperAppliedVoltage)
 
         self.spindexer1SimModel.update(kRobotUpdatePeriod)
-        # self.spindexer2SimModel.update(kRobotUpdatePeriod)
-        # self.kickerLowerSimModel.update(kRobotUpdatePeriod)
         self.kickerUpperSimModel.update(kRobotUpdatePeriod)
 
         spindexer1MotorSim.set_raw_rotor_position(
@@ -77,7 +57,7 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         )
         spindexer1MotorSim.set_supply_voltage(
             clamp(
-                simVoltage - spindexer1MotorSim.supply_current * kSpindexerMotor1.R,
+                simVoltage - spindexer1MotorSim.supply_current * kSpindexerSystem.R,
                 0,
                 simVoltage,
             )
@@ -101,7 +81,7 @@ class IndexerSubsystemIOSIM(IndexerSubsystemIOTalon):
         )
         kickerUpperMotorSim.set_supply_voltage(
             clamp(
-                simVoltage - kickerUpperMotorSim.supply_current * kKickerMotorUpper.R,
+                simVoltage - kickerUpperMotorSim.supply_current * kKickerSystem.R,
                 0,
                 simVoltage,
             )

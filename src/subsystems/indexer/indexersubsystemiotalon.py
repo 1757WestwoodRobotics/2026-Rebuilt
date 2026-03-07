@@ -8,7 +8,7 @@ from phoenix6.signals import MotorAlignmentValue
 from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.phoenixutil import tryUntilOk, PhoenixUtil
 
-from constants import kRobotUpdateFrequency
+from constants import kRobotUpdateFrequency, kRioCANBus
 from constants.indexer import (
     kKickerLowerCANId,
     kKickerUpperCANId,
@@ -27,10 +27,8 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
     kickerLowerConfig: TalonFXConfiguration = TalonFXConfiguration()
     kickerUpperConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    spindexer1Demand: VoltageOut = VoltageOut(0, False)
-    spindexer2Demand: VoltageOut = VoltageOut(0, False)
-    kickerLowerDemand: VoltageOut = VoltageOut(0, False)
-    kickerUpperDemand: VoltageOut = VoltageOut(0, False)
+    spindexerDemand: VoltageOut = VoltageOut(0)
+    kickerDemand: VoltageOut = VoltageOut(0)
 
     def __init__(self) -> None:
         self.spindexer1Motor = TalonFX(kSpindexer1CANId)
@@ -72,8 +70,20 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         )
         tryUntilOk(
             5,
+            lambda: self.spindexer2Motor.configurator.apply(
+                self.spindexer2Config, 0.25
+            ),
+        )
+        tryUntilOk(
+            5,
             lambda: self.kickerUpperMotor.configurator.apply(
                 self.kickerUpperConfig, 0.25
+            ),
+        )
+        tryUntilOk(
+            5,
+            lambda: self.kickerLowerMotor.configurator.apply(
+                self.kickerLowerConfig, 0.25
             ),
         )
 
@@ -82,15 +92,15 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         self.spindexer1Supply = self.spindexer1Motor.get_supply_current()
         self.spindexer1Applied = self.spindexer1Motor.get_motor_voltage()
 
-        # self.spindexer2Position = self.spindexer2Motor.get_position()
-        # self.spindexer2Velocity = self.spindexer2Motor.get_velocity()
-        # self.spindexer2Supply = self.spindexer2Motor.get_supply_current()
-        # self.spindexer2Applied = self.spindexer2Motor.get_motor_voltage()
+        self.spindexer2Position = self.spindexer2Motor.get_position()
+        self.spindexer2Velocity = self.spindexer2Motor.get_velocity()
+        self.spindexer2Supply = self.spindexer2Motor.get_supply_current()
+        self.spindexer2Applied = self.spindexer2Motor.get_motor_voltage()
 
-        # self.kickerLowerPosition = self.kickerLowerMotor.get_position()
-        # self.kickerLowerVelocity = self.kickerLowerMotor.get_velocity()
-        # self.kickerLowerSupply = self.kickerLowerMotor.get_supply_current()
-        # self.kickerLowerApplied = self.kickerLowerMotor.get_motor_voltage()
+        self.kickerLowerPosition = self.kickerLowerMotor.get_position()
+        self.kickerLowerVelocity = self.kickerLowerMotor.get_velocity()
+        self.kickerLowerSupply = self.kickerLowerMotor.get_supply_current()
+        self.kickerLowerApplied = self.kickerLowerMotor.get_motor_voltage()
 
         self.kickerUpperPosition = self.kickerUpperMotor.get_position()
         self.kickerUpperVelocity = self.kickerUpperMotor.get_velocity()
@@ -103,14 +113,14 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.spindexer1Velocity,
             self.spindexer1Supply,
             self.spindexer1Applied,
-            # self.spindexer2Position,
-            # self.spindexer2Velocity,
-            # self.spindexer2Supply,
-            # self.spindexer2Applied,
-            # self.kickerLowerPosition,
-            # self.kickerLowerVelocity,
-            # self.kickerLowerSupply,
-            # self.kickerLowerApplied,
+            self.spindexer2Position,
+            self.spindexer2Velocity,
+            self.spindexer2Supply,
+            self.spindexer2Applied,
+            self.kickerLowerPosition,
+            self.kickerLowerVelocity,
+            self.kickerLowerSupply,
+            self.kickerLowerApplied,
             self.kickerUpperPosition,
             self.kickerUpperVelocity,
             self.kickerUpperSupply,
@@ -118,19 +128,19 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         )
 
         PhoenixUtil.registerSignals(
-            "",
+            kRioCANBus,
             self.spindexer1Position,
             self.spindexer1Velocity,
             self.spindexer1Supply,
             self.spindexer1Applied,
-            # self.spindexer2Position,
-            # self.spindexer2Velocity,
-            # self.spindexer2Supply,
-            # self.spindexer2Applied,
-            # self.kickerLowerPosition,
-            # self.kickerLowerVelocity,
-            # self.kickerLowerSupply,
-            # self.kickerLowerApplied,
+            self.spindexer2Position,
+            self.spindexer2Velocity,
+            self.spindexer2Supply,
+            self.spindexer2Applied,
+            self.kickerLowerPosition,
+            self.kickerLowerVelocity,
+            self.kickerLowerSupply,
+            self.kickerLowerApplied,
             self.kickerUpperPosition,
             self.kickerUpperVelocity,
             self.kickerUpperSupply,
@@ -150,28 +160,28 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         inputs.spindex1AppliedVolts = self.spindexer1Applied.value
         inputs.spindex1SupplyAmps = self.spindexer1Supply.value
 
-        # inputs.spindexer2Connected = BaseStatusSignal.is_all_good(
-        #     self.spindexer2Position,
-        #     self.spindexer2Velocity,
-        #     self.spindexer2Applied,
-        #     self.spindexer2Supply,
-        # )
+        inputs.spindexer2Connected = BaseStatusSignal.is_all_good(
+            self.spindexer2Position,
+            self.spindexer2Velocity,
+            self.spindexer2Applied,
+            self.spindexer2Supply,
+        )
 
-        # inputs.spindexer2Position = self.spindexer2Position.value
-        # inputs.spindex2Velocity = self.spindexer2Velocity.value
-        # inputs.spindex2AppliedVolts = self.spindexer2Applied.value
-        # inputs.spindex2SupplyAmps = self.spindexer2Supply.value
+        inputs.spindexer2Position = self.spindexer2Position.value
+        inputs.spindex2Velocity = self.spindexer2Velocity.value
+        inputs.spindex2AppliedVolts = self.spindexer2Applied.value
+        inputs.spindex2SupplyAmps = self.spindexer2Supply.value
 
-        # inputs.kickLowerConnected = BaseStatusSignal.is_all_good(
-        #     self.kickerLowerPosition,
-        #     self.kickerLowerVelocity,
-        #     self.kickerLowerApplied,
-        #     self.kickerLowerSupply,
-        # )
-        # inputs.kickLowerPosition = self.kickerLowerPosition.value
-        # inputs.kickLowerVelocity = self.kickerLowerVelocity.value
-        # inputs.kickLowerAppliedVolts = self.kickerLowerApplied.value
-        # inputs.kickLowerSupplyAmps = self.kickerLowerSupply.value
+        inputs.kickLowerConnected = BaseStatusSignal.is_all_good(
+            self.kickerLowerPosition,
+            self.kickerLowerVelocity,
+            self.kickerLowerApplied,
+            self.kickerLowerSupply,
+        )
+        inputs.kickLowerPosition = self.kickerLowerPosition.value
+        inputs.kickLowerVelocity = self.kickerLowerVelocity.value
+        inputs.kickLowerAppliedVolts = self.kickerLowerApplied.value
+        inputs.kickLowerSupplyAmps = self.kickerLowerSupply.value
 
         inputs.kickUpperConnected = BaseStatusSignal.is_all_good(
             self.kickerUpperPosition,
@@ -187,15 +197,7 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
     def setIndexerTarget(
         self,
         spindexer1: float,
-        # spindexer2: float,
-        # kickerLower: float,
         kickerUpper: float,
     ) -> None:
-        self.spindexer1Motor.set_control(self.spindexer1Demand.with_output(spindexer1))
-        # self.spindexer2Motor.set_control(self.spindexer2Demand.with_output(spindexer2))
-        # self.kickerLowerMotor.set_control(
-        #     self.kickerLowerDemand.with_output(kickerLower)
-        # )
-        self.kickerUpperMotor.set_control(
-            self.kickerUpperDemand.with_output(kickerUpper)
-        )
+        self.spindexer1Motor.set_control(self.spindexerDemand.with_output(spindexer1))
+        self.kickerUpperMotor.set_control(self.kickerDemand.with_output(kickerUpper))

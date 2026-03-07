@@ -20,10 +20,8 @@ kKickerCurrentLimit = (
 kSpindexerGearRatio = 42 / 60
 kKickerGearRatio = 50 / 24
 
-kSpindexerMotor1 = DCMotor.falcon500(1)
-kSpindexerMotor2 = DCMotor.falcon500(1)
-kKickerMotorLower = DCMotor.falcon500(1)
-kKickerMotorUpper = DCMotor.falcon500(1)
+kSpindexerSystem = DCMotor.falcon500(2)
+kKickerSystem = DCMotor.falcon500(2)
 
 kSpindexer1ForwardVoltage = 6.0
 kSpindexer1ReverseVoltage = -6.0
