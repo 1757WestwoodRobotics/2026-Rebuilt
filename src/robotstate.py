@@ -170,6 +170,10 @@ class RobotState:
         )
 
     @classmethod
+    def hubAboutToChangeTrigger(cls) -> Trigger:
+        return Trigger(cls.hubAboutToChange)
+
+    @classmethod
     def hubActive(cls) -> bool:
         """
         Returns true if the active hub is the one we are scoring on
