@@ -12,6 +12,7 @@ from phoenix6.signal_logger import SignalLogger
 from pykit.wpilog.wpilogwriter import WPILOGWriter
 from pykit.wpilog.wpilogreader import WPILOGReader
 from pykit.networktables.nt4Publisher import NT4Publisher
+from pykit.networktables.loggednetworkstring import LoggedNetworkString
 from pykit.loggedrobot import LoggedRobot
 from pykit.logger import Logger
 
@@ -30,6 +31,7 @@ class MentorBot(LoggedRobot):
     """
 
     autonomousCommand: typing.Optional[commands2.Command] = None
+    enablePurpose: LoggedNetworkString = LoggedNetworkString("Enable Purpose", "")
 
     def __init__(self):
         super().__init__()
