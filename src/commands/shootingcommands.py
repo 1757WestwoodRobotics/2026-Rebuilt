@@ -9,7 +9,6 @@ import commands.flywheelcommands as FlywheelCommands
 import commands.hoodcommands as HoodCommands
 
 from constants.hood import kHoodMaxAngle
-from constants.shooting import kFeedShootingPower
 
 
 def shootBalls(

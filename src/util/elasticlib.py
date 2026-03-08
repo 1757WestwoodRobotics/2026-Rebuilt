@@ -1,4 +1,5 @@
 # Imported from https://github.com/Gold872/elastic_dashboard/blob/main/elasticlib/elasticlib.py
+# pylint: disable=global-statement,broad-exception-caught
 import json
 from enum import Enum
 

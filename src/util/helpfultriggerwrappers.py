@@ -25,7 +25,7 @@ class NetworkTableButton(Trigger):
     def __init__(self, key: str) -> None:
         self.logBool = LoggedNetworkBoolean(key, False)
         self.logBool.value = False
-        super().__init__(lambda: self.logBool.value)
+        super().__init__(self.logBool)
 
 
 class ModifiableJoystickButton(Trigger):
