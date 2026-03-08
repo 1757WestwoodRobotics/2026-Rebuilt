@@ -22,9 +22,10 @@ class TurretSubsystemIO:
     def updateInputs(self, inputs: TurretSubsystemIOInputs):
         pass
 
-    def set_turret_angle(self, position: Rotation2d):
+    def set_turret_angle(self, position: Rotation2d, velocity: float):
         """
         sets the turret angle in radians
+        can also supply a target velocity in rad / s
         """
 
     def set_turret_volts(self, volts: float):
