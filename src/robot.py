@@ -18,6 +18,7 @@ from pykit.logger import Logger
 
 import constants
 from robotcontainer import RobotContainer
+from util import elasticlib
 from util.logtracer import LogTracer
 from util.phoenixutil import PhoenixUtil
 
@@ -115,6 +116,7 @@ class MentorBot(LoggedRobot):
         PathPlannerLogging.setLogActivePathCallback(
             lambda poses: Logger.recordOutput("PathPlanner/CurrentPath", poses)
         )
+        elasticlib.select_tab("PREFLIGHT")
 
     def robotPeriodic(self) -> None:
         LogTracer.resetOuter("RobotPeriodic")
@@ -139,6 +141,7 @@ class MentorBot(LoggedRobot):
 
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
+        elasticlib.select_tab("Autonomous")
 
     def autonomousPeriodic(self) -> None:
         """This function is called periodically during autonomous"""
@@ -150,6 +153,7 @@ class MentorBot(LoggedRobot):
         # this line or comment it out.
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
+        elasticlib.select_tab("Teleoperated")
 
     def teleopPeriodic(self) -> None:
         """This function is called periodically when in teleop"""
