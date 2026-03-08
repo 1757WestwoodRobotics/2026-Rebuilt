@@ -20,6 +20,7 @@ import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
 import commands.hoodcommands as HoodCommands
 import commands.overridecommands as OverrideCommands
+import commands.shootingcommands as ShootingCommands
 
 from commands.resetgyro import ResetGyro
 from robotmechanism import RobotMechanism
@@ -421,15 +422,7 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            commands2.cmd.parallel(
-                FlywheelCommands.shootWithDistance(
-                    self.flywheel, RobotState.distanceToHub
-                ),
-                HoodCommands.angleHoodWithDistance(self.hood, RobotState.distanceToHub),
-                commands2.cmd.waitUntil(RobotState.readyToShoot).andThen(
-                    IndexerCommands.kickIndexer(self.indexer)
-                ),
-            )
+            ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
         )
 
         self.oi.driverController.povDown().onTrue(
@@ -480,6 +473,9 @@ class RobotContainer:
         )
         self.oi.operatorController.button(10).whileTrue(
             IndexerCommands.ejectIndexer(self.indexer)
+        )
+        self.oi.operatorController.button(21).whileTrue(
+            ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
         )
 
         RobotState.shiftTrigger().onTrue(
