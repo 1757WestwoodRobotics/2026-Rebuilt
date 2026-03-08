@@ -23,6 +23,7 @@ import commands.overridecommands as OverrideCommands
 import commands.shootingcommands as ShootingCommands
 
 from commands.resetgyro import ResetGyro
+from preflight import PreflightChecklist
 from robotmechanism import RobotMechanism
 from robotstate import RobotState
 from subsystems.climber.climbersubsystem import ClimberSubsystem
@@ -328,6 +329,13 @@ class RobotContainer:
         )
         if wpilib.RobotBase.isReal() and not os.path.exists("/U/logs"):
             self.usbAlert.set(True)
+        self.preflightAlert = wpilib.Alert(
+            "preflight checking not complete", wpilib.Alert.AlertType.kError
+        )
+
+        # preflight checklist
+        AlertLogger.registerGroup("preflight")
+        self.preflight = PreflightChecklist()
 
         # Initialize as active at startup;
         # this initial value may be updated later based on the actual shift state
@@ -374,6 +382,9 @@ class RobotContainer:
         self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
+
+    def disabledPeriodic(self) -> None:
+        self.preflight.update()
 
     def robotPeriodic(self) -> None:
         RobotState.periodic(
@@ -517,6 +528,7 @@ class RobotContainer:
             )
         )
         self.deadInTheWaterAlert.set(self.chooser.getSelected() == self.nothingAuto)
+        self.preflightAlert.set(self.preflight.is_complete())
 
     def getAutonomousCommand(self) -> commands2.Command:
         selected = self.chooser.getSelected()

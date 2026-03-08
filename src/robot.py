@@ -131,6 +131,7 @@ class MentorBot(LoggedRobot):
 
     def disabledPeriodic(self) -> None:
         """This function is called periodically when disabled"""
+        self.container.disabledPeriodic()
 
     def autonomousInit(self) -> None:
         """This autonomous runs the autonomous command selected by your RobotContainer class."""
