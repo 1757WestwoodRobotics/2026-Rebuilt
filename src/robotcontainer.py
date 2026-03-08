@@ -486,6 +486,18 @@ class RobotContainer:
             Commands.runOnce(lambda: self.shiftActiveAlert.set(True))
         ).onFalse(Commands.runOnce(lambda: self.shiftActiveAlert.set(False)))
 
+        RobotState.hubAboutToChangeTrigger().onTrue(
+            commands2.cmd.sequence(
+                self.oi.rumbleControllersCommand(0.5).withTimeout(0.3),
+                commands2.cmd.waitSeconds(0.7),
+                self.oi.rumbleControllersCommand(0.5).withTimeout(0.3),
+                commands2.cmd.waitSeconds(0.7),
+                self.oi.rumbleControllersCommand(0.5).withTimeout(0.3),
+                commands2.cmd.waitSeconds(0.7),
+                self.oi.rumbleControllersCommand(1.0).withTimeout(0.5),
+            ).withName("Shift Change Rumble")
+        )  # rumble 3 times when about to change
+
     def configureOverrides(self) -> None:
         """
         Configures commands that are for override and manual mode vaues
