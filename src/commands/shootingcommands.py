@@ -8,6 +8,9 @@ import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
 import commands.hoodcommands as HoodCommands
 
+from constants.hood import kHoodMaxAngle
+from constants.shooting import kFeedShootingPower
+
 
 def shootBalls(
     indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
@@ -22,3 +25,32 @@ def shootBalls(
             IndexerCommands.kickIndexer(indexer)
         ),
     )
+
+
+def feedBalls(
+    indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
+) -> Command:
+    """
+    Command to feed balls into the flywheel without waiting for it to be at speed or the hood to be at angle
+    """
+    return cmd.parallel(
+        FlywheelCommands.feedWithDistance(flywheel, RobotState.distanceToObjective),
+        HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(
+            IndexerCommands.kickIndexer(indexer)
+        ),
+    )
+
+
+def setFeedObjective() -> Command:
+    def _set():
+        RobotState.objective = RobotState.RobotMetaObjective.FEED
+
+    return cmd.runOnce(_set).withName("FeedObjective")
+
+
+def setShootObjective() -> Command:
+    def _set():
+        RobotState.objective = RobotState.RobotMetaObjective.SHOOT
+
+    return cmd.runOnce(_set).withName("ShootObjective")

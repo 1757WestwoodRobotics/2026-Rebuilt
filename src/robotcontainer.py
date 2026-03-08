@@ -479,6 +479,7 @@ class RobotContainer:
             IntakeCommands.bumpIntakeDown(self.intake)
         )
 
+        # indexer related
         self.oi.operatorController.button(5).whileTrue(
             IndexerCommands.kickIndexer(self.indexer)
         )
@@ -487,6 +488,14 @@ class RobotContainer:
         )
         self.oi.operatorController.button(21).whileTrue(
             ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
+        )
+
+        # objective related
+        self.oi.operatorController.button(17).onTrue(
+            ShootingCommands.setFeedObjective()
+        )
+        self.oi.operatorController.button(18).onTrue(
+            ShootingCommands.setShootObjective()
         )
 
         RobotState.shiftTrigger().onTrue(

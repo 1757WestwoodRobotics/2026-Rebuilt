@@ -1,3 +1,4 @@
+from enum import Enum, auto
 from typing import Callable
 from commands2.button import Trigger
 from pykit.logger import Logger
@@ -25,12 +26,23 @@ from util.logtracer import LogTracer
 from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
 from constants.auto import kAutoDistanceTolerance, kAutoRotationTolerance
-from constants.field import kEndgameDuration, kShiftDuration, kCloseHubLocation
+from constants.field import (
+    kEndgameDuration,
+    kShiftDuration,
+    kCloseHubLocation,
+    kFeedObjectiveLeft,
+    kFeedObjectiveRight,
+    kFieldWidth,
+)
 from constants.vision import kRedHubAprilTags, kBlueHubAprilTags
 
 
 # pylint: disable-next=too-many-public-methods
 class RobotState:
+    class RobotMetaObjective(Enum):
+        SHOOT = auto()
+        FEED = auto()
+
     headingOffset: Rotation2d = Rotation2d()
     robotHeading: Rotation2d = Rotation2d()
     turretRotation: Rotation2d = Rotation2d()
@@ -72,6 +84,24 @@ class RobotState:
     hoodAtAngle: bool = False
 
     brownoutFlag: bool = False
+
+    objective: RobotMetaObjective = RobotMetaObjective.SHOOT
+
+    @classmethod
+    def objectiveLocation(cls) -> Translation2d:
+        match cls.objective:
+            case RobotState.RobotMetaObjective.SHOOT:
+                return cls.hubLocation()
+            case RobotState.RobotMetaObjective.FEED:
+                robotPose = cls.getFieldPose()
+                localFeedObjective = (
+                    kFeedObjectiveLeft
+                    if robotPose.Y() > kFieldWidth / 2
+                    else kFeedObjectiveRight
+                )  # don't hit the hub
+                return FlipUtil.fieldTranslation(
+                    localFeedObjective
+                )  # location to target for feeding
 
     @classmethod
     def readyToShoot(cls) -> bool:
@@ -281,6 +311,8 @@ class RobotState:
         Logger.recordOutput("Robot/HeadingVelocity", robotYawVelocity)
         Logger.recordOutput("Robot/Velocity", fieldRelativeRobotVelocity)
         Logger.recordOutput("Robot/HeadingOffset", cls.headingOffset)
+        Logger.recordOutput("Robot/Objective", cls.objective.name)
+        Logger.recordOutput("Robot/ObjectiveLocation", cls.objectiveLocation())
 
         autoPositionDelta = estimatedFieldPose - cls.targetAutonomousStartingLocation
         Logger.recordOutput("Auto/PositionOffset", autoPositionDelta)
@@ -331,6 +363,10 @@ class RobotState:
         Returns the distance from the robot to the hub in meters, based on the hub estimator
         """
         return cls.hubLocation().distance(cls.getHubPose().translation())
+
+    @classmethod
+    def distanceToObjective(cls) -> float:
+        return cls.objectiveLocation().distance(cls.getFieldPose().translation())
 
     @classmethod
     def getRotation(cls) -> Rotation2d:
