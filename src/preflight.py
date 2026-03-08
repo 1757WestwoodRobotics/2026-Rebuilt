@@ -14,7 +14,7 @@ class PreflightChecklist:
 
         def update(self):
             """
-            Sets the proper alert for this check based on the value, which should be set by the 
+            Sets the proper alert for this check based on the value, which should be set by the
             user to indicate whether the check has been completed or not
             """
             self.alert.set(not self.value())
@@ -59,4 +59,4 @@ class PreflightChecklist:
         return all(check.value for check in self.checks)
 
     def missing(self) -> list[str]:
-        return [check._key for check in self.checks if not check.value]
+        return [check.name for check in self.checks if not check.value]

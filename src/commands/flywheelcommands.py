@@ -31,6 +31,7 @@ def shootWithDistance(
 
     return fireAtSpeed(flywheel, calculateSpeed).withName("ShootWithDistance")
 
+
 def feedWithDistance(
     flywheel: FlywheelSubsystem, distance: Callable[[], float]
 ) -> Command:

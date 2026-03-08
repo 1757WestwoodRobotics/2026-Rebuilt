@@ -20,4 +20,4 @@ kHoodAngleMap = lambda x: Rotation2d.fromDegrees(
     interp(x, xp=[0, 5, 10, 15], fp=[0, 15, 30, 45])
 )
 
-kFeedFlywheelMap = partial(interp, xp=[0, 5, 10], fp=[5, 40, 80]) # rad / s
+kFeedFlywheelMap = partial(interp, xp=[0, 5, 10], fp=[5, 40, 80])  # rad / s
