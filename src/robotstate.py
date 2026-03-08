@@ -362,11 +362,17 @@ class RobotState:
         """
         Returns the distance from the robot to the hub in meters, based on the hub estimator
         """
-        return cls.hubLocation().distance(cls.getHubPose().translation())
+        return cls.hubLocation().distance(
+            (pose3dFrom2d(cls.getHubPose()) + kTurretLocation).toPose2d().translation()
+        )
 
     @classmethod
     def distanceToObjective(cls) -> float:
-        return cls.objectiveLocation().distance(cls.getFieldPose().translation())
+        return cls.objectiveLocation().distance(
+            (pose3dFrom2d(cls.getFieldPose()) + kTurretLocation)
+            .toPose2d()
+            .translation()
+        )
 
     @classmethod
     def getRotation(cls) -> Rotation2d:
