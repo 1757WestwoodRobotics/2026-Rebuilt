@@ -32,6 +32,7 @@ class TurretSubsystem(Subsystem):
         )  # initialize IO inputs
         self.isClosedLoop = True
         self.turretGoal = Rotation2d()
+        self.turretGoalVel = 0.0  # rad / s
 
     def periodic(self) -> None:
         """Run ongoing subsystem periodic process."""
@@ -44,12 +45,15 @@ class TurretSubsystem(Subsystem):
             goalAngle = clampRotation(
                 self.turretGoal, kTurretMinAngle, kTurretMaxAngle
             )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
+            goalVel = self.turretGoalVel
 
             if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
                 goalAngle = kTurretStartingAngle
-            self.io.set_turret_angle(goalAngle)
+                goalVel = 0
+            self.io.set_turret_angle(goalAngle, goalVel)
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Turret/goal", self.turretGoal)
+        Logger.recordOutput("Turret/goalVel", self.turretGoalVel)
         Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
         RobotState.turretAtAngle = self.atTarget()
 
@@ -67,6 +71,10 @@ class TurretSubsystem(Subsystem):
 
     def setTurretGoal(self, goal: Rotation2d) -> None:
         self.turretGoal = goal
+
+    def setTurretGoalWithVel(self, goal: Rotation2d, vel: float) -> None:
+        self.setTurretGoal(goal)
+        self.turretGoalVel = vel
 
     @property
     def position(self) -> Rotation2d:
