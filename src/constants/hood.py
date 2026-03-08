@@ -16,7 +16,7 @@ kHoodGearRatio = (48 / 16) * (24 / 18) * (170 / 15)
 
 kHoodCANId = 8
 
-kHoodPGain = 70.0
+kHoodPGain = 120.0
 kHoodIGain = 0.0
 kHoodDGain = 0.0
 kHoodSGain = 0.326

@@ -1,3 +1,4 @@
+from math import inf
 from os import path
 from wpimath.geometry import Pose3d, Rotation2d, Rotation3d, Transform3d
 from robotpy_apriltag import AprilTagFieldLayout
@@ -83,7 +84,7 @@ kTurretToCameraTransform = Transform3d(
 kMaxVisionAmbiguity = 0.3
 kMaxVisionZError = 0.75  # meters
 kXyStdDevCoeff = 0.02  # meters
-kThetaStdDevCoeff = 0.06  # radians
+kThetaStdDevCoeff = inf  # radians
 
 kTargetName = "Target"
 

@@ -51,7 +51,7 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
         self.pivotMotor = TalonFX(kPivotCANId)
         self.rollerMotor = TalonFX(kRollerCANId)
 
-        self.pivotConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
+        # self.pivotConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
         self.pivotConfig.current_limits = kPivotCurrentLimit
         self.pivotConfig.feedback.sensor_to_mechanism_ratio = kPivotGearRatio
         self.pivotConfig.slot0 = (
