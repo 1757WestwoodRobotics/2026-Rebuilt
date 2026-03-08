@@ -433,10 +433,8 @@ class RobotContainer:
         )
 
         self.oi.driverController.povDown().onTrue(
-            ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
-                self.oi.rumbleControllersCommand().withTimeout(0.5)
-            )
-        )
+            ResetGyro(self.drive, Pose2d(0, 0, 0))
+        ).onTrue(self.oi.rumbleControllersCommand().withTimeout(0.5))
 
         self.oi.driverController.x().whileTrue(DefenseState(self.drive))
 
