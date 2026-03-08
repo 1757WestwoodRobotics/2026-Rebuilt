@@ -4,12 +4,12 @@ from wpimath.system.plant import DCMotor
 kFlywheelCANId = 7
 kFlywheelMinSpeed = 0.2  # rad/s
 
-kFlywheelPGain = 0.53611
+kFlywheelPGain = 0.60663
 kFlywheelIGain = 0.0
 kFlywheelDGain = 0.0
-kFlywheelSGain = 0.44694
-kFlywheelVGain = 0.01949
-kFlywheelAGain = 0.0021855
+kFlywheelSGain = 0.13743
+kFlywheelVGain = 0.129141
+kFlywheelAGain = 0.00263
 
 kFlywheelCurrentLimit = (
     CurrentLimitsConfigs()
