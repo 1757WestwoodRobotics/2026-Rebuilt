@@ -6,6 +6,7 @@ from subsystems.turret.turretsubsystem import TurretSubsystem
 from constants.field import kCloseHubLocation
 from constants.turret import kTurretLocation, kTurretMinAngle, kTurretMaxAngle
 from util.angleoptimize import optimizeAngle
+from util.convenientmath import pose3dFrom2d
 from util.fliputil import FlipUtil
 
 
@@ -16,11 +17,9 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
         turret.setClosedLoop(True)
         robotPose = RobotState.getHubPose()
 
-        turret2DLocationOnField = (
-            kTurretLocation.translation().toTranslation2d() + robotPose.translation()
-        )  # add Turret location transform in 2D onto the robotPose
+        turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
         targetRelativeToTurret = (
-            FlipUtil.fieldTranslation(kCloseHubLocation) - turret2DLocationOnField
+            FlipUtil.fieldTranslation(kCloseHubLocation) - turretLocation.translation()
         )
         targetAngle = targetRelativeToTurret.angle()
 
