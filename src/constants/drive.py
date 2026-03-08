@@ -14,10 +14,10 @@ from .math import (
 )
 
 # Robot Physical parameters
-kRobotWidth = 28 * kMetersPerInch
+kRobotWidth = 30.5 * kMetersPerInch
 """meters"""
 
-kRobotLength = 26 * kMetersPerInch
+kRobotLength = 24.5 * kMetersPerInch
 """meters"""
 
 kSwerveModuleCenterToRobotCenterWidth = 11.5 * kMetersPerInch
