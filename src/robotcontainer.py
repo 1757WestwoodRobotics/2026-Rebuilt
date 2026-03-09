@@ -515,7 +515,7 @@ class RobotContainer:
 
     def configureOverrides(self) -> None:
         """
-        Configures commands that are for override and manual mode vaues
+        Configures commands that are for overrides and manual mode values
         """
         NetworkTableButton("Override/Flywheel").whileTrue(
             OverrideCommands.overrideFlywheel(self.flywheel)
