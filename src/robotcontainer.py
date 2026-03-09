@@ -536,7 +536,7 @@ class RobotContainer:
             )
         )
         self.deadInTheWaterAlert.set(self.chooser.getSelected() == self.nothingAuto)
-        self.preflightAlert.set(self.preflight.is_complete())
+        self.preflightAlert.set(not self.preflight.is_complete())
 
     def getAutonomousCommand(self) -> commands2.Command:
         selected = self.chooser.getSelected()

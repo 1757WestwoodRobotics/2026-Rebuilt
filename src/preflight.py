@@ -59,7 +59,7 @@ class PreflightChecklist:
             check.update()
 
     def is_complete(self) -> bool:
-        return all(check.value for check in self.checks)
+        return all(check.value() for check in self.checks)
 
     def missing(self) -> list[str]:
-        return [check.name for check in self.checks if not check.value]
+        return [check.name for check in self.checks if not check.value()]
