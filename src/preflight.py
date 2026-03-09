@@ -26,6 +26,9 @@ class PreflightChecklist:
     def __init__(self):
         self.checks: list[PreflightChecklist.PreflightCheck] = [
             PreflightChecklist.PreflightCheck(
+                "DriverStation restarted?", "Preflight/DSR", True
+            ),
+            PreflightChecklist.PreflightCheck(
                 "Robot has Power", "Preflight/RobotPower", True
             ),
             PreflightChecklist.PreflightCheck(
