@@ -46,14 +46,19 @@ def trackedTurret(turret: TurretSubsystem) -> Command:
         )
         distSquared = targetRelativeDistance * targetRelativeDistance
 
-        goalTurretVel = (
-            -turretVelocity.omega
-            + (
-                targetRelativeToTurret.x * turretVelocity.vy
-                - targetRelativeToTurret.y * turretVelocity.vx
+        if distSquared < 1e-6:
+            goalTurretVel = (
+                -turretVelocity.omega
+            )  # if we're basically on top of the target, just cancel out robot rotation
+        else:
+            goalTurretVel = (
+                -turretVelocity.omega
+                + (
+                    targetRelativeToTurret.x * turretVelocity.vy
+                    - targetRelativeToTurret.y * turretVelocity.vx
+                )
+                / distSquared
             )
-            / distSquared
-        )
 
         turret.setTurretGoalWithVel(
             optimizeAngle(
