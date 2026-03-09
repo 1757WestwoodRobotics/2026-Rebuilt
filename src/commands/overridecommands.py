@@ -15,7 +15,9 @@ def overrideFlywheel(flywheel: FlywheelSubsystem) -> Command:
     Returns a command that allows the operator to override the flywheel speed using network input
     """
 
-    return fireAtSpeed(flywheel, _flywheelSetpoint).withName("OverrideFlywheel")
+    return fireAtSpeed(flywheel, lambda: _flywheelSetpoint.value).withName(
+        "OverrideFlywheel"
+    )
 
 
 def overrideHood(hood: HoodSubsystem) -> Command:
