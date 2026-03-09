@@ -30,7 +30,8 @@ def feedBalls(
     indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
 ) -> Command:
     """
-    Command to feed balls into the flywheel without waiting for it to be at speed or the hood to be at angle
+    Command to feed balls into the flywheel when the flywheel is at a lower speed and the hood
+    is at a more open angle, for use when feeding from the floor or a low station
     """
     return cmd.parallel(
         FlywheelCommands.feedWithDistance(flywheel, RobotState.distanceToObjective),

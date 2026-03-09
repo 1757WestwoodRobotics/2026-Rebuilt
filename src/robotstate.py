@@ -106,7 +106,8 @@ class RobotState:
     @classmethod
     def readyToShoot(cls) -> bool:
         """
-        Returns true if the robot is ready to shoot, which is determined by whether the flywheel is at speed and the turret is facing the hub
+        Returns true if the robot is ready to shoot, which is determined by whether the flywheel
+        is at speed, the turret is facing the hub, and the hood is at the correct angle
         """
         return cls.flywheelAtSpeed and cls.turretAtAngle and cls.hoodAtAngle
 

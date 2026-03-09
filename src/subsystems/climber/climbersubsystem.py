@@ -38,6 +38,7 @@ class ClimberSubsystem(Subsystem):
             self.io.set_climber_position(
                 clamp(self.climberGoal, kClimberMinHeight, kClimberMaxHeight)
                 + self.climberFudge
+                # clamp and then add fudge such that you can fudge beyond your limits to climb "more"
             )
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Climber/goal", self.climberGoal)
