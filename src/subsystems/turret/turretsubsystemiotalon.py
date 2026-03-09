@@ -99,7 +99,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
         self.motor.set_control(
             self.closedDemand.with_position(
                 position.radians() / kRadiansPerRevolution
-            ).with_feed_forward(kTurretVGain * velocity)
+            ).with_feed_forward(kTurretVGain * velocity / kRadiansPerRevolution)
         )
 
     def set_turret_volts(self, volts: float):
