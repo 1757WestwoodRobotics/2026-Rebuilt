@@ -13,7 +13,7 @@ class NotificationLevel(Enum):
 
 
 class Notification:
-    """Represents an notification with various display properties."""
+    """Represents a notification with various display properties."""
 
     def __init__(
         self,
@@ -52,7 +52,7 @@ __notification_publisher = None
 
 def send_notification(notification: Notification):
     """
-    Sends an notification notification to the Elastic dashboard.
+    Sends a notification notification to the Elastic dashboard.
     The notification is serialized as a JSON string before being published.
 
     Args:
