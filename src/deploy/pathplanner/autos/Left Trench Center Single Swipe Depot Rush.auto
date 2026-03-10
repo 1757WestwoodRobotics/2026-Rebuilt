@@ -7,25 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Rush"
+            "pathName": "Left Center Rush"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center Return"
+            "pathName": "Left Center Return"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
+            "pathName": "Depot Rush (from left center return)"
           }
         }
       ]
