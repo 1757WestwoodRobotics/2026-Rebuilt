@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Rush"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Return"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot Rush (from center return)"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

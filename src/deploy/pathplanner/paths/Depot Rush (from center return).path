@@ -3,39 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.929,
-        "y": 4.757
+        "x": 3.013,
+        "y": 7.304
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.0206514996895475,
-        "y": 7.547802080894579
+        "x": 2.7695885509838996,
+        "y": 7.807406082289804
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.013,
-        "y": 7.304
+        "x": 0.6116100178890873,
+        "y": 5.9414847942754925
       },
       "prevControl": {
-        "x": 4.34348200238024,
-        "y": 7.69341308696146
+        "x": 1.2119499105545617,
+        "y": 6.103738819320214
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5186813186813188,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Stop intake rollers",
+      "name": "Shoot",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
+      "endWaypointRelativePos": 1.0,
+      "command": null
+    },
+    {
+      "name": "Run Intake Rollers",
+      "waypointRelativePos": 0.7553191489361691,
+      "endWaypointRelativePos": 1.0,
       "command": null
     }
   ],
@@ -49,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 13.392
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": 13.392
   },
   "useDefaultConstraints": true
 }
