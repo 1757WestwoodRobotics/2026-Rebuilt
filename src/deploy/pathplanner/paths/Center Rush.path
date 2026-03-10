@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.570608228980322,
-        "y": 7.417996422182468
+        "x": 4.55438282647585,
+        "y": 7.450447227191413
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.134221824686941,
-        "y": 7.547799642218246
+        "x": 5.901091234347048,
+        "y": 7.466672629695886
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 4.757030411449016
       },
       "prevControl": {
-        "x": 8.075295169946333,
-        "y": 7.482898032200357
+        "x": 7.896815742397138,
+        "y": 7.255742397137746
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,20 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Deploy Intake",
+      "waypointRelativePos": 0.19680851063829766,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Run Intake Rollers",
+      "waypointRelativePos": 0.6303191489361697,
+      "endWaypointRelativePos": 1.0,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -48,7 +61,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -45.0
+    "rotation": -49.18491612511846
   },
   "useDefaultConstraints": true
 }
