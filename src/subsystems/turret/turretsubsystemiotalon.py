@@ -2,6 +2,7 @@ from phoenix6 import BaseStatusSignal
 from phoenix6.configs.talon_fx_configs import (
     MotionMagicConfigs,
     Slot0Configs,
+    SoftwareLimitSwitchConfigs,
     TalonFXConfiguration,
 )
 from phoenix6.controls import PositionVoltage, VoltageOut
@@ -23,6 +24,8 @@ from constants.turret import (
     kTurretVGain,
     kTurretAGain,
     kTurretInvertedValue,
+    kTurretMinAngle,
+    kTurretMaxAngle
 )
 from constants.math import kRadiansPerRevolution
 from constants import kRobotUpdateFrequency, kRioCANBus
@@ -62,6 +65,17 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
             )
         )
         self.turretConfig.motor_output.inverted = kTurretInvertedValue
+        self.turretConfig.software_limit_switch = (
+            SoftwareLimitSwitchConfigs()
+            .with_forward_soft_limit_enable(True)
+            .with_reverse_soft_limit_enable(True)
+            .with_forward_soft_limit_threshold(
+                kTurretMaxAngle.radians() / kRadiansPerRevolution
+            )
+            .with_reverse_soft_limit_threshold(
+                kTurretMinAngle.radians() / kRadiansPerRevolution
+            )
+        )
         tryUntilOk(5, lambda: self.motor.configurator.apply(self.turretConfig))
 
         self.position = self.motor.get_position()
