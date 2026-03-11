@@ -23,6 +23,7 @@ from util.robotposeestimator import (
     VisionObservation,
 )
 from util.logtracer import LogTracer
+from constants import kRobotMode, RobotModes
 from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
 from constants.auto import kAutoDistanceTolerance, kAutoRotationTolerance
@@ -331,7 +332,7 @@ class RobotState:
         Logger.recordOutput("Game/HubActive", cls.hubActive())
         Logger.recordOutput("Game/HubDistance", cls.distanceToHub())
 
-        if not RobotBase.isReal():
+        if kRobotMode == RobotModes.SIMULATION:
             Logger.recordOutput("Robot/SimPose", cls.getSimPose())
             Logger.recordOutput("Robot/SimTurretPose", cls.getSimTurretPose())
 
@@ -395,7 +396,7 @@ class RobotState:
             for consumer in cls.simResetPoseConsumers:
                 consumer(pose)
             return
-        print("This is not supposed to happen")
+        print("This is not supposed to happen (reset)")
 
     @classmethod
     def registerSimPoseResetConsumer(cls, consumer: Callable[[Pose2d], None]) -> None:
@@ -405,7 +406,7 @@ class RobotState:
     def getSimPose(cls) -> Pose2d:
         if len(cls.simPoseReceiverConsumers) == 1:
             return cls.simPoseReceiverConsumers[0]()
-        print("This is not supposed to happen")
+        print("This is not supposed to happen (get)")
         return cls.getFieldPose()
 
     @classmethod
