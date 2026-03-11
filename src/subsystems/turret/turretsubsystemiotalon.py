@@ -4,7 +4,7 @@ from phoenix6.configs.talon_fx_configs import (
     Slot0Configs,
     TalonFXConfiguration,
 )
-from phoenix6.controls import MotionMagicVoltage, VoltageOut
+from phoenix6.controls import PositionVoltage, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
 from wpimath.geometry import Rotation2d
 
@@ -32,7 +32,7 @@ from util.phoenixutil import PhoenixUtil, tryUntilOk
 class TurretSubsystemIOTalon(TurretSubsystemIO):
     turretConfig: TalonFXConfiguration = TalonFXConfiguration()
 
-    closedDemand: MotionMagicVoltage = MotionMagicVoltage(0)
+    closedDemand: PositionVoltage = PositionVoltage(0)
     openDemand: VoltageOut = VoltageOut(0)
 
     def __init__(self) -> None:
@@ -99,7 +99,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
         self.motor.set_control(
             self.closedDemand.with_position(
                 position.radians() / kRadiansPerRevolution
-            ).with_feed_forward(kTurretVGain * velocity / kRadiansPerRevolution)
+            ).with_velocity(velocity / kRadiansPerRevolution)
         )
 
     def set_turret_volts(self, volts: float):

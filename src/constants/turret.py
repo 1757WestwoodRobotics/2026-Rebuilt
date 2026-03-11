@@ -16,7 +16,7 @@ kTurretTolerance = Rotation2d.fromDegrees(2.0)
 kTurretSafetyTolerance = Rotation2d.fromDegrees(5.0)
 
 kTurretCanId = 9
-kTurretPGain = 110.321
+kTurretPGain = 20.321
 kTurretIGain = 0.0
 kTurretDGain = 0.80233
 kTurretSGain = 0.015852
@@ -31,7 +31,7 @@ kTurretCurrentLimit = (
 )
 
 kTurretSimMotor = DCMotor.krakenX44FOC(1)
-kTurretSimInertia = 0.005  # kg m^2
+kTurretSimInertia = 0.05  # kg m^2
 
 kTurretInvertedValue = InvertedValue.CLOCKWISE_POSITIVE
 
