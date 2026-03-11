@@ -1,8 +1,10 @@
 from collections.abc import Callable
 from typing import Optional
+from pykit.logger import Logger
 from wpimath.geometry import Pose2d, Pose3d, Transform3d
 from photonlibpy.simulation import SimCameraProperties, PhotonCameraSim, VisionSystemSim
 
+from robotstate import RobotState
 from subsystems.vision.visionio import VisionSubsystemIO
 from subsystems.vision.visioniophoton import VisionSubsystemIOPhotonVision
 
@@ -33,7 +35,7 @@ class VisionSubsystemIOPhotonSim(VisionSubsystemIOPhotonVision):
             VisionSubsystemIOPhotonSim.turretSim = VisionSystemSim("turret")
             VisionSubsystemIOPhotonSim.turretSim.addAprilTags(kApriltagFieldLayout)
 
-        cameraProperties = SimCameraProperties.OV9281_1280_720()
+        cameraProperties = SimCameraProperties.OV9281_1920_1080()
         self.cameraSim = PhotonCameraSim(
             self.camera, cameraProperties, kApriltagFieldLayout
         )
@@ -55,3 +57,7 @@ class VisionSubsystemIOPhotonSim(VisionSubsystemIOPhotonVision):
             assert VisionSubsystemIOPhotonSim.visionSim is not None
             VisionSubsystemIOPhotonSim.visionSim.update(self.poseSupplier())
         super().updateInputs(inputs)
+        turretPose = RobotState.getTurretPose()
+        camPose = turretPose + self.robotToCamera
+        Logger.recordOutput("VisionSim/Cam"+self.camera.getName()+"Pose", camPose)
+
