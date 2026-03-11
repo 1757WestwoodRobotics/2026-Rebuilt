@@ -59,5 +59,4 @@ class VisionSubsystemIOPhotonSim(VisionSubsystemIOPhotonVision):
         super().updateInputs(inputs)
         turretPose = RobotState.getTurretPose()
         camPose = turretPose + self.robotToCamera
-        Logger.recordOutput("VisionSim/Cam"+self.camera.getName()+"Pose", camPose)
-
+        Logger.recordOutput("VisionSim/Cam" + self.camera.getName() + "Pose", camPose)

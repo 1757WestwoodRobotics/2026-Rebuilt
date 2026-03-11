@@ -25,7 +25,7 @@ from constants.turret import (
     kTurretAGain,
     kTurretInvertedValue,
     kTurretMinAngle,
-    kTurretMaxAngle
+    kTurretMaxAngle,
 )
 from constants.math import kRadiansPerRevolution
 from constants import kRobotUpdateFrequency, kRioCANBus
