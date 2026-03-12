@@ -10,7 +10,7 @@ import commands2
 import commands2.cmd as Commands
 from pathplannerlib.auto import PathPlannerAuto
 
-from commands.drive.fieldrelativeassisteddrive import FieldRelativeAssistedDrive
+from commands.drive.absoluterelativedrive import AbsoluteRelativeDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
 import commands.intakecommands as IntakeCommands
@@ -67,7 +67,6 @@ from constants.vision import (
 )
 from constants.field import kAutoDuration
 from constants.drive import (
-    kTurboSpeedMultiplier,
     kNormalSpeedMultiplier,
     kFrontLeftModuleName,
     kFrontLeftDriveMotorId,
@@ -415,11 +414,12 @@ class RobotContainer:
         """
 
         self.drive.setDefaultCommand(
-            FieldRelativeAssistedDrive(
+            AbsoluteRelativeDrive(
                 self.drive,
-                lambda: self.oi.driverY() * kTurboSpeedMultiplier,
-                lambda: self.oi.driverX() * kTurboSpeedMultiplier,
-                self.oi.driverRotation,
+                self.oi.driverY,
+                self.oi.driverX,
+                self.oi.driverRotationX,
+                self.oi.driverRotationY,
             )
         )
 
