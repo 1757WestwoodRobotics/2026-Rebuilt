@@ -25,8 +25,11 @@ class OperatorInterface:
         self.driverY = SignSquare(
             Invert(Deadband(self.driverController.getLeftY, kXboxJoystickDeadband))
         )
-        self.driverRotation = Invert(
+        self.driverRotationX = Invert(
             Deadband(self.driverController.getRightX, kXboxJoystickDeadband)
+        )
+        self.driverRotationY = Invert(
+            Deadband(self.driverController.getRightY, kXboxJoystickDeadband)
         )
 
     def rumbleControllers(self, amount: float = 1.0) -> None:
