@@ -19,7 +19,11 @@ def trackedTurretStatic(turret: TurretSubsystem) -> Command:
 
     def trackFunc():
         turret.setClosedLoop(True)
-        robotPose = RobotState.getHubPose()
+        robotPose = (
+            RobotState.getHubPose()
+            if RobotState.objective == RobotState.RobotMetaObjective.SHOOT
+            else RobotState.getFieldPose()
+        )
         robotVelocity = RobotState.robotFieldVelocity
 
         turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
@@ -77,7 +81,11 @@ def trackedTurretMoving(turret: TurretSubsystem) -> Command:
 
     def trackFunc():
         turret.setClosedLoop(True)
-        robotPose = RobotState.getHubPose()
+        robotPose = (
+            RobotState.getHubPose()
+            if RobotState.objective == RobotState.RobotMetaObjective.SHOOT
+            else RobotState.getFieldPose()
+        )
         robotVelocity = RobotState.robotFieldVelocity
 
         turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
@@ -86,7 +94,6 @@ def trackedTurretMoving(turret: TurretSubsystem) -> Command:
             RobotState.effectiveObjectiveLocation - turretLocation.translation()
         )
         targetRelativeDistance = RobotState.effectiveObjectiveDistance
-        RobotState.effectiveObjectiveDistance = targetRelativeDistance
         targetAngle = targetRelativeToTurret.angle()
         turretAngle = targetAngle - robotPose.rotation()  # account for robot rotation
 
