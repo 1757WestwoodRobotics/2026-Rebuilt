@@ -21,6 +21,7 @@ from constants.intake import (
     kPivotExtendedPosition,
     kPivotDepotPosition,
     kPivotSafePosition,
+    kPivotOscillatedPosition,
     kPivotMinAngle,
     kPivotMaxAngle,
     kPivotStartAngle,
@@ -36,6 +37,7 @@ class PivotGoal(Enum):
     DEPLOYED = kPivotExtendedPosition
     RETRACTED = kPivotRetractedPosition
     DEPOT = kPivotDepotPosition
+    OSCILLATE = kPivotOscillatedPosition  # this is a special goal that oscillates between extended and retracted, used for releasing
 
 
 class RollerGoal(Enum):
@@ -84,9 +86,15 @@ class IntakeSubsystem(Subsystem):
         Logger.processInputs("Intake", self.inputs)
         LogTracer.record("UpdateInputs")
 
+        pivotGoal = self.pivotGoal.value
+        if self.pivotGoal == PivotGoal.OSCILLATE:
+            if self.isAtGoal(PivotGoal.OSCILLATE.value):
+                pivotGoal = PivotGoal.DEPLOYED.value
+            elif self.isAtGoal(PivotGoal.DEPLOYED.value):
+                pivotGoal = PivotGoal.OSCILLATE.value
         if self.isClosedLoop:
             goalAngle = (
-                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle)
+                clampRotation(pivotGoal, kPivotMinAngle, kPivotMaxAngle)
                 + self.pivotFudge
             )
             if (
