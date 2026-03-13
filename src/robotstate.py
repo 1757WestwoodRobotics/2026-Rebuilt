@@ -92,6 +92,8 @@ class RobotState:
     flywheelOverriden: bool = False
     hoodOverriden: bool = False
 
+    effectiveObjectiveDistance: float = 0.0
+
     @classmethod
     def objectiveLocation(cls) -> Translation2d:
         match cls.objective:
@@ -305,13 +307,15 @@ class RobotState:
         LogTracer.record("EstimatorUpdate")
 
         estimatedFieldPose = cls.getFieldPose()
+        estimatedHubPose = cls.getHubPose()
+
         Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
         Logger.recordOutput(
             "Robot/Pose/Estimator/LastVisionUpdate",
             cls.fieldEstimator.lastMeasurementTime,
         )
         Logger.recordOutput("Robot/Pose/OdometryPose", cls.odometry.getPose())
-        Logger.recordOutput("Robot/Pose/HubEstimator/Pose", cls.getHubPose())
+        Logger.recordOutput("Robot/Pose/HubEstimator/Pose", estimatedHubPose)
         Logger.recordOutput(
             "Robot/Pose/HubEstimator/LastVisionUpdate",
             cls.hubEstimator.lastMeasurementTime,

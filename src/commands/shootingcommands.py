@@ -25,7 +25,7 @@ from util.controltype import AnalogInput
 from util.convenientmath import pose3dFrom2d
 
 
-def shootBalls(
+def shootBallsStatic(
     indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
 ) -> Command:
     """
@@ -62,7 +62,7 @@ def shootWithOscillation(
     )
 
 
-def feedBalls(
+def feedBallsStatic(
     indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
 ) -> Command:
     """
@@ -80,15 +80,128 @@ def feedBalls(
     )
 
 
-def shootBasedOnMode(
+def shootBasedOnModeStatic(
     indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
 ) -> Command:
     """
     Command to shoot or feed balls based on the current objective
     """
     return cmd.either(
-        shootBalls(indexer, hood, flywheel),
-        feedBalls(indexer, hood, flywheel),
+        shootBallsStatic(indexer, hood, flywheel),
+        feedBallsStatic(indexer, hood, flywheel),
+        lambda: RobotState.objective == RobotState.RobotMetaObjective.SHOOT,
+    )
+
+
+def shootBallsMoving(
+    indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
+) -> Command:
+    """
+    Command to shoot balls while moving, with compensation for robot velocity
+    """
+    return cmd.parallel(
+        FlywheelCommands.shootWithDistance(
+            flywheel, lambda: RobotState.effectiveObjectiveDistance
+        ),
+        HoodCommands.angleHoodWithDistance(
+            hood, lambda: RobotState.effectiveObjectiveDistance
+        ),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(
+            IndexerCommands.kickIndexer(indexer)
+        ),
+    )
+
+
+def shootBallsMovingWithOscillation(
+    indexer: IndexerSubsystem,
+    hood: HoodSubsystem,
+    flywheel: FlywheelSubsystem,
+    intake: IntakeSubsystem,
+) -> Command:
+    """
+    Command to shoot balls while moving with oscillation, with compensation for robot velocity
+    """
+    return cmd.parallel(
+        FlywheelCommands.shootWithDistance(
+            flywheel, lambda: RobotState.effectiveObjectiveDistance
+        ),
+        HoodCommands.angleHoodWithDistance(
+            hood, lambda: RobotState.effectiveObjectiveDistance
+        ),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(
+            cmd.parallel(
+                IndexerCommands.kickIndexer(indexer),
+                IntakeCommands.oscillateIntake(intake),
+            )
+        ),
+    )
+
+
+def feedBallsMoving(
+    indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
+) -> Command:
+    """
+    Command to feed balls while moving, with compensation for robot velocity
+    """
+    return cmd.parallel(
+        FlywheelCommands.feedWithDistance(
+            flywheel, lambda: RobotState.effectiveObjectiveDistance
+        ),
+        HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(
+            IndexerCommands.kickIndexer(indexer)
+        ),
+    )
+
+
+def feedBallsMovingWithOscillation(
+    indexer: IndexerSubsystem,
+    hood: HoodSubsystem,
+    flywheel: FlywheelSubsystem,
+    intake: IntakeSubsystem,
+) -> Command:
+    """
+    Command to feed balls while moving with oscillation, with compensation for robot velocity
+    """
+    return cmd.parallel(
+        FlywheelCommands.feedWithDistance(
+            flywheel, lambda: RobotState.effectiveObjectiveDistance
+        ),
+        HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(
+            cmd.parallel(
+                IndexerCommands.kickIndexer(indexer),
+                IntakeCommands.oscillateIntake(intake),
+            )
+        ),
+    )
+
+
+def shootBasedOnModeMoving(
+    indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
+) -> Command:
+    """
+    Command to shoot or feed balls while moving based on the current objective, with compensation for robot velocity
+    """
+    return cmd.either(
+        shootBallsMoving(indexer, hood, flywheel),
+        feedBallsMoving(indexer, hood, flywheel),
+        lambda: RobotState.objective == RobotState.RobotMetaObjective.SHOOT,
+    )
+
+
+def shootBasedOnModeMovingWithOscillation(
+    indexer: IndexerSubsystem,
+    hood: HoodSubsystem,
+    flywheel: FlywheelSubsystem,
+    intake: IntakeSubsystem,
+) -> Command:
+    """
+    Command to shoot or feed balls while moving with oscillation based on the current objective, with compensation for robot velocity
+    """
+    return cmd.either(
+        shootBallsMovingWithOscillation(indexer, hood, flywheel, intake),
+        feedBallsMovingWithOscillation(indexer, hood, flywheel, intake),
         lambda: RobotState.objective == RobotState.RobotMetaObjective.SHOOT,
     )
 
