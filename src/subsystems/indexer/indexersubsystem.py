@@ -17,13 +17,13 @@ from constants.indexer import (
 
 class SpindexerMotorGoal(Enum):
     FORWARD = kSpindexer1ForwardVoltage
-    NEUTRAL = 0
+    NEUTRAL = 0.0
     REVERSE = kSpindexer1ReverseVoltage
 
 
 class KickerMotorGoal(Enum):
     FORWARD = kKickUpperForwardVoltage
-    NEUTRAL = 0
+    NEUTRAL = 0.0
     REVERSE = kKickUpperReverseVoltage
 
 
