@@ -36,6 +36,7 @@ from constants.field import (
     kFieldWidth,
 )
 from constants.vision import kRedHubAprilTags, kBlueHubAprilTags
+from constants.shooting import kSOTMIteratons, kShotTimeMap
 
 
 # pylint: disable-next=too-many-public-methods
@@ -88,6 +89,7 @@ class RobotState:
 
     objective: RobotMetaObjective = RobotMetaObjective.SHOOT
 
+    effectiveObjectiveLocation: Translation2d = Translation2d()
     effectiveObjectiveDistance: float = 0.0
 
     @classmethod
@@ -304,6 +306,25 @@ class RobotState:
 
         estimatedFieldPose = cls.getFieldPose()
         estimatedHubPose = cls.getHubPose()
+
+        robotPose = (
+            cls.getFieldPose()
+            if cls.objective == cls.RobotMetaObjective.FEED
+            else cls.getHubPose()
+        )
+        robotVelocity = cls.robotFieldVelocity
+        turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
+        targetRelativeToTurret = cls.objectiveLocation() - turretLocation.translation()
+        targetRelativeDistance = targetRelativeToTurret.norm()
+        for _ in range(kSOTMIteratons):
+            shotTime = kShotTimeMap(targetRelativeDistance)
+            cls.effectiveObjectiveLocation = cls.objectiveLocation() - Translation2d(
+                robotVelocity.vx * shotTime,
+                robotVelocity.vy * shotTime,
+            )
+            cls.effectiveObjectiveDistance = cls.effectiveObjectiveLocation.distance(
+                turretLocation.translation()
+            )
 
         Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
         Logger.recordOutput(
