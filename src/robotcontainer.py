@@ -514,8 +514,8 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            # ShootingCommands.ShootingCommands.shootBasedOnModeMovingWithOscillation(
-            #     self.indexer, self.hood, self.flywheel
+            # ShootingCommands.shootBasedOnModeMovingWithOscillation(
+            #     self.indexer, self.hood, self.flywheel, self.intake
             # )
             ShootingCommands.TurretFixedDriveShoot(
                 self.flywheel,
