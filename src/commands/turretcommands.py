@@ -15,7 +15,7 @@ from util.convenientmath import pose3dFrom2d
 
 
 def trackedTurretStatic(turret: TurretSubsystem) -> Command:
-    """Identify a target specified by kTargetLocation, and enable subsystem to move toward it."""
+    """Statically track the turret towards the robot objective"""
 
     def trackFunc():
         turret.setClosedLoop(True)
@@ -77,7 +77,7 @@ def trackedTurretStatic(turret: TurretSubsystem) -> Command:
 
 
 def trackedTurretMoving(turret: TurretSubsystem) -> Command:
-    """Identify a target specified by kTargetLocation, and enable subsystem to move toward it."""
+    """Track towards a target, compensating for the effects of relative velocity"""
 
     def trackFunc():
         turret.setClosedLoop(True)
