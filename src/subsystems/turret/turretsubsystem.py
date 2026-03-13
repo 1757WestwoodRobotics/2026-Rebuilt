@@ -73,6 +73,7 @@ class TurretSubsystem(Subsystem):
 
     def setTurretGoal(self, goal: Rotation2d) -> None:
         self.turretGoal = goal
+        self.turretGoalVel = 0.0
 
     def setTurretGoalWithVel(self, goal: Rotation2d, vel: float) -> None:
         self.setTurretGoal(goal)
