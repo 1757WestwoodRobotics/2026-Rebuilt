@@ -56,7 +56,7 @@ def send_notification(notification: Notification):
     The notification is serialized as a JSON string before being published.
 
     Args:
-        notification (ElasticNotification): The notification object containing the notification details.
+        notification (Notification): The notification object containing the notification details.
 
     Raises:
         Exception: If there is an error during serialization or publishing the notification.
