@@ -51,6 +51,8 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
         self.torque = self.motor.get_torque_current()
 
         self.motor.set_position(0)
+        # We are forcing the position to be 0 at the start of the program.
+        # This relies on the climber being fully retracted at every start up
 
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
