@@ -51,7 +51,7 @@ kShotTimeMap = partial(
     xp=[1.24, 1.71, 1.93, 2.11, 2.71, 2.97, 3.30],
     fp=[0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
 )
-# Example mapping function for distance to shot time, where xp is the distance in 
+# Example mapping function for distance to shot time, where xp is the distance in
 # meters and fp is the corresponding shot time in seconds
 
 kSOTMIteratons = 5
