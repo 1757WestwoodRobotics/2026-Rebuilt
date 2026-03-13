@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 7.199123434697897,
-        "y": 0.31127012522336356
+        "y": 0.3112701252233635
       },
       "isLocked": false,
       "linkedName": null
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Deploy Intake",
+      "name": "deployIntake",
       "waypointRelativePos": 0.20744680851063824,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Run Intake Rollers",
+      "name": "runIntakeRollers",
       "waypointRelativePos": 0.4680851063829799,
       "endWaypointRelativePos": 1.0,
       "command": null

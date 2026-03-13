@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Deploy Intake",
+      "name": "deployIntake",
       "waypointRelativePos": 0.19680851063829766,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Run Intake Rollers",
+      "name": "runIntakeRollers",
       "waypointRelativePos": 0.6303191489361697,
       "endWaypointRelativePos": 1.0,
       "command": null

@@ -33,9 +33,27 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Stop intake rollers",
+      "name": "stopIntakeRollers",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "aimHood",
+      "waypointRelativePos": 0.8,
+      "endWaypointRelativePos": 1.0,
+      "command": null
+    },
+    {
+      "name": "aimTurret",
+      "waypointRelativePos": 0.8,
+      "endWaypointRelativePos": 1.0,
+      "command": null
+    },
+    {
+      "name": "shoot",
+      "waypointRelativePos": 0.8,
+      "endWaypointRelativePos": 1.0,
       "command": null
     }
   ],
