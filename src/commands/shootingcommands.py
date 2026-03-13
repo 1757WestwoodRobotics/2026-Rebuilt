@@ -20,6 +20,8 @@ def shootBalls(
     return cmd.parallel(
         FlywheelCommands.shootWithDistance(flywheel, RobotState.distanceToHub),
         HoodCommands.angleHoodWithDistance(hood, RobotState.distanceToHub),
+        # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
+        # to shoot, then keep kicking regardless if we are out of tolerance
         cmd.waitUntil(RobotState.readyToShoot).andThen(
             IndexerCommands.kickIndexer(indexer)
         ),
@@ -36,6 +38,8 @@ def feedBalls(
     return cmd.parallel(
         FlywheelCommands.feedWithDistance(flywheel, RobotState.distanceToObjective),
         HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
+        # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
+        # to shoot, then keep kicking regardless if we are out of tolerance
         cmd.waitUntil(RobotState.readyToShoot).andThen(
             IndexerCommands.kickIndexer(indexer)
         ),
