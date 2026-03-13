@@ -97,7 +97,11 @@ class RobotState:
                 robotPose = cls.getFieldPose()
                 localFeedObjective = (
                     kFeedObjectiveLeft
-                    if robotPose.Y() > kFieldWidth / 2
+                    if (
+                        robotPose.Y() < kFieldWidth / 2
+                        if FlipUtil.shouldFlip()
+                        else robotPose.Y() > kFieldWidth / 2
+                    )
                     else kFeedObjectiveRight
                 )  # don't hit the hub
                 return FlipUtil.fieldTranslation(
