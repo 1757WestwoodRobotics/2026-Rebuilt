@@ -36,7 +36,7 @@ from constants.field import (
     kFieldWidth,
 )
 from constants.vision import kRedHubAprilTags, kBlueHubAprilTags
-from constants.shooting import kSOTMIteratons, kShotTimeMap
+from constants.shooting import kSOTMIterations, kShotTimeMap
 
 
 # pylint: disable-next=too-many-public-methods
@@ -316,7 +316,7 @@ class RobotState:
         turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
         targetRelativeToTurret = cls.objectiveLocation() - turretLocation.translation()
         cls.effectiveObjectiveDistance = targetRelativeToTurret.norm()
-        for _ in range(kSOTMIteratons):
+        for _ in range(kSOTMIterations):
             shotTime = kShotTimeMap(cls.effectiveObjectiveDistance)
             cls.effectiveObjectiveLocation = cls.objectiveLocation() - Translation2d(
                 robotVelocity.vx * shotTime,
