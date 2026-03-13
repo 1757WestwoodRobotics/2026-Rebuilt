@@ -57,6 +57,7 @@ kPivotDangerZoneStart = Rotation2d.fromDegrees(70)
 # the position at which the turret should go to a fixed position to avoid hitting the intake
 
 kPivotDepotPosition = Rotation2d.fromDegrees(5)
+kPivotOscillatedPosition = Rotation2d.fromDegrees(10)
 kPivotExtendedPosition = Rotation2d()
 
 kRollerCANId = 2

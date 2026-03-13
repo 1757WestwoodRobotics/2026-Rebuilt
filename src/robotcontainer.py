@@ -432,7 +432,9 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            ShootingCommands.shootBasedOnMode(self.indexer, self.hood, self.flywheel)
+            ShootingCommands.shootBasedOnModeWithOscillation(
+                self.indexer, self.hood, self.flywheel, self.intake
+            )
         )
 
         self.oi.driverController.povDown().onTrue(
