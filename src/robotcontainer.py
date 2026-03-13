@@ -375,7 +375,7 @@ class RobotContainer:
         self.configureButtonBindings()
         self.configureOverrides()
 
-        self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
+        self.turret.setDefaultCommand(TurretCommands.trackedTurretMoving(self.turret))
         self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
         self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
 
@@ -432,7 +432,7 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            ShootingCommands.shootBasedOnMode(self.indexer, self.hood, self.flywheel)
+            ShootingCommands.shootBasedOnModeMoving(self.indexer, self.hood, self.flywheel)
         )
 
         self.oi.driverController.povDown().onTrue(
@@ -488,7 +488,7 @@ class RobotContainer:
             IndexerCommands.ejectIndexer(self.indexer)
         )
         self.oi.operatorController.button(21).whileTrue(
-            ShootingCommands.shootBasedOnMode(self.indexer, self.hood, self.flywheel)
+            ShootingCommands.shootBasedOnModeMoving(self.indexer, self.hood, self.flywheel)
         )
 
         # objective related
