@@ -42,6 +42,19 @@ def feedBalls(
     )
 
 
+def shootBasedOnMode(
+    indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
+) -> Command:
+    """
+    Command to shoot or feed balls based on the current objective
+    """
+    return cmd.either(
+        shootBalls(indexer, hood, flywheel),
+        feedBalls(indexer, hood, flywheel),
+        lambda: RobotState.objective == RobotState.RobotMetaObjective.SHOOT,
+    )
+
+
 def setFeedObjective() -> Command:
     def _set():
         RobotState.objective = RobotState.RobotMetaObjective.FEED
