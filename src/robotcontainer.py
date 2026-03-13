@@ -432,7 +432,7 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
+            ShootingCommands.shootBasedOnMode(self.indexer, self.hood, self.flywheel)
         )
 
         self.oi.driverController.povDown().onTrue(
@@ -488,7 +488,7 @@ class RobotContainer:
             IndexerCommands.ejectIndexer(self.indexer)
         )
         self.oi.operatorController.button(21).whileTrue(
-            ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
+            ShootingCommands.shootBasedOnMode(self.indexer, self.hood, self.flywheel)
         )
 
         # objective related
