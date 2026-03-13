@@ -355,14 +355,14 @@
             },
             "children": [
               {
-                "title": "Robot Power?",
+                "title": "DS Restarted?",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Toggle Switch",
                 "properties": {
-                  "topic": "Preflight/RobotPower",
+                  "topic": "Preflight/DSR",
                   "period": 0.06,
                   "data_type": "boolean"
                 }
@@ -381,14 +381,14 @@
                 }
               },
               {
-                "title": "No E-Stop?",
+                "title": "Robot Power?",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Toggle Switch",
                 "properties": {
-                  "topic": "Preflight/E-Stop",
+                  "topic": "Preflight/RobotPower",
                   "period": 0.06,
                   "data_type": "boolean"
                 }
@@ -454,6 +454,19 @@
                 "type": "Toggle Switch",
                 "properties": {
                   "topic": "Preflight/Vision",
+                  "period": 0.06,
+                  "data_type": "boolean"
+                }
+              },
+              {
+                "title": "No E-Stop?",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Toggle Switch",
+                "properties": {
+                  "topic": "Preflight/E-Stop",
                   "period": 0.06,
                   "data_type": "boolean"
                 }
