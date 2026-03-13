@@ -7,7 +7,8 @@ class PreflightChecklist:
         def __init__(self, name: str, key: str, expected: bool):
             self._key = key
             self._name = name
-            self.value = LoggedNetworkBoolean(key, not expected)
+            self._value = LoggedNetworkBoolean(key, not expected)
+            self._expected = expected
             self.alert = Alert(
                 "preflight", "Check Failed: " + name, Alert.AlertType.kError
             )
@@ -18,6 +19,13 @@ class PreflightChecklist:
             user to indicate whether the check has been completed or not
             """
             self.alert.set(not self.value())
+
+        def value(self) -> bool:
+            """
+            Returns the value of this check, which should be set by the user to indicate whether
+            the check has been completed or not
+            """
+            return self._value.value == self._expected
 
         @property
         def name(self) -> str:
