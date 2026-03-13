@@ -10,7 +10,6 @@ from constants.turret import (
     kTurretMinAngle,
     kTurretMaxAngle,
 )
-from constants.shooting import kSOTMIteratons, kShotTimeMap
 from util.angleoptimize import optimizeAngle
 from util.convenientmath import pose3dFrom2d
 
@@ -82,16 +81,11 @@ def trackedTurretMoving(turret: TurretSubsystem) -> Command:
         robotVelocity = RobotState.robotFieldVelocity
 
         turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
-        targetRelativeToTurret = Translation2d()
-        targetRelativeDistance = 0.0
-        for _ in range(kSOTMIteratons):
-            shotTime = kShotTimeMap(targetRelativeDistance)
-            effectiveObjective = RobotState.objectiveLocation() - Translation2d(
-                robotVelocity.vx * shotTime,
-                robotVelocity.vy * shotTime,
-            )
-            targetRelativeToTurret = effectiveObjective - turretLocation.translation()
-            targetRelativeDistance = targetRelativeToTurret.norm()
+
+        targetRelativeToTurret = (
+            RobotState.effectiveObjectiveLocation - turretLocation.translation()
+        )
+        targetRelativeDistance = RobotState.effectiveObjectiveDistance
         RobotState.effectiveObjectiveDistance = targetRelativeDistance
         targetAngle = targetRelativeToTurret.angle()
         turretAngle = targetAngle - robotPose.rotation()  # account for robot rotation
