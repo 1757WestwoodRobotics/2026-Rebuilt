@@ -346,7 +346,7 @@ class RobotContainer:
 
         NamedCommands.registerCommand("Nothing", self.nothingAuto)
         NamedCommands.registerCommand(
-            "shoot", ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
+            "shoot", ShootingCommands.shootBallsStatic(self.indexer, self.hood, self.flywheel)
         )
 
         NamedCommands.registerCommand(
@@ -386,7 +386,7 @@ class RobotContainer:
         self.configureButtonBindings()
         self.configureOverrides()
 
-        self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
+        self.turret.setDefaultCommand(TurretCommands.trackedTurretMoving(self.turret))
         self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
         self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
         self.flywheel.setDefaultCommand(FlywheelCommands.idle(self.flywheel))
@@ -475,7 +475,7 @@ class RobotContainer:
             IndexerCommands.ejectIndexer(self.indexer)
         )
         self.oi.operatorController.button(21).whileTrue(
-            ShootingCommands.shootBasedOnModeWithOscillation(
+            ShootingCommands.shootBasedOnModeMovingWithOscillation(
                 self.indexer, self.hood, self.flywheel, self.intake
             )
         )
@@ -514,8 +514,8 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            # ShootingCommands.shootBasedOnModeWithOscillation(
-            #     self.indexer, self.hood, self.flywheel, self.intake
+            # ShootingCommands.ShootingCommands.shootBasedOnModeMovingWithOscillation(
+            #     self.indexer, self.hood, self.flywheel
             # )
             ShootingCommands.TurretFixedDriveShoot(
                 self.flywheel,
