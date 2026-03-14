@@ -7,7 +7,7 @@ from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
 from subsystems.hood.hoodsubsystem import HoodSubsystem
 from subsystems.indexer.indexersubsystem import IndexerSubsystem, IndexerSubsystemGoal
-from subsystems.intake.intakesubsystem import IntakeSubsystem
+from subsystems.intake.intakesubsystem import IntakeSubsystem, PivotGoal
 
 import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
@@ -131,6 +131,7 @@ class TurretFixedDriveShoot(Command):
         turret: TurretSubsystem,
         indexer: IndexerSubsystem,
         drive: DriveSubsystem,
+        intake: IntakeSubsystem,
         forward: AnalogInput,
         sideways: AnalogInput,
     ):
@@ -144,6 +145,7 @@ class TurretFixedDriveShoot(Command):
         self.hood = hood
         self.turret = turret
         self.drive = drive
+        self.intake = intake
 
         self.forward = forward
         self.sideways = sideways
@@ -162,11 +164,7 @@ class TurretFixedDriveShoot(Command):
         self.turret.setTurretGoal(self.lockedAngle)
         objectiveDistance = RobotState.distanceToObjective()
         objectiveLocation = RobotState.objectiveLocation()
-        robotLocation = (
-            RobotState.getFieldPose()
-            if RobotState.objective == RobotState.RobotMetaObjective.FEED
-            else RobotState.getHubPose()
-        )
+        robotLocation = RobotState.getHubPose()
         turretLocation = (pose3dFrom2d(robotLocation) + kTurretLocation).toPose2d()
         self.flywheel.setGoal(float(kShootingMap(objectiveDistance)))
         self.hood.setHoodGoal(kHoodAngleMap(objectiveDistance))
@@ -205,3 +203,8 @@ class TurretFixedDriveShoot(Command):
             and self.rotationPID.atSetpoint()
         ):
             self.indexer.setTarget(IndexerSubsystemGoal.KICK)
+            self.intake.setPivotGoal(PivotGoal.OSCILLATE)
+
+    def end(self, _interrupted: bool):
+        self.flywheel.flywheelIdle()
+        self.intake.setPivotGoal(PivotGoal.DEPLOYED)
