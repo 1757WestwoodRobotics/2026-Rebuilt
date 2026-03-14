@@ -21,6 +21,7 @@ import commands.indexercommands as IndexerCommands  # module, not class
 import commands.hoodcommands as HoodCommands
 import commands.overridecommands as OverrideCommands
 import commands.shootingcommands as ShootingCommands
+import commands.flywheelcommands as FlywheelCommands
 
 from commands.resetgyro import ResetGyro
 from preflight import PreflightChecklist
@@ -388,6 +389,7 @@ class RobotContainer:
         self.turret.setDefaultCommand(TurretCommands.trackedTurret(self.turret))
         self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
         self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
+        self.flywheel.setDefaultCommand(FlywheelCommands.idle(self.flywheel))
 
         wpilib.DriverStation.silenceJoystickConnectionWarning(True)
 
@@ -528,9 +530,7 @@ class RobotContainer:
                 self.oi.driverY,
                 self.oi.driverX,
             )
-        ).onFalse(
-            OverrideCommands.overrideTurret(self.turret)
-        )
+        ).onFalse(OverrideCommands.overrideTurret(self.turret))
 
         self.oi.driverController.povDown().onTrue(
             ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
