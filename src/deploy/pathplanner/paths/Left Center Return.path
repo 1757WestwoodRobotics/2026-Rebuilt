@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.110035335689046,
-        "y": 7.159823321554771
+        "x": 2.8846875000000005,
+        "y": 7.084396551724138
       },
       "prevControl": {
-        "x": 3.9433215547703186,
-        "y": 7.4803180212014135
+        "x": 3.717973719081273,
+        "y": 7.404891251370781
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,26 +50,14 @@
   "eventMarkers": [
     {
       "name": "stopIntakeRollers",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.01,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "",
-      "waypointRelativePos": 1.6,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
-      "name": "",
-      "waypointRelativePos": 1.6,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
       "name": "shoot",
-      "waypointRelativePos": 1.6,
-      "endWaypointRelativePos": 1.0,
+      "waypointRelativePos": 1.5361445783132524,
+      "endWaypointRelativePos": 2.0,
       "command": null
     }
   ],

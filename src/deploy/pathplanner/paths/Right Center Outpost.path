@@ -61,8 +61,8 @@
     },
     {
       "name": "shoot",
-      "waypointRelativePos": 1.4,
-      "endWaypointRelativePos": null,
+      "waypointRelativePos": 1.3644578313253,
+      "endWaypointRelativePos": 2.0,
       "command": null
     }
   ],

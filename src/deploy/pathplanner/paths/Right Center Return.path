@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.467280858676207,
-        "y": 0.5871019677996412
+        "x": 3.2560883620689665,
+        "y": 0.5708765652949206
       },
       "prevControl": {
-        "x": 5.1871735241502686,
-        "y": 0.5222003577817531
+        "x": 4.975981027543028,
+        "y": 0.5059749552770325
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,21 +55,9 @@
       "command": null
     },
     {
-      "name": "",
-      "waypointRelativePos": 1.9,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
-      "name": "",
-      "waypointRelativePos": 1.9,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
       "name": "shoot",
-      "waypointRelativePos": 1.9,
-      "endWaypointRelativePos": 1.0,
+      "waypointRelativePos": 1.7469879518072289,
+      "endWaypointRelativePos": 2.0,
       "command": null
     }
   ],

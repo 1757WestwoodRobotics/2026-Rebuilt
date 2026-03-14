@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.055494699646643,
-        "y": 7.159823321554771
+        "x": 4.037984913793104,
+        "y": 7.446023706896551
       },
       "isLocked": false,
       "linkedName": "Left Starting Config"
+    },
+    {
+      "anchor": {
+        "x": 2.8846875000000005,
+        "y": 7.084396551724138
+      },
+      "prevControl": {
+        "x": 3.626936647069576,
+        "y": 7.566071074996954
+      },
+      "nextControl": {
+        "x": 2.2182770278587602,
+        "y": 6.651936712949065
+      },
+      "isLocked": false,
+      "linkedName": "Left Return Ending"
     },
     {
       "anchor": {
@@ -31,7 +47,20 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "shoot",
+      "waypointRelativePos": 0.6746987951807227,
+      "endWaypointRelativePos": 2.0,
+      "command": null
+    },
+    {
+      "name": "climb",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
