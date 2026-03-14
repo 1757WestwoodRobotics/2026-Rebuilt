@@ -17,10 +17,10 @@ class OperatorInterface:
     operatorController: CommandFarmController
 
     def __init__(self) -> None:
-        if kRobotMode == RobotModes.SIMULATION:
-            self.driverController = CommandXboxController(0)
-        else:
-            self.driverController = CommandPS4Controller(0)
+        # if kRobotMode == RobotModes.SIMULATION:
+        #     self.driverController = CommandXboxController(0)
+        # else:
+        self.driverController = CommandXboxController(0)
         self.operatorController = CommandFarmController(1)
 
         self.driverX = SignSquare(

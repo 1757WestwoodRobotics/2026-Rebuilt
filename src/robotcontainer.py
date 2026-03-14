@@ -433,11 +433,11 @@ class RobotContainer:
             )
         )
 
-        if kRobotMode == RobotModes.SIMULATION:
-            # ps4 controller binds are weird in simulation for some reason, so use xbox controller binds in sim
-            self.configureXboxControllerBinds()
-        else:
-            self.configurePS4ControllerBinds()
+        # if kRobotMode == RobotModes.SIMULATION:
+        #     # ps4 controller binds are weird in simulation for some reason, so use xbox controller binds in sim
+        self.configureXboxControllerBinds()
+        # else:
+        #     self.configurePS4ControllerBinds()
 
         # Operator Controller (Farm Box) Section
         # these buttons come from our strategy spreadsheet,
