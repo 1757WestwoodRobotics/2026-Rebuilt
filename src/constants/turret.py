@@ -16,10 +16,10 @@ kTurretTolerance = Rotation2d.fromDegrees(2.0)
 kTurretSafetyTolerance = Rotation2d.fromDegrees(5.0)
 
 kTurretCanId = 9
-kTurretPGain = 20.321
+kTurretPGain = 30.321
 kTurretIGain = 0.0
 kTurretDGain = 0.80233
-kTurretSGain = 0.015852
+kTurretSGain = 0.5
 kTurretVGain = 0.32494
 kTurretAGain = 0.0039108
 
