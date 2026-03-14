@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 3.666584051724138,
-        "y": 5.55969827586207
+        "y": 5.041691810344828
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.8944612068965525,
-        "y": 5.823588362068965
+        "y": 5.305581896551723
       },
       "isLocked": false,
       "linkedName": "Left Center Starting Config"

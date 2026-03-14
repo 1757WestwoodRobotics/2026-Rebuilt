@@ -9,15 +9,21 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
-                  "pathName": "Right Center Backup"
+                  "pathName": "Left Center Depot"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "deployIntake"
                 }
               }
             ]

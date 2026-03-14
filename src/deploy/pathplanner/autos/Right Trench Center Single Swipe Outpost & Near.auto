@@ -9,24 +9,18 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Left Center Rush"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "deployIntake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Center Rush"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Center Return"
           }
         },
         {
@@ -34,9 +28,9 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 7.0
+                  "pathName": "Right Center Outpost"
                 }
               },
               {
@@ -46,6 +40,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Comes In"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]
