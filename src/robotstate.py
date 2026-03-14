@@ -319,12 +319,26 @@ class RobotState:
         robotVelocity = cls.robotFieldVelocity
         turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
         targetRelativeToTurret = cls.objectiveLocation() - turretLocation.translation()
+        turretRobotFrameVel = (
+            Translation2d(
+                -kTurretLocation.rotation().toRotation2d().sin(),
+                kTurretLocation.rotation().toRotation2d().cos(),
+            )
+            * robotVelocity.omega
+            * kTurretLocation.translation().toTranslation2d().norm()
+        )
+        turretFieldRefVel = turretRobotFrameVel.rotateBy(robotPose.rotation())
+        turretVelocity = ChassisSpeeds(  # the velocity the turret moves in field space
+            robotVelocity.vx + turretFieldRefVel.x,
+            robotVelocity.vy + turretFieldRefVel.y,
+            robotVelocity.omega,
+        )
         cls.effectiveObjectiveDistance = targetRelativeToTurret.norm()
         for _ in range(kSOTMIterations):
             shotTime = kShotTimeMap(cls.effectiveObjectiveDistance)
             cls.effectiveObjectiveLocation = cls.objectiveLocation() - Translation2d(
-                robotVelocity.vx * shotTime,
-                robotVelocity.vy * shotTime,
+                turretVelocity.vx * shotTime,
+                turretVelocity.vy * shotTime,
             )
             cls.effectiveObjectiveDistance = cls.effectiveObjectiveLocation.distance(
                 turretLocation.translation()
