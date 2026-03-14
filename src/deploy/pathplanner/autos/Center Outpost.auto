@@ -9,35 +9,16 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 0.25
+                  "pathName": "Center Start Outpost"
                 }
               },
-              {
-                "type": "named",
-                "data": {
-                  "name": "deployIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "shoot"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left Center Backup"
-                }
               }
             ]
           }
@@ -49,7 +30,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 5.0
                 }
               },
               {
