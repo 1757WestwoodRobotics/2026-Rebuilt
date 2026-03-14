@@ -516,9 +516,20 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            ShootingCommands.shootBasedOnModeWithOscillation(
-                self.indexer, self.hood, self.flywheel, self.intake
+            # ShootingCommands.shootBasedOnModeWithOscillation(
+            #     self.indexer, self.hood, self.flywheel, self.intake
+            # )
+            ShootingCommands.TurretFixedDriveShoot(
+                self.flywheel,
+                self.hood,
+                self.turret,
+                self.indexer,
+                self.drive,
+                self.oi.driverY,
+                self.oi.driverX,
             )
+        ).onFalse(
+            OverrideCommands.overrideTurret(self.turret)
         )
 
         self.oi.driverController.povDown().onTrue(
@@ -535,7 +546,6 @@ class RobotContainer:
         self.oi.driverController.leftTrigger().whileTrue(
             IntakeCommands.runIntakeRollers(self.intake)
         )
-
 
     def configurePS4ControllerBinds(self) -> None:
         # Driver Controller (PS4) Section
