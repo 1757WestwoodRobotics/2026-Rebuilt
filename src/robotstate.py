@@ -270,6 +270,7 @@ class RobotState:
         return Trigger(cls.hubActive)
 
     @classmethod
+    # pylint: disable-next=too-many-statements
     def periodic(
         cls,
         heading: Rotation2d,
@@ -344,6 +345,12 @@ class RobotState:
                 turretLocation.translation()
             )
 
+        Logger.recordOutput(
+            "Robot/SOTM/EffectiveObjectiveLocation", cls.effectiveObjectiveLocation
+        )
+        Logger.recordOutput(
+            "Robot/SOTM/EffectiveObjectiveDistance", cls.effectiveObjectiveDistance
+        )
         Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
         Logger.recordOutput(
             "Robot/Pose/Estimator/LastVisionUpdate",
