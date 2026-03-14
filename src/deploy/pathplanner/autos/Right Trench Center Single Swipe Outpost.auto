@@ -17,12 +17,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "aimHood"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 10.0

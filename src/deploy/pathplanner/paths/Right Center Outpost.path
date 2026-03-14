@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.832,
-        "y": 3.848
+        "x": 7.831914132372315,
+        "y": 3.8484078711983196
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.69186046511628,
-        "y": -0.6784794275491963
+        "x": 7.5076508620689655,
+        "y": 0.027780172413792936
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Center"
+    },
+    {
+      "anchor": {
+        "x": 4.554,
+        "y": 0.5708765652949206
+      },
+      "prevControl": {
+        "x": 5.181508620689656,
+        "y": 0.5653340517241383
+      },
+      "nextControl": {
+        "x": 4.103391815302487,
+        "y": 0.5748565934514208
+      },
+      "isLocked": false,
+      "linkedName": "Right Starting Config"
     },
     {
       "anchor": {
@@ -20,22 +36,18 @@
         "y": 0.6844543828264751
       },
       "prevControl": {
-        "x": 4.538157423971379,
-        "y": 1.3010196779964214
+        "x": 3.606802120141343,
+        "y": 0.5576325088339229
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Outpost"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4301801801801804,
-      "rotationDegrees": -90.0
-    },
-    {
-      "waypointRelativePos": 0.6599099099099077,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 0.97,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -48,20 +60,8 @@
       "command": null
     },
     {
-      "name": "aimHood",
-      "waypointRelativePos": 0.6602739726027407,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
-      "name": "aimTurret",
-      "waypointRelativePos": 0.706849315068493,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
       "name": "shoot",
-      "waypointRelativePos": 0.7123287671232872,
+      "waypointRelativePos": 1.4,
       "endWaypointRelativePos": null,
       "command": null
     }

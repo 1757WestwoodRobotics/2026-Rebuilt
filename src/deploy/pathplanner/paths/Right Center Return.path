@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.832,
-        "y": 3.848
+        "x": 7.831914132372315,
+        "y": 3.8484078711983196
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.085545617173524,
-        "y": 0.7493559928443645
+        "x": 7.085459749545839,
+        "y": 0.7497638640426842
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Center"
+    },
+    {
+      "anchor": {
+        "x": 4.554,
+        "y": 0.5708765652949206
+      },
+      "prevControl": {
+        "x": 5.107615655263512,
+        "y": 0.5679750228947972
+      },
+      "nextControl": {
+        "x": 4.023445229681979,
+        "y": 0.5736572438162546
+      },
+      "isLocked": false,
+      "linkedName": "Right Starting Config"
     },
     {
       "anchor": {
@@ -25,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Return Ending"
     }
   ],
   "rotationTargets": [],
@@ -39,20 +55,20 @@
       "command": null
     },
     {
-      "name": "aimHood",
-      "waypointRelativePos": 0.9397260273972574,
+      "name": "",
+      "waypointRelativePos": 1.9,
       "endWaypointRelativePos": 1.0,
       "command": null
     },
     {
-      "name": "aimTurret",
-      "waypointRelativePos": 0.94,
+      "name": "",
+      "waypointRelativePos": 1.9,
       "endWaypointRelativePos": 1.0,
       "command": null
     },
     {
       "name": "shoot",
-      "waypointRelativePos": 0.94,
+      "waypointRelativePos": 1.9,
       "endWaypointRelativePos": 1.0,
       "command": null
     }

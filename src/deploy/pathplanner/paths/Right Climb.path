@@ -3,47 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.110035335689046,
-        "y": 7.159823321554771
+        "x": 4.554,
+        "y": 0.5708765652949206
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6394682516103343,
-        "y": 7.0304387061701545
+        "x": 2.116501766784453,
+        "y": 0.8140282685512371
       },
       "isLocked": false,
-      "linkedName": "Left Return Ending"
+      "linkedName": "Right Starting Config"
     },
     {
       "anchor": {
-        "x": 0.6116100178890873,
-        "y": 5.9414847942754925
+        "x": 1.0748939929328625,
+        "y": 2.929293286219082
       },
       "prevControl": {
-        "x": 1.2119499105545617,
-        "y": 6.103738819320214
+        "x": 1.1239230267174087,
+        "y": 2.684148117296352
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Depot"
+      "linkedName": "Right Tower"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5186813186813188,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 0,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "runIntakeRollers",
-      "waypointRelativePos": 0.7553191489361691,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -54,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 13.392
+    "velocity": 0,
+    "rotation": 37.303948277983444
   },
   "useDefaultConstraints": true
 }

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.554382826468916,
+        "x": 4.554,
         "y": 0.5708765652949206
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.199123434697897,
+        "x": 7.198740608228982,
         "y": 0.3112701252233635
       },
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "Right Starting Config"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 3.8484078711983196
       },
       "prevControl": {
-        "x": 7.896815742383271,
-        "y": 2.096064400715065
+        "x": 7.896812794178888,
+        "y": 2.0960642915247933
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Center"
     }
   ],
   "rotationTargets": [],

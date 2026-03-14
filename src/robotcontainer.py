@@ -8,7 +8,7 @@ import wpilib
 from wpimath.geometry import Pose2d
 import commands2
 import commands2.cmd as Commands
-from pathplannerlib.auto import PathPlannerAuto
+from pathplannerlib.auto import PathPlannerAuto, NamedCommands
 
 from commands.drive.absoluterelativedrive import AbsoluteRelativeDrive
 from commands.drive.anglealign import AngleAlignDrive
@@ -20,6 +20,7 @@ import commands.indexercommands as IndexerCommands  # module, not class
 import commands.hoodcommands as HoodCommands
 import commands.overridecommands as OverrideCommands
 import commands.shootingcommands as ShootingCommands
+import commands.flywheelcommands as FlywheelCommands
 
 from commands.resetgyro import ResetGyro
 from preflight import PreflightChecklist
@@ -342,6 +343,11 @@ class RobotContainer:
 
         self.nothingAuto = commands2.WaitCommand(kAutoDuration)
 
+        NamedCommands.registerCommand("Nothing", self.nothingAuto)
+        NamedCommands.registerCommand("aimHood", HoodCommands.AimHood(self.hood))
+        NamedCommands.registerCommand("aimTurret", TurretCommands.trackedTurret(self.turret))
+        NamedCommands.registerCommand("shoot", FlywheelCommands.)
+
         # Chooser
         self.chooser: LoggedDashboardChooser[commands2.Command] = (
             LoggedDashboardChooser("Autonomous")
@@ -546,3 +552,4 @@ class RobotContainer:
             return self.nothingAuto
         assert isinstance(selected, commands2.Command)
         return selected
+
