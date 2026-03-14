@@ -1,3 +1,4 @@
+from typing import Callable
 from commands2 import Command, cmd
 from wpimath.geometry import Rotation2d, Translation2d
 from wpimath.kinematics import ChassisSpeeds
@@ -94,3 +95,13 @@ def runOverride(turret: TurretSubsystem, goal) -> Command:
         turret.setTurretGoal(goal)
 
     return cmd.run(overrideFunc, turret).withName("TurretOverride")
+
+
+def angleTurret(turret: TurretSubsystem, goal: Callable[[], Rotation2d]) -> Command:
+    """Move the turret toward the target goal angle."""
+
+    def overrideFunc():
+        turret.setClosedLoop(True)
+        turret.setTurretGoal(goal())
+
+    return cmd.run(overrideFunc, turret).withName("AngleTurret")
