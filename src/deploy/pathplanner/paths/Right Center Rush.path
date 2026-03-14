@@ -37,12 +37,6 @@
       "waypointRelativePos": 0.20744680851063824,
       "endWaypointRelativePos": null,
       "command": null
-    },
-    {
-      "name": "runIntakeRollers",
-      "waypointRelativePos": 0.4680851063829799,
-      "endWaypointRelativePos": 1.0,
-      "command": null
     }
   ],
   "globalConstraints": {

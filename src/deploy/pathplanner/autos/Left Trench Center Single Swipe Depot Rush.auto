@@ -17,9 +17,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Depot Rush (from left center return)"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Depot Rush (from left center return)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]

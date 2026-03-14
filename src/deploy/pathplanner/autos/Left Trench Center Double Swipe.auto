@@ -23,12 +23,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.5
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left Starting Adjustment"
@@ -44,6 +38,12 @@
           "type": "path",
           "data": {
             "pathName": "Left Center Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]

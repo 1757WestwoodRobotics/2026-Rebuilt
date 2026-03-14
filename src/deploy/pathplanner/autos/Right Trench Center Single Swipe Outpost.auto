@@ -11,15 +11,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Right Center Outpost"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Center Outpost"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 10.0
+            "name": "shoot"
           }
         }
       ]

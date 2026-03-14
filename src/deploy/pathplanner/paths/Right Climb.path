@@ -58,12 +58,6 @@
       "waypointRelativePos": 0.35,
       "endWaypointRelativePos": 2.0,
       "command": null
-    },
-    {
-      "name": "climb",
-      "waypointRelativePos": 2.0,
-      "endWaypointRelativePos": null,
-      "command": null
     }
   ],
   "globalConstraints": {
