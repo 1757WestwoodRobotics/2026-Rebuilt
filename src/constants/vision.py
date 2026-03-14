@@ -77,7 +77,7 @@ kTurretToCameraTransform = Transform3d(
         0.166,
         0,
         0.028,
-        Rotation3d.fromDegrees(0.0, -30.0, 0.0),
+        Rotation3d.fromDegrees(0.0, -24.0, 0.0),
     ),
 )
 
