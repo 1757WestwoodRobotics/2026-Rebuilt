@@ -20,7 +20,6 @@ import commands.indexercommands as IndexerCommands  # module, not class
 import commands.hoodcommands as HoodCommands
 import commands.overridecommands as OverrideCommands
 import commands.shootingcommands as ShootingCommands
-import commands.flywheelcommands as FlywheelCommands
 
 from commands.resetgyro import ResetGyro
 from preflight import PreflightChecklist
@@ -350,9 +349,6 @@ class RobotContainer:
 
         NamedCommands.registerCommand(
             "deployIntake", IntakeCommands.deployIntake(self.intake)
-        )
-        NamedCommands.registerCommand(
-            "runIntakeRollers", IntakeCommands.runIntakeRollers(self.intake)
         )
 
         # Chooser
