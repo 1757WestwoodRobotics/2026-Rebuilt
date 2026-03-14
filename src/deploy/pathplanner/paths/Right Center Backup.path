@@ -3,43 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8846875000000005,
-        "y": 7.084396551724138
+        "x": 3.647036637931035,
+        "y": 2.539622844827586
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4141204159212886,
-        "y": 6.955011936339522
+        "x": 2.503512931034483,
+        "y": 2.6373599137931034
       },
       "isLocked": false,
-      "linkedName": "Left Return Ending"
+      "linkedName": "Right Center Starting Config"
     },
     {
       "anchor": {
-        "x": 0.6367349137931042,
-        "y": 5.931099137931035
+        "x": 1.1645150862068971,
+        "y": 2.539622844827586
       },
       "prevControl": {
-        "x": 1.237074806458578,
-        "y": 6.093353162975757
+        "x": 1.9659590517241385,
+        "y": 2.6275862068965523
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Depot"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5186813186813188,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "deployIntake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "shoot",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": 1.0,
+      "command": null
+    },
+    {
       "name": "runIntakeRollers",
-      "waypointRelativePos": 0.7553191489361691,
+      "waypointRelativePos": 0.7575301204819282,
       "endWaypointRelativePos": 1.0,
       "command": null
     }
@@ -59,8 +66,8 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 13.392
+    "velocity": 0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
