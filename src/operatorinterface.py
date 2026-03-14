@@ -1,5 +1,5 @@
 from commands2 import Command, cmd
-from commands2.button import CommandXboxController
+from commands2.button import CommandPS4Controller
 from wpilib.interfaces import GenericHID
 from util.helpfultriggerwrappers import Deadband, Invert, SignSquare
 from util.joystick.commandfarmcontroller import CommandFarmController
@@ -12,11 +12,11 @@ class OperatorInterface:
     The controls that the operator(s)/driver(s) interact with
     """
 
-    driverController: CommandXboxController
+    driverController: CommandPS4Controller
     operatorController: CommandFarmController
 
     def __init__(self) -> None:
-        self.driverController = CommandXboxController(0)
+        self.driverController = CommandPS4Controller(0)
         self.operatorController = CommandFarmController(1)
 
         self.driverX = SignSquare(

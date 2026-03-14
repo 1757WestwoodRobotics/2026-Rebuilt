@@ -433,14 +433,14 @@ class RobotContainer:
         )
 
         # Driver Controller (Xbox) Section
-        self.oi.driverController.rightBumper().whileTrue(
+        self.oi.driverController.R1().whileTrue(
             AngleAlignDrive(
                 self.drive,
                 lambda: self.oi.driverY() * kNormalSpeedMultiplier,
                 lambda: self.oi.driverX() * kNormalSpeedMultiplier,
             ).repeatedly()
         )
-        self.oi.driverController.rightTrigger().whileTrue(
+        self.oi.driverController.R2().whileTrue(
             ShootingCommands.shootBasedOnModeWithOscillation(
                 self.indexer, self.hood, self.flywheel, self.intake
             )
@@ -452,12 +452,12 @@ class RobotContainer:
             )
         )
 
-        self.oi.driverController.x().whileTrue(DefenseState(self.drive))
+        self.oi.driverController.square().whileTrue(DefenseState(self.drive))
 
-        self.oi.driverController.leftBumper().onTrue(
+        self.oi.driverController.L1().onTrue(
             IntakeCommands.toggleIntakeDeployment(self.intake)
         )
-        self.oi.driverController.leftTrigger().whileTrue(
+        self.oi.driverController.L2().whileTrue(
             IntakeCommands.runIntakeRollers(self.intake)
         )
 
