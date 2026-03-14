@@ -1,5 +1,6 @@
 import os
 
+from commands2.button import CommandPS4Controller, CommandXboxController
 from pykit.logger import Logger
 from pykit.alertlogger import AlertLogger
 from pykit.networktables.loggeddashboardchooser import LoggedDashboardChooser
@@ -432,34 +433,11 @@ class RobotContainer:
             )
         )
 
-        # Driver Controller (Xbox) Section
-        self.oi.driverController.R1().whileTrue(
-            AngleAlignDrive(
-                self.drive,
-                lambda: self.oi.driverY() * kNormalSpeedMultiplier,
-                lambda: self.oi.driverX() * kNormalSpeedMultiplier,
-            ).repeatedly()
-        )
-        self.oi.driverController.R2().whileTrue(
-            ShootingCommands.shootBasedOnModeWithOscillation(
-                self.indexer, self.hood, self.flywheel, self.intake
-            )
-        )
-
-        self.oi.driverController.povDown().onTrue(
-            ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
-                self.oi.rumbleControllersCommand().withTimeout(0.5)
-            )
-        )
-
-        self.oi.driverController.square().whileTrue(DefenseState(self.drive))
-
-        self.oi.driverController.L1().onTrue(
-            IntakeCommands.toggleIntakeDeployment(self.intake)
-        )
-        self.oi.driverController.L2().whileTrue(
-            IntakeCommands.runIntakeRollers(self.intake)
-        )
+        if kRobotMode == RobotModes.SIMULATION:
+            # ps4 controller binds are weird in simulation for some reason, so use xbox controller binds in sim
+            self.configureXboxControllerBinds()
+        else:
+            self.configurePS4ControllerBinds()
 
         # Operator Controller (Farm Box) Section
         # these buttons come from our strategy spreadsheet,
@@ -527,6 +505,68 @@ class RobotContainer:
                 self.oi.rumbleControllersCommand(1.0).withTimeout(0.5),
             ).withName("Shift Change Rumble")
         )  # rumble 3 times when about to change
+
+    def configureXboxControllerBinds(self) -> None:
+        assert isinstance(self.oi.driverController, CommandXboxController)
+        self.oi.driverController.rightBumper().whileTrue(
+            AngleAlignDrive(
+                self.drive,
+                lambda: self.oi.driverY() * kNormalSpeedMultiplier,
+                lambda: self.oi.driverX() * kNormalSpeedMultiplier,
+            ).repeatedly()
+        )
+        self.oi.driverController.rightTrigger().whileTrue(
+            ShootingCommands.shootBasedOnModeWithOscillation(
+                self.indexer, self.hood, self.flywheel, self.intake
+            )
+        )
+
+        self.oi.driverController.povDown().onTrue(
+            ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
+                self.oi.rumbleControllersCommand().withTimeout(0.5)
+            )
+        )
+
+        self.oi.driverController.x().whileTrue(DefenseState(self.drive))
+
+        self.oi.driverController.leftBumper().onTrue(
+            IntakeCommands.toggleIntakeDeployment(self.intake)
+        )
+        self.oi.driverController.leftTrigger().whileTrue(
+            IntakeCommands.runIntakeRollers(self.intake)
+        )
+
+
+    def configurePS4ControllerBinds(self) -> None:
+        # Driver Controller (PS4) Section
+        assert isinstance(self.oi.driverController, CommandPS4Controller)
+        self.oi.driverController.R1().whileTrue(
+            AngleAlignDrive(
+                self.drive,
+                lambda: self.oi.driverY() * kNormalSpeedMultiplier,
+                lambda: self.oi.driverX() * kNormalSpeedMultiplier,
+            ).repeatedly()
+        )
+        self.oi.driverController.R2().whileTrue(
+            ShootingCommands.shootBasedOnModeWithOscillation(
+                self.indexer, self.hood, self.flywheel, self.intake
+            )
+        )
+
+        self.oi.driverController.povDown().onTrue(
+            ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
+                self.oi.rumbleControllersCommand().withTimeout(0.5)
+            )
+        )
+
+        self.oi.driverController.square().whileTrue(DefenseState(self.drive))
+
+        self.oi.driverController.L1().onTrue(
+            IntakeCommands.toggleIntakeDeployment(self.intake)
+        )
+        self.oi.driverController.L2().whileTrue(
+            IntakeCommands.runIntakeRollers(self.intake)
+        )
 
     def configureOverrides(self) -> None:
         """
