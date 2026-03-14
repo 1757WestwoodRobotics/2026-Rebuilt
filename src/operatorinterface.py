@@ -1,10 +1,11 @@
 from commands2 import Command, cmd
-from commands2.button import CommandPS4Controller
+from commands2.button import CommandPS4Controller, CommandXboxController
 from wpilib.interfaces import GenericHID
 from util.helpfultriggerwrappers import Deadband, Invert, SignSquare
 from util.joystick.commandfarmcontroller import CommandFarmController
 
 from constants.oi import kXboxJoystickDeadband
+from constants import kRobotMode, RobotModes
 
 
 class OperatorInterface:
@@ -12,11 +13,14 @@ class OperatorInterface:
     The controls that the operator(s)/driver(s) interact with
     """
 
-    driverController: CommandPS4Controller
+    driverController: CommandPS4Controller | CommandXboxController
     operatorController: CommandFarmController
 
     def __init__(self) -> None:
-        self.driverController = CommandPS4Controller(0)
+        if kRobotMode == RobotModes.SIMULATION:
+            self.driverController = CommandXboxController(0)
+        else:
+            self.driverController = CommandPS4Controller(0)
         self.operatorController = CommandFarmController(1)
 
         self.driverX = SignSquare(
