@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3569073275862076,
-        "y": 6.204762931034483
+        "x": 2.1205724508050086,
+        "y": 6.606726296958855
       },
       "isLocked": false,
       "linkedName": "Left Return Ending"
@@ -20,8 +20,8 @@
         "y": 5.931099137931035
       },
       "prevControl": {
-        "x": 1.4381788793103456,
-        "y": 5.882230603448277
+        "x": 1.422880143112701,
+        "y": 6.347119856887299
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "deployIntake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

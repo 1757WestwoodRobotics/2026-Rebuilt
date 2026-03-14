@@ -9,25 +9,6 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.25
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "deployIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
                 "type": "named",
                 "data": {
                   "name": "shoot"
@@ -65,6 +46,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Done Editing",
+  "folder": null,
   "choreoAuto": false
 }

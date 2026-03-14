@@ -2,7 +2,9 @@
   "robotWidth": 0.87,
   "robotLength": 0.71675,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Done editing"
+  ],
   "autoFolders": [
     "Done Editing"
   ],

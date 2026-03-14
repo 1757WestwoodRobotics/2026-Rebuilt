@@ -39,9 +39,9 @@
       "command": null
     },
     {
-      "name": "",
-      "waypointRelativePos": 0.7575301204819282,
-      "endWaypointRelativePos": 1.0,
+      "name": "deployIntake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
       "command": null
     }
   ],
