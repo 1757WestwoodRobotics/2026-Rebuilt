@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Right Center Rush"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "deployIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right Center Rush"
+                }
+              }
+            ]
           }
         },
         {
@@ -52,6 +65,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Done Editing",
   "choreoAuto": false
 }

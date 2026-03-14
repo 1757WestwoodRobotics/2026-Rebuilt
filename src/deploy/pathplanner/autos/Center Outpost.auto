@@ -19,6 +19,12 @@
                 "data": {
                   "name": "shoot"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "deployIntake"
+                }
               }
             ]
           }
@@ -46,6 +52,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Done Editing",
   "choreoAuto": false
 }
