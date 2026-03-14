@@ -217,7 +217,7 @@ def shootBasedOnModeWithOscillation(
     """
     return cmd.either(
         shootWithOscillation(indexer, hood, flywheel, intake),
-        feedBalls(indexer, hood, flywheel),
+        feedBallsStatic(indexer, hood, flywheel),
         lambda: RobotState.objective == RobotState.RobotMetaObjective.SHOOT,
     )
 
