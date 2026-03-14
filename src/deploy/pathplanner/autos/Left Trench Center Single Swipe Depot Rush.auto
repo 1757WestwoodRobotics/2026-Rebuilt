@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "deployIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Center Rush"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Center Rush"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "deployIntake"
+                }
+              }
+            ]
           }
         },
         {
