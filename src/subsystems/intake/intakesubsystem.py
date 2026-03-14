@@ -80,6 +80,8 @@ class IntakeSubsystem(Subsystem):
         self.rollerGoal = RollerGoal.NEUTRAL
         self.pivotFudge = Rotation2d()  # fudge factor, ideally stays at 0
 
+        self._oscillationGoal = PivotGoal.OSCILLATE
+
     def periodic(self) -> None:
         LogTracer.resetOuter("IntakeSubsystem Periodic")
         self.io.updateInputs(self.inputs)
@@ -89,9 +91,10 @@ class IntakeSubsystem(Subsystem):
         pivotGoal = self.pivotGoal.value
         if self.pivotGoal == PivotGoal.OSCILLATE:
             if self.isAtGoal(PivotGoal.OSCILLATE.value):
-                pivotGoal = PivotGoal.DEPLOYED.value
+                self._oscillationGoal = PivotGoal.DEPLOYED
             elif self.isAtGoal(PivotGoal.DEPLOYED.value):
-                pivotGoal = PivotGoal.OSCILLATE.value
+                self._oscillationGoal = PivotGoal.OSCILLATE
+            pivotGoal = self._oscillationGoal.value
         if self.isClosedLoop:
             goalAngle = (
                 clampRotation(pivotGoal, kPivotMinAngle, kPivotMaxAngle)
