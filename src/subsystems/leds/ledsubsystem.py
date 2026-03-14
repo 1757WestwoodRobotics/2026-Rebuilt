@@ -3,6 +3,7 @@ from commands2 import Subsystem
 from phoenix6.controls.empty_animation import EmptyAnimation
 from phoenix6.controls.solid_color import RGBWColor, SolidColor
 from phoenix6.hardware.candle import CANdle
+from pykit.logger import Logger
 from wpilib import DriverStation, Timer
 
 from constants.led import (
@@ -17,6 +18,9 @@ from constants.led import (
     kAutoMaxFadeTime,
     kAutoOutColor,
     kCANdleTotalLedCount,
+    kCANdleOnboardLedCount,
+    kCANdleExternalLedCount,
+    kEmptyZero,
     kEmptyOne,
 )
 from constants.drive import kCANivoreCANBus
@@ -48,11 +52,9 @@ class LEDSubsystem(Subsystem):
             self.lastEnabledAuto = DriverStation.isAutonomous()
             self.lastEnabledTime = Timer.getFPGATimestamp()
 
-        desired_control_2: Union[EmptyAnimation, SolidColor] = (
-            kEmptyOne  # prep a slot 1 empty animation
-        )
         if DriverStation.isEStopped():
-            desired_control = kEstopAnim
+            self.candle.set_control(kEstopAnim)
+            self.candle.set_control(kEmptyOne)
         elif DriverStation.isDisabled():
             if (
                 self.lastEnabledAuto
@@ -63,37 +65,46 @@ class LEDSubsystem(Subsystem):
                     - (Timer.getFPGATimestamp() - self.lastEnabledTime)
                     / kAutoMaxFadeTime
                 )
-                desired_control = SolidColor(
-                    0, int(percent * kCANdleTotalLedCount), kAutoOutColor
+                self.candle.set_control(kEmptyZero)
+                self.candle.set_control(kEmptyOne)
+                self.candle.set_control(
+                    SolidColor(
+                        kCANdleOnboardLedCount,
+                        int(percent * kCANdleExternalLedCount),
+                        kAutoOutColor,
+                    )
                 )
-                desired_control_2 = SolidColor(
-                    int(percent * kCANdleTotalLedCount),
-                    kCANdleTotalLedCount,
-                    RGBWColor(0, 0, 0),
+                self.candle.set_control(
+                    SolidColor(
+                        kCANdleOnboardLedCount + int(percent * kCANdleExternalLedCount),
+                        kCANdleTotalLedCount,
+                        RGBWColor(0, 0, 0),
+                    )
                 )
             else:
                 if RobotState.brownoutFlag:
-                    desired_control = kBrownoutAnim
+                    self.candle.set_control(kBrownoutAnim)
+                    self.candle.set_control(kEmptyOne)
                 else:
-                    desired_control = kDisabledAnim
+                    self.candle.set_control(kDisabledAnim)
+                    self.candle.set_control(kEmptyOne)
         else:
             if RobotState.hubAboutToChange():
                 if RobotState.readyToShoot():
-                    desired_control = kShootingFlashAnim
+                    self.candle.set_control(kShootingFlashAnim)
+                    self.candle.set_control(kEmptyOne)
                 else:
-                    desired_control = kPrepFlashAnim
+                    self.candle.set_control(kPrepFlashAnim)
+                    self.candle.set_control(kEmptyOne)
             else:
                 if RobotState.readyToShoot():
-                    desired_control = kShootingAnim
+                    self.candle.set_control(kShootingAnim)
+                    self.candle.set_control(kEmptyOne)
                 else:
-                    desired_control = kPrepAnim
+                    self.candle.set_control(kPrepAnim)
+                    self.candle.set_control(kEmptyOne)
 
-        # Only send a new control if it has changed to reduce CAN bus usage
-        if desired_control is not self._last_control:
-            self.candle.set_control(desired_control)
-            self._last_control = desired_control
+        Logger.recordOutput("LED/lastEnabledAuto", self.lastEnabledAuto)
+        Logger.recordOutput("LED/lastEnabledTime", self.lastEnabledTime)
 
-        if desired_control_2 is not self._last_control_2:  # slot 1
-            self.candle.set_control(desired_control_2)
-            self._last_control_2 = desired_control_2
         LogTracer.recordTotal()

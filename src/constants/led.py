@@ -8,12 +8,13 @@ from phoenix6.signals.rgbw_color import RGBWColor
 
 kCANdleCANId = 21
 kCANdleOnboardLedCount = 8
-kCANdleExternalLedCount = 64
+kCANdleExternalLedCount = 18
 
 kAutoMaxFadeTime = 5.0
 kAutoFadeDuration = 2.5  # nominally 3.0, reality is closer to 2.5 seconds in between
 
 kEmptyOne = EmptyAnimation(1)
+kEmptyZero = EmptyAnimation(0)
 
 kCANdleTotalLedCount = kCANdleOnboardLedCount + kCANdleExternalLedCount
 
