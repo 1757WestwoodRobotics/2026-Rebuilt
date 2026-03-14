@@ -344,9 +344,16 @@ class RobotContainer:
         self.nothingAuto = commands2.WaitCommand(kAutoDuration)
 
         NamedCommands.registerCommand("Nothing", self.nothingAuto)
-        NamedCommands.registerCommand("aimHood", HoodCommands.AimHood(self.hood))
-        NamedCommands.registerCommand("aimTurret", TurretCommands.trackedTurret(self.turret))
-        NamedCommands.registerCommand("shoot", FlywheelCommands.)
+        NamedCommands.registerCommand(
+            "shoot", ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
+        )
+
+        NamedCommands.registerCommand(
+            "deployIntake", IntakeCommands.toggleIntakeDeployment(self.intake)
+        )
+        NamedCommands.registerCommand(
+            "runIntakeRollers", IntakeCommands.runIntakeRollers(self.intake)
+        )
 
         # Chooser
         self.chooser: LoggedDashboardChooser[commands2.Command] = (
@@ -552,4 +559,3 @@ class RobotContainer:
             return self.nothingAuto
         assert isinstance(selected, commands2.Command)
         return selected
-
