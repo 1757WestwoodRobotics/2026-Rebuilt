@@ -8,7 +8,7 @@ import wpilib
 from wpimath.geometry import Pose2d
 import commands2
 import commands2.cmd as Commands
-from pathplannerlib.auto import PathPlannerAuto
+from pathplannerlib.auto import PathPlannerAuto, NamedCommands
 
 from commands.drive.absoluterelativedrive import AbsoluteRelativeDrive
 from commands.drive.anglealign import AngleAlignDrive
@@ -341,6 +341,15 @@ class RobotContainer:
         # Autonomous routines
 
         self.nothingAuto = commands2.WaitCommand(kAutoDuration)
+
+        NamedCommands.registerCommand("Nothing", self.nothingAuto)
+        NamedCommands.registerCommand(
+            "shoot", ShootingCommands.shootBalls(self.indexer, self.hood, self.flywheel)
+        )
+
+        NamedCommands.registerCommand(
+            "deployIntake", IntakeCommands.deployIntake(self.intake)
+        )
 
         # Chooser
         self.chooser: LoggedDashboardChooser[commands2.Command] = (

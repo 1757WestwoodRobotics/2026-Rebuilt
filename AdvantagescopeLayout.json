@@ -223,7 +223,7 @@
                 "sources": [
                   {
                     "type": "robot",
-                    "logKey": "/RealOutputs/Robot/Pose/Estimator/Pose",
+                    "logKey": "/RealOutputs/RobotState/Pose Data/Global Pose",
                     "logType": "Pose2d",
                     "visible": true,
                     "options": {
