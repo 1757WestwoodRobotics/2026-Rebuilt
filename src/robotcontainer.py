@@ -490,7 +490,9 @@ class RobotContainer:
             IndexerCommands.ejectIndexer(self.indexer)
         )
         self.oi.operatorController.button(21).whileTrue(
-            ShootingCommands.shootBasedOnMode(self.indexer, self.hood, self.flywheel)
+            ShootingCommands.shootBasedOnModeWithOscillation(
+                self.indexer, self.hood, self.flywheel, self.intake
+            )
         )
 
         # objective related
