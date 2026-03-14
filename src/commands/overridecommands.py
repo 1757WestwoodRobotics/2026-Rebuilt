@@ -18,8 +18,10 @@ def overrideFlywheel(flywheel: FlywheelSubsystem) -> Command:
     Returns a command that allows the operator to override the flywheel speed using network input
     """
 
-    return fireAtSpeed(flywheel, lambda: _flywheelSetpoint.value).withName(
-        "OverrideFlywheel"
+    return (
+        fireAtSpeed(flywheel, lambda: _flywheelSetpoint.value)
+        .withName("OverrideFlywheel")
+        .ignoringDisable(True)
     )
 
 
@@ -28,15 +30,19 @@ def overrideHood(hood: HoodSubsystem) -> Command:
     Returns a command that allows the operator to override the hood angle using network input
     """
 
-    return angleHood(
-        hood, lambda: Rotation2d.fromDegrees(_hoodSetpoint.value)
-    ).withName("OverrideHood")
+    return (
+        angleHood(hood, lambda: Rotation2d.fromDegrees(_hoodSetpoint.value))
+        .withName("OverrideHood")
+        .ignoringDisable(True)
+    )
 
 
 def overrideTurret(turret: TurretSubsystem) -> Command:
     """
     Returns a command that allows the operator to override the turret angle using network input
     """
-    return angleTurret(
-        turret, lambda: Rotation2d.fromDegrees(_turretSetpoint.value)
-    ).withName("OverrideTurret")
+    return (
+        angleTurret(turret, lambda: Rotation2d.fromDegrees(_turretSetpoint.value))
+        .withName("OverrideTurret")
+        .ignoringDisable(True)
+    )
