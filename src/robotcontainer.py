@@ -538,6 +538,9 @@ class RobotContainer:
         NetworkTableButton("Override/Hood").whileTrue(
             OverrideCommands.overrideHood(self.hood)
         )
+        NetworkTableButton("Override/Turret").whileTrue(
+            OverrideCommands.overrideTurret(self.turret)
+        )
 
     def updateAlerts(self):
         self.driverDisconnected.set(
