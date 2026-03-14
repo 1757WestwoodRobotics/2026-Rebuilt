@@ -349,7 +349,7 @@ class RobotContainer:
         )
 
         NamedCommands.registerCommand(
-            "deployIntake", IntakeCommands.toggleIntakeDeployment(self.intake)
+            "deployIntake", IntakeCommands.deployIntake(self.intake)
         )
         NamedCommands.registerCommand(
             "runIntakeRollers", IntakeCommands.runIntakeRollers(self.intake)
