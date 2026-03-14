@@ -45,3 +45,10 @@ def feedWithDistance(
         )  # pykit doesn't support numpy variables, so we need to convert the output of the interp function to a float
 
     return fireAtSpeed(flywheel, calculateSpeed).withName("FeedWithDistance")
+
+
+def idle(flywheel: FlywheelSubsystem):
+    """
+    Idles the flywheel
+    """
+    return cmd.run(lambda: flywheel.flywheelIdle(), flywheel).withName("IdleFlywheel")
