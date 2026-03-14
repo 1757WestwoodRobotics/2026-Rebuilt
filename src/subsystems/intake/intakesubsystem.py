@@ -37,7 +37,7 @@ class PivotGoal(Enum):
     DEPLOYED = kPivotExtendedPosition
     RETRACTED = kPivotRetractedPosition
     DEPOT = kPivotDepotPosition
-    OSCILLATE = kPivotOscillatedPosition  # this is a special goal that oscillates between extended and retracted, used for releasing
+    OSCILLATE = kPivotOscillatedPosition  # this is a special goal for oscillating between the deployed and a slight upwards tilt
 
 
 class RollerGoal(Enum):
@@ -90,7 +90,10 @@ class IntakeSubsystem(Subsystem):
 
         pivotGoal = self.pivotGoal.value
         if self.pivotGoal == PivotGoal.OSCILLATE:
-            if self.isAtGoal(PivotGoal.OSCILLATE.value):
+            if (
+                self.isAtGoal(PivotGoal.OSCILLATE.value)
+                or self.rollerGoal == RollerGoal.FORWARD
+            ):
                 self._oscillationGoal = PivotGoal.DEPLOYED
             elif self.isAtGoal(PivotGoal.DEPLOYED.value):
                 self._oscillationGoal = PivotGoal.OSCILLATE
