@@ -50,10 +50,10 @@ def oscillateIntake(intake: IntakeSubsystem) -> Command:
 
 def toggleIntakeDeployment(intake: IntakeSubsystem) -> Command:
     def toggle():
-        if intake.pivotGoal == PivotGoal.RETRACTED:
-            intake.setPivotGoal(PivotGoal.DEPLOYED)
-        else:
+        if intake.pivotGoal == PivotGoal.DEPLOYED:
             intake.setPivotGoal(PivotGoal.RETRACTED)
+        else:
+            intake.setPivotGoal(PivotGoal.DEPLOYED)
 
     return Commands.runOnce(toggle, intake).withName("ToggleIntakeDeployment")
 
