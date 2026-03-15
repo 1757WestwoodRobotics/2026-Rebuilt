@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.5657650862068975,
-        "y": 7.485118534482758
+        "x": 4.340969827586208,
+        "y": 7.563308189655173
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.049367173524152,
-        "y": 7.480695014187897
+        "x": 3.824571914903462,
+        "y": 7.558884669360311
       },
       "isLocked": false,
       "linkedName": "Left Starting Config"
-    },
-    {
-      "anchor": {
-        "x": 2.8507155635062613,
-        "y": 7.061037567084079
-      },
-      "prevControl": {
-        "x": 3.5929647105758367,
-        "y": 7.542712090356895
-      },
-      "nextControl": {
-        "x": 2.184305091365021,
-        "y": 6.628577728309006
-      },
-      "isLocked": false,
-      "linkedName": "Left Return Ending"
     },
     {
       "anchor": {
@@ -50,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "shoot",
-      "waypointRelativePos": 0.6746987951807227,
+      "waypointRelativePos": 0.35,
       "endWaypointRelativePos": 2.0,
       "command": null
     }
@@ -68,10 +52,10 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Done editing",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -49.18491612511846
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
