@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5780926724137938,
-        "y": 0.63375
+        "x": 3.6457602862254017,
+        "y": 4.22159212880143
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.666261180679785,
-        "y": 1.5119499105545615
+        "x": 3.3031285718323358,
+        "y": 4.219524170558235
       },
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": "Left Center Starting Config"
     },
     {
       "anchor": {
-        "x": 2.4450805008944543,
-        "y": 2.680178890876565
+        "x": 2.19832155026794,
+        "y": 4.22159212880143
       },
       "prevControl": {
-        "x": 1.8122898032200356,
-        "y": 1.9500357781753133
+        "x": 2.8090522004473275,
+        "y": 4.218205668243512
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 179.42684176382673
   },
   "reversed": false,
   "folder": null,
