@@ -13,12 +13,6 @@
                 "data": {
                   "pathName": "Center Backup"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
               }
             ]
           }
@@ -32,12 +26,6 @@
                 "data": {
                   "waitTime": 3.0
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
               }
             ]
           }
@@ -46,6 +34,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Full Autos",
+  "folder": "Raw Movement Autos",
   "choreoAuto": false
 }

@@ -11,16 +11,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Backup"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "pathName": "Left Center Rush"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Center Return"
           }
         },
         {
@@ -30,13 +30,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "waitTime": 7.0
                 }
               }
             ]
@@ -46,6 +40,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Full Autos",
+  "folder": "Raw Movement Autos",
   "choreoAuto": false
 }

@@ -13,12 +13,6 @@
                 "data": {
                   "pathName": "Left Center Rush"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "deployIntake"
-                }
               }
             ]
           }
@@ -34,36 +28,12 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 2.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "pathName": "Depot Rush (from left center return)"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Starting Adjustment"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Center Rush"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Center Return"
           }
         },
         {
@@ -73,13 +43,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "waitTime": 3.0
                 }
               }
             ]
@@ -89,6 +53,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Full Autos",
+  "folder": "Raw Movement Autos",
   "choreoAuto": false
 }

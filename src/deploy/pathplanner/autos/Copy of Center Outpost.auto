@@ -11,13 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Backup"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "pathName": "Center Start Outpost"
                 }
               }
             ]
@@ -30,13 +24,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "waitTime": 5.0
                 }
               }
             ]
@@ -46,6 +34,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Full Autos",
+  "folder": "Raw Movement Autos",
   "choreoAuto": false
 }
