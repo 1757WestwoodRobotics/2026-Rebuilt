@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.666584051724138,
-        "y": 5.041691810344828
+        "x": 3.6457602862254017,
+        "y": 4.22159212880143
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8944612068965525,
-        "y": 5.305581896551723
+        "x": 3.191449016100179,
+        "y": 4.692128801431127
       },
       "isLocked": false,
       "linkedName": "Left Center Starting Config"
@@ -31,20 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "shoot",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    },
-    {
-      "name": "deployIntake",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
