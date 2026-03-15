@@ -7,7 +7,7 @@ from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
 from subsystems.hood.hoodsubsystem import HoodSubsystem
 from subsystems.indexer.indexersubsystem import IndexerSubsystem, IndexerSubsystemGoal
-from subsystems.intake.intakesubsystem import IntakeSubsystem, PivotGoal
+from subsystems.intake.intakesubsystem import IntakeSubsystem, PivotGoal, RollerGoal
 
 import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
@@ -203,8 +203,10 @@ class TurretFixedDriveShoot(Command):
             and self.rotationPID.atSetpoint()
         ):
             self.indexer.setTarget(IndexerSubsystemGoal.KICK)
-            self.intake.setPivotGoal(PivotGoal.OSCILLATE)
+            # self.intake.setPivotGoal(PivotGoal.OSCILLATE)
+            self.intake.setRollerGoal(RollerGoal.FORWARD)
 
     def end(self, _interrupted: bool):
         self.flywheel.flywheelIdle()
-        self.intake.setPivotGoal(PivotGoal.DEPLOYED)
+        # self.intake.setPivotGoal(PivotGoal.DEPLOYED)
+        self.intake.setRollerGoal(RollerGoal.NEUTRAL)
