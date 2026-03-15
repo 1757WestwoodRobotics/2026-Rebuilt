@@ -131,7 +131,7 @@ class TurretFixedDriveShoot(Command):
         turret: TurretSubsystem,
         indexer: IndexerSubsystem,
         drive: DriveSubsystem,
-        intake: IntakeSubsystem,
+        # intake: IntakeSubsystem,
         forward: AnalogInput,
         sideways: AnalogInput,
     ):
@@ -145,7 +145,7 @@ class TurretFixedDriveShoot(Command):
         self.hood = hood
         self.turret = turret
         self.drive = drive
-        self.intake = intake
+        # self.intake = intake
 
         self.forward = forward
         self.sideways = sideways
@@ -204,9 +204,31 @@ class TurretFixedDriveShoot(Command):
         ):
             self.indexer.setTarget(IndexerSubsystemGoal.KICK)
             # self.intake.setPivotGoal(PivotGoal.OSCILLATE)
-            self.intake.setRollerGoal(RollerGoal.FORWARD)
+            # self.intake.setRollerGoal(RollerGoal.FORWARD)
 
     def end(self, _interrupted: bool):
         self.flywheel.flywheelIdle()
         # self.intake.setPivotGoal(PivotGoal.DEPLOYED)
-        self.intake.setRollerGoal(RollerGoal.NEUTRAL)
+        # self.intake.setRollerGoal(RollerGoal.NEUTRAL)
+
+
+def shootBasedOnOverride(
+    flywheel: FlywheelSubsystem,
+    hood: HoodSubsystem,
+    indexer: IndexerSubsystem,
+    turret: TurretSubsystem,
+    drive: DriveSubsystem,
+    forward: AnalogInput,
+    sideways: AnalogInput,
+) -> Command:
+    return cmd.either(
+        TurretFixedDriveShoot(
+            flywheel, hood, turret, indexer, drive, forward, sideways
+        ),
+        cmd.parallel(
+            shootBasedOnMode(indexer, hood, flywheel),
+            turret.getDefaultCommand(),
+            drive.getDefaultCommand(),
+        ),
+        lambda: RobotState.turretOverriden
+    )
