@@ -1,9 +1,10 @@
-from commands2 import Command
+from commands2 import Command, cmd
 from pykit.networktables.loggednetworknumber import LoggedNetworkNumber
 from wpimath.geometry import Rotation2d
 from commands.flywheelcommands import fireAtSpeed
 from commands.hoodcommands import angleHood
 from commands.turretcommands import angleTurret
+from robotstate import RobotState
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
 from subsystems.hood.hoodsubsystem import HoodSubsystem
 from subsystems.turret.turretsubsystem import TurretSubsystem
@@ -20,6 +21,8 @@ def overrideFlywheel(flywheel: FlywheelSubsystem) -> Command:
 
     return (
         fireAtSpeed(flywheel, lambda: _flywheelSetpoint.value)
+        .alongWith(cmd.runOnce(lambda: setattr(RobotState, "turretOverriden", True)))
+        .finallyDo(lambda _interrupted: setattr(RobotState, "turretOverriden", False))
         .withName("OverrideFlywheel")
         .ignoringDisable(True)
     )
@@ -32,6 +35,8 @@ def overrideHood(hood: HoodSubsystem) -> Command:
 
     return (
         angleHood(hood, lambda: Rotation2d.fromDegrees(_hoodSetpoint.value))
+        .alongWith(cmd.runOnce(lambda: setattr(RobotState, "hoodOverriden", True)))
+        .finallyDo(lambda _interrupted: setattr(RobotState, "hoodOverriden", False))
         .withName("OverrideHood")
         .ignoringDisable(True)
     )
@@ -43,6 +48,8 @@ def overrideTurret(turret: TurretSubsystem) -> Command:
     """
     return (
         angleTurret(turret, lambda: Rotation2d.fromDegrees(_turretSetpoint.value))
+        .alongWith(cmd.runOnce(lambda: setattr(RobotState, "turretOverriden", True)))
+        .finallyDo(lambda _interrupted: setattr(RobotState, "turretOverriden", False))
         .withName("OverrideTurret")
         .ignoringDisable(True)
     )

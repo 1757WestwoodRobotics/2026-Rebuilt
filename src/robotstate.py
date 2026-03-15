@@ -88,6 +88,10 @@ class RobotState:
 
     objective: RobotMetaObjective = RobotMetaObjective.SHOOT
 
+    turretOverriden: bool = False
+    flywheelOverriden: bool = False
+    hoodOverriden: bool = False
+
     @classmethod
     def objectiveLocation(cls) -> Translation2d:
         match cls.objective:
