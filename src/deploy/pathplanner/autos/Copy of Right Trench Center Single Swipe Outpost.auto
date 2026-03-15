@@ -11,22 +11,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Center Rush"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "deployIntake"
+                  "pathName": "Right Center Rush"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Center Return"
           }
         },
         {
@@ -36,13 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Depot Rush (from left center return)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "pathName": "Right Center Outpost"
                 }
               }
             ]
@@ -55,13 +37,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "waitTime": 6.0
                 }
               }
             ]
@@ -71,6 +47,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Full Autos",
+  "folder": "Raw Movement Autos",
   "choreoAuto": false
 }

@@ -11,13 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right Center Rush"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "deployIntake"
+                  "pathName": "Left Center Rush"
                 }
               }
             ]
@@ -26,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Center Return"
+            "pathName": "Left Center Return"
           }
         },
         {
@@ -38,12 +32,6 @@
                 "data": {
                   "waitTime": 2.5
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
               }
             ]
           }
@@ -51,19 +39,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Starting Adjustment"
+            "pathName": "Left Starting Adjustment"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Center Rush"
+            "pathName": "Left Center Rush"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Center Return"
+            "pathName": "Left Center Return"
           }
         },
         {
@@ -74,12 +62,6 @@
                 "type": "wait",
                 "data": {
                   "waitTime": 2.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
                 }
               }
             ]
@@ -89,6 +71,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Full Autos",
+  "folder": "Raw Movement Autos",
   "choreoAuto": false
 }
