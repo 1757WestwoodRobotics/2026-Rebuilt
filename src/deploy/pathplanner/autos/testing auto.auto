@@ -1,0 +1,19 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "testing auto"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Raw Movement Autos",
+  "choreoAuto": false
+}
