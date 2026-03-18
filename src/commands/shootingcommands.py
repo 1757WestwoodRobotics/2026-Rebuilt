@@ -17,7 +17,7 @@ import commands.hoodcommands as HoodCommands
 
 from constants.trajectory import kRotationPGain, kRotationIGain, kRotationDGain
 from constants.hood import kHoodMaxAngle
-from constants.shooting import kShootingMap, kHoodAngleMap
+from constants.shooting import kShootingMap, kHoodAngleMap, kFeedFlywheelMap
 from constants.turret import kTurretLocation, kTurretTolerance
 
 from util.angleoptimize import optimizeAngle
@@ -164,10 +164,18 @@ class TurretFixedDriveShoot(Command):
         self.turret.setTurretGoal(self.lockedAngle)
         objectiveDistance = RobotState.distanceToObjective()
         objectiveLocation = RobotState.objectiveLocation()
-        robotLocation = RobotState.getHubPose()
+        robotLocation = (
+            RobotState.getHubPose()
+            if RobotState.objective == RobotState.RobotMetaObjective.SHOOT
+            else RobotState.getFieldPose()
+        )
         turretLocation = (pose3dFrom2d(robotLocation) + kTurretLocation).toPose2d()
-        self.flywheel.setGoal(float(kShootingMap(objectiveDistance)))
-        self.hood.setHoodGoal(kHoodAngleMap(objectiveDistance))
+        if RobotState.objective == RobotState.RobotMetaObjective.SHOOT:
+            self.flywheel.setGoal(float(kShootingMap(objectiveDistance)))
+            self.hood.setHoodGoal(kHoodAngleMap(objectiveDistance))
+        else:
+            self.flywheel.setGoal(float(kFeedFlywheelMap(objectiveDistance)))
+            self.hood.setHoodGoal(kHoodMaxAngle)
 
         objectiveRelativeToRobot = objectiveLocation - turretLocation.translation()
 
