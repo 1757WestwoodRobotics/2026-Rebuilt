@@ -7,7 +7,8 @@ from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
 from subsystems.hood.hoodsubsystem import HoodSubsystem
 from subsystems.indexer.indexersubsystem import IndexerSubsystem, IndexerSubsystemGoal
-from subsystems.intake.intakesubsystem import IntakeSubsystem, PivotGoal, RollerGoal
+from subsystems.intake.intakesubsystem import IntakeSubsystem
+from subsystems.turret.turretsubsystem import TurretSubsystem
 
 import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
@@ -19,7 +20,6 @@ from constants.hood import kHoodMaxAngle
 from constants.shooting import kShootingMap, kHoodAngleMap
 from constants.turret import kTurretLocation, kTurretTolerance
 
-from subsystems.turret.turretsubsystem import TurretSubsystem
 from util.angleoptimize import optimizeAngle
 from util.controltype import AnalogInput
 from util.convenientmath import pose3dFrom2d
@@ -230,5 +230,5 @@ def shootBasedOnOverride(
             turret.getDefaultCommand(),
             drive.getDefaultCommand(),
         ),
-        lambda: RobotState.turretOverriden
+        lambda: RobotState.turretOverriden,
     )

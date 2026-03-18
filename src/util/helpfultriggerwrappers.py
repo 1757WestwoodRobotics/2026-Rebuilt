@@ -88,6 +88,7 @@ def SignSquare(inputFn: AnalogInput) -> AnalogInput:
 
     return square
 
+
 def Cubic(inputFn: AnalogInput) -> AnalogInput:
     def cube() -> float:
         val = inputFn()
@@ -95,9 +96,11 @@ def Cubic(inputFn: AnalogInput) -> AnalogInput:
 
     return cube
 
+
 def ConstantMul(inputFn: AnalogInput, val: float) -> AnalogInput:
     def multiply() -> float:
         return val * inputFn()
+
     return multiply
 
 

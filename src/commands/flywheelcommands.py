@@ -51,4 +51,4 @@ def idle(flywheel: FlywheelSubsystem):
     """
     Idles the flywheel
     """
-    return cmd.run(lambda: flywheel.flywheelIdle(), flywheel).withName("IdleFlywheel")
+    return cmd.run(flywheel.flywheelIdle, flywheel).withName("IdleFlywheel")
