@@ -347,7 +347,7 @@ def shootBasedOnOverride(
             flywheel, hood, turret, indexer, drive, forward, sideways
         ),
         cmd.parallel(
-            shootBasedOnMode(indexer, hood, flywheel),
+            shootBasedOnModeMoving(indexer, hood, flywheel),
             turret.getDefaultCommand(),
             drive.getDefaultCommand(),
         ),

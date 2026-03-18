@@ -346,7 +346,8 @@ class RobotContainer:
 
         NamedCommands.registerCommand("Nothing", self.nothingAuto)
         NamedCommands.registerCommand(
-            "shoot", ShootingCommands.shootBallsStatic(self.indexer, self.hood, self.flywheel)
+            "shoot",
+            ShootingCommands.shootBallsStatic(self.indexer, self.hood, self.flywheel),
         )
 
         NamedCommands.registerCommand(
