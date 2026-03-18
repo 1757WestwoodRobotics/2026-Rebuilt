@@ -25,6 +25,18 @@ from util.controltype import AnalogInput
 from util.convenientmath import pose3dFrom2d
 
 
+def feedIfTurretAligned(indexer: IndexerSubsystem) -> Command:
+    """
+    Command to feed balls into the flywheel when the turret is aligned, for use when feeding from the floor or a low station
+    """
+
+    return cmd.either(
+        IndexerCommands.kickIndexer(indexer),
+        cmd.none(),
+        lambda: RobotState.turretAtAngle,
+    ).repeatedly()
+
+
 def shootBallsStatic(
     indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
 ) -> Command:
@@ -36,9 +48,7 @@ def shootBallsStatic(
         HoodCommands.angleHoodWithDistance(hood, RobotState.distanceToHub),
         # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
         # to shoot, then keep kicking regardless if we are out of tolerance
-        cmd.waitUntil(RobotState.readyToShoot).andThen(
-            IndexerCommands.kickIndexer(indexer)
-        ),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
     )
 
 
@@ -55,7 +65,7 @@ def shootWithOscillation(
         # to shoot, then keep kicking regardless if we are out of tolerance
         cmd.waitUntil(RobotState.readyToShoot).andThen(
             cmd.parallel(
-                IndexerCommands.kickIndexer(indexer),
+                feedIfTurretAligned(indexer),
                 IntakeCommands.oscillateIntake(intake),
             )
         ),
@@ -74,9 +84,7 @@ def feedBallsStatic(
         HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
         # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
         # to shoot, then keep kicking regardless if we are out of tolerance
-        cmd.waitUntil(RobotState.readyToShoot).andThen(
-            IndexerCommands.kickIndexer(indexer)
-        ),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
     )
 
 
@@ -106,9 +114,7 @@ def shootBallsMoving(
         HoodCommands.angleHoodWithDistance(
             hood, lambda: RobotState.effectiveObjectiveDistance
         ),
-        cmd.waitUntil(RobotState.readyToShoot).andThen(
-            IndexerCommands.kickIndexer(indexer)
-        ),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
     )
 
 
@@ -130,7 +136,7 @@ def shootBallsMovingWithOscillation(
         ),
         cmd.waitUntil(RobotState.readyToShoot).andThen(
             cmd.parallel(
-                IndexerCommands.kickIndexer(indexer),
+                feedIfTurretAligned(indexer),
                 IntakeCommands.oscillateIntake(intake),
             )
         ),
@@ -148,9 +154,7 @@ def feedBallsMoving(
             flywheel, lambda: RobotState.effectiveObjectiveDistance
         ),
         HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
-        cmd.waitUntil(RobotState.readyToShoot).andThen(
-            IndexerCommands.kickIndexer(indexer)
-        ),
+        cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
     )
 
 
@@ -170,7 +174,7 @@ def feedBallsMovingWithOscillation(
         HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
         cmd.waitUntil(RobotState.readyToShoot).andThen(
             cmd.parallel(
-                IndexerCommands.kickIndexer(indexer),
+                feedIfTurretAligned(indexer),
                 IntakeCommands.oscillateIntake(intake),
             )
         ),
