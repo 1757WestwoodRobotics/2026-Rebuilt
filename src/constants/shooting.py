@@ -21,8 +21,11 @@ kShootingMap = partial(
         2.71,
         2.97,
         3.30,
+        4,
+        5,
+        6,
     ],
-    fp=[200, 230, 230, 230, 245, 250, 260],
+    fp=[200, 230, 230, 230, 245, 250, 260, 280, 300, 320],
 )
 # Example mapping function for distance to flywheel speed,
 # where xp is the distance in meters and fp is the
@@ -39,8 +42,11 @@ kHoodAngleMap = lambda x: Rotation2d.fromDegrees(
             2.71,
             2.97,
             3.30,
+            4,
+            5,
+            6,
         ],
-        fp=[12, 15, 17.5, 20, 21, 23, 24],
+        fp=[12, 15, 17.5, 20, 21, 23, 24, 25, 30, 35],
     )
 )
 
