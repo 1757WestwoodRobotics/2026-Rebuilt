@@ -17,6 +17,13 @@ from util.convenientmath import pose3dFrom2d
 def trackTurretAtGoal(
     turret: TurretSubsystem, targetRelativeToTurret: Callable[[], Translation2d]
 ) -> Command:
+    """
+    Create a command that tracks the turret to a field-space goal.
+    The `targetRelativeToTurret` supplier must return a `Translation2d` expressed in
+    field coordinates, equal to (target position) minus (turret position). This is
+    the vector from the turret to the target in field space.
+    """
+
     def trackFunc():
         targetRelative = targetRelativeToTurret()
         turret.setClosedLoop(True)
