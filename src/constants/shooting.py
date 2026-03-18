@@ -45,10 +45,16 @@ kFeedFlywheelMap = partial(
     interp, xp=kSampleDistances, fp=[110, 135, 145, 150, 175, 185, 195, 220, 250, 274]
 )  # rad / s
 
+kFeedShotTimeMap = partial(
+    interp,
+    xp=kSampleDistances,
+    fp=[0.59, 0.66, 0.69, 0.73, 0.81, 0.84, 0.88, 0.95, 1.04, 1.14],
+)
+
 kShotTimeMap = partial(
     interp,
-    xp=[1.24, 1.71, 1.93, 2.11, 2.71, 2.97, 3.30],
-    fp=[0.78, 0.787, 0.796, 0.792, 0.907, 0.911, 0.940],
+    xp=kSampleDistances,
+    fp=[0.78, 0.787, 0.796, 0.792, 0.907, 0.911, 0.940, 1.02, 1.04, 1.05],
 )
 # Example mapping function for distance to shot time, where xp is the distance in
 # meters and fp is the corresponding shot time in seconds
