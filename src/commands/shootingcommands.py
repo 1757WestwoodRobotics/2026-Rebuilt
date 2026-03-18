@@ -181,7 +181,8 @@ def shootBasedOnModeMoving(
     indexer: IndexerSubsystem, hood: HoodSubsystem, flywheel: FlywheelSubsystem
 ) -> Command:
     """
-    Command to shoot or feed balls while moving based on the current objective, with compensation for robot velocity
+    Command to shoot or feed balls while moving based on the current objective,
+    with compensation for robot velocity
     """
     return cmd.either(
         shootBallsMoving(indexer, hood, flywheel),
@@ -197,7 +198,8 @@ def shootBasedOnModeMovingWithOscillation(
     intake: IntakeSubsystem,
 ) -> Command:
     """
-    Command to shoot or feed balls while moving with oscillation based on the current objective, with compensation for robot velocity
+    Command to shoot or feed balls while moving with oscillation based on the current objective,
+    with compensation for robot velocity
     """
     return cmd.either(
         shootBallsMovingWithOscillation(indexer, hood, flywheel, intake),
