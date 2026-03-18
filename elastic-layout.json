@@ -381,14 +381,14 @@
                 }
               },
               {
-                "title": "Robot Power?",
+                "title": "Lens cap removed?",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Toggle Switch",
                 "properties": {
-                  "topic": "Preflight/RobotPower",
+                  "topic": "Preflight/LensCap",
                   "period": 0.06,
                   "data_type": "boolean"
                 }
@@ -467,6 +467,19 @@
                 "type": "Toggle Switch",
                 "properties": {
                   "topic": "Preflight/E-Stop",
+                  "period": 0.06,
+                  "data_type": "boolean"
+                }
+              },
+              {
+                "title": "Robot Power?",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Toggle Switch",
+                "properties": {
+                  "topic": "Preflight/RobotPower",
                   "period": 0.06,
                   "data_type": "boolean"
                 }
