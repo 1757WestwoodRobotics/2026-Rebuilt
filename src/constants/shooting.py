@@ -11,20 +11,22 @@ from functools import partial
 from numpy import interp
 from wpimath.geometry import Rotation2d
 
+kSampleDistances = [
+    1.24,
+    1.71,
+    1.93,
+    2.11,
+    2.71,
+    2.97,
+    3.30,
+    4.0,
+    5.0,
+    6.0,
+]  # in meters
+
 kShootingMap = partial(
     interp,
-    xp=[
-        1.24,
-        1.71,
-        1.93,
-        2.11,
-        2.71,
-        2.97,
-        3.30,
-        4,
-        5,
-        6,
-    ],
+    xp=kSampleDistances,
     fp=[200, 230, 230, 230, 245, 250, 260, 280, 300, 320],
 )
 # Example mapping function for distance to flywheel speed,
@@ -34,18 +36,7 @@ kShootingMap = partial(
 kHoodAngleMap = lambda x: Rotation2d.fromDegrees(
     interp(
         x,
-        xp=[
-            1.24,
-            1.71,
-            1.93,
-            2.11,
-            2.71,
-            2.97,
-            3.30,
-            4,
-            5,
-            6,
-        ],
+        xp=kSampleDistances,
         fp=[12, 15, 17.5, 20, 21, 23, 24, 25, 30, 35],
     )
 )
