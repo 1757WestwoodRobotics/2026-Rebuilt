@@ -21,8 +21,8 @@ def overrideFlywheel(flywheel: FlywheelSubsystem) -> Command:
 
     return (
         fireAtSpeed(flywheel, lambda: _flywheelSetpoint.value)
-        .alongWith(cmd.runOnce(lambda: setattr(RobotState, "turretOverriden", True)))
-        .finallyDo(lambda _interrupted: setattr(RobotState, "turretOverriden", False))
+        .alongWith(cmd.runOnce(lambda: setattr(RobotState, "flywheelOverriden", True)))
+        .finallyDo(lambda _interrupted: setattr(RobotState, "flywheelOverriden", False))
         .withName("OverrideFlywheel")
         .ignoringDisable(True)
     )
