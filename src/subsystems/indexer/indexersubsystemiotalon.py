@@ -37,10 +37,10 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         self.kickerLowerMotor = TalonFX(kKickerLowerCANId)
         self.kickerUpperMotor = TalonFX(kKickerUpperCANId)
 
-        self.spindexer1Config.motor_output.neutral_mode = NeutralModeValue.COAST
-        self.spindexer2Config.motor_output.neutral_mode = NeutralModeValue.COAST
-        self.kickerLowerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
-        self.kickerUpperConfig.motor_output.neutral_mode = NeutralModeValue.COAST
+        self.spindexer1Config.motor_output.neutral_mode = NeutralModeValue.BRAKE
+        self.spindexer2Config.motor_output.neutral_mode = NeutralModeValue.BRAKE
+        self.kickerLowerConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
+        self.kickerUpperConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
 
         self.spindexer1Config.motor_output.inverted = kSpindexerInvertedValue
 
