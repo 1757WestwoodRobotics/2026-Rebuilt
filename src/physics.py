@@ -18,12 +18,11 @@ from wpimath.geometry import (
     Rotation2d,
     Rotation3d,
     Transform2d,
-    Translation2d,
     Translation3d,
 )
+from wpimath.kinematics import ChassisSpeeds
 from pyfrc.physics.core import PhysicsInterface
 from robot import Orion
-from wpimath.kinematics import ChassisSpeeds
 from robotstate import RobotState
 from subsystems.drive.swervemoduleiotalonfx import SwerveModuleIOCTRE
 from subsystems.drive.drivesubsystem import DriveSubsystem
@@ -83,7 +82,9 @@ class FuelSim:
 
         def update(self, tm_diff: float) -> bool:
             """
-            Updates the position and velocity of the fuel based on its current velocity and gravity. Returns True if the fuel is still in the air, and False if it has hit the ground.
+            Updates the position and velocity of the fuel based on its current velocity
+            and gravity. Returns True if the fuel is still in the air,
+            and False if it has hit the ground.
             """
             self.position += self.velocity * tm_diff
             self.velocity += Translation3d(0, 0, -kSimGravity) * tm_diff  # gravity
@@ -99,7 +100,7 @@ class FuelSim:
         self.indexer = indexer
         self.flywheel = flywheel
         self.hood = hood
-        self.fuel = []
+        self.fuel: list[FuelSim.SimulatedFuel] = []
         self.lastFuelTime = 0.0
 
     def addFuel(self) -> None:
