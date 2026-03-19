@@ -58,13 +58,12 @@ def overrideTurret(turret: TurretSubsystem) -> Command:
 
 
 class EmergencyTurretOverride(Command):
-    _emergencyOverride: Rotation2d
-
     def __init__(self, turret: TurretSubsystem) -> None:
         Command.__init__(self)
         self.setName("EmergencyTurretOverride")
         self.turret = turret
         self.addRequirements(self.turret)
+        self._emergencyOverride = Rotation2d()
 
     def initialize(self):
         self._emergencyOverride = self.turret.position
