@@ -331,6 +331,8 @@ class TurretFixedDriveShoot(Command):
             and self.rotationPID.atSetpoint()
         ):
             self.indexer.setTarget(IndexerSubsystemGoal.KICK)
+        else:
+            self.indexer.setTarget(IndexerSubsystemGoal.HOLD)
             # self.intake.setPivotGoal(PivotGoal.OSCILLATE)
             # self.intake.setRollerGoal(RollerGoal.FORWARD)
 
