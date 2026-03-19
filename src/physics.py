@@ -10,6 +10,7 @@
 #
 
 from phoenix6.unmanaged import feed_enable
+from pykit.logger import Logger
 from wpilib import RobotController
 from wpimath.geometry import Pose2d, Rotation2d, Transform2d
 from pyfrc.physics.core import PhysicsInterface
@@ -21,6 +22,7 @@ from subsystems.drive.drivesubsystem import DriveSubsystem
 from constants.sim import (
     kSimDefaultRobotLocation,
 )
+from subsystems.indexer.indexersubsystem import IndexerSubsystem
 
 
 class SwerveDriveSim:
@@ -53,6 +55,11 @@ class SwerveDriveSim:
         newPose = self.pose + deltaTrans
         self.pose = newPose
 
+class FuelSim:
+    def __init__(self, indexerSubsystem: IndexerSubsystem) -> None:
+        self.indexerSubsystem = indexerSubsystem
+        self.fuel = []
+
 
 class PhysicsEngine:
     """
@@ -66,6 +73,7 @@ class PhysicsEngine:
         self.bot = robot
 
         driveSubsystem: DriveSubsystem = robot.container.drive
+        indexer: IndexerSubsystem = robot.container.indexer
 
         if not isinstance(driveSubsystem.frontLeftModule.io, SwerveModuleIOCTRE):
             # do not simulation
@@ -108,3 +116,5 @@ class PhysicsEngine:
 
         simRobotPose = self.driveSim.getPose()
         self.physics_controller.field.setRobotPose(simRobotPose)
+
+        Logger.recordOutput("Sim/RobotPose", simRobotPose)
