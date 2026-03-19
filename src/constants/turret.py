@@ -31,7 +31,7 @@ kTurretCurrentLimit = (
 )
 
 kTurretSimMotor = DCMotor.krakenX44FOC(1)
-kTurretSimInertia = 0.05  # kg m^2
+kTurretSimInertia = 0.2  # kg m^2
 
 kTurretInvertedValue = InvertedValue.CLOCKWISE_POSITIVE
 
