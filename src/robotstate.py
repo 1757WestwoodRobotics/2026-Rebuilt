@@ -390,6 +390,10 @@ class RobotState:
         Logger.recordOutput("Game/HubActive", cls.hubActive())
         Logger.recordOutput("Game/HubDistance", cls.distanceToHub())
 
+        Logger.recordOutput("Robot/Overrides/Turret", cls.turretOverriden)
+        Logger.recordOutput("Robot/Overrides/Flywheel", cls.flywheelOverriden)
+        Logger.recordOutput("Robot/Overrides/Hood", cls.hoodOverriden)
+
         if kRobotMode == RobotModes.SIMULATION:
             Logger.recordOutput("Robot/SimPose", cls.getSimPose())
             Logger.recordOutput("Robot/SimTurretPose", cls.getSimTurretPose())
