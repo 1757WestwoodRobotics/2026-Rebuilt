@@ -558,7 +558,7 @@ class RobotContainer:
             OverrideCommands.overrideTurret(self.turret)
         )
         self.oi.operatorController.button(22).toggleOnTrue(
-            OverrideCommands.emergencyTurretOverride(self.turret)
+            OverrideCommands.EmergencyTurretOverride(self.turret)
         )
 
     def updateAlerts(self):
