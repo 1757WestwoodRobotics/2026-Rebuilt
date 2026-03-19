@@ -30,13 +30,12 @@ def feedIfTurretAligned(indexer: IndexerSubsystem) -> Command:
     Command to feed balls into the flywheel when the turret is aligned,
     for use when feeding from the floor or a low station
     """
+    atAngle = lambda: RobotState.turretAtAngle
 
     return cmd.either(
-        IndexerCommands.kickIndexer(indexer).onlyWhile(
-            lambda: RobotState.turretAtAngle
-        ),
-        cmd.none(),
-        lambda: RobotState.turretAtAngle,
+        IndexerCommands.kickIndexer(indexer).onlyWhile(atAngle),
+        IndexerCommands.holdIndexer(indexer).until(atAngle),
+        atAngle,
     ).repeatedly()
 
 
