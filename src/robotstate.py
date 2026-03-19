@@ -348,6 +348,7 @@ class RobotState:
                 turretLocation.translation()
             )
 
+        Logger.recordOutput("Robot/ReadyToShoot", cls.readyToShoot())
         Logger.recordOutput(
             "Robot/SOTM/EffectiveObjectiveLocation", cls.effectiveObjectiveLocation
         )
