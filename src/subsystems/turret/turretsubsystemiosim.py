@@ -1,5 +1,4 @@
 from phoenix6.signals import InvertedValue
-from pykit.logger import Logger
 from wpilib import RobotController
 from wpilib.simulation import DCMotorSim
 from wpimath.system.plant import LinearSystemId

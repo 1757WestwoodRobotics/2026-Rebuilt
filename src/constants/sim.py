@@ -17,10 +17,16 @@ kSimRobotVelocityArrayKey = "SimRobotVelocityArray"
 kMotorBaseKey = "motors"
 
 kFuelSimEffectiveWheelRadius = 0.027  # meters
-# the effective radius of the shooter wheels when exiting the system, used as a velocity calibration factor
-kFuelSimEffectiveExitAngle = lambda originalAngle: Rotation2d.fromDegrees(90 - (8 + originalAngle.degrees()))
-kFuelSimEffectiveVelocity = lambda originalVelocity: originalVelocity * kFuelSimEffectiveWheelRadius
+# the effective radius of the shooter wheels when exiting the system,
+# used as a velocity calibration factor
+kFuelSimEffectiveExitAngle = lambda originalAngle: Rotation2d.fromDegrees(
+    90 - (8 + originalAngle.degrees())
+)
+# based on testing
+kFuelSimEffectiveVelocity = (
+    lambda originalVelocity: originalVelocity * kFuelSimEffectiveWheelRadius
+)
 kSimGravity = 9.81  # m/s^2
 
-kSimBPS = 10 # number of simulated balls per second
+kSimBPS = 10  # number of simulated balls per second
 kSimSecondsPerBall = 1 / kSimBPS
