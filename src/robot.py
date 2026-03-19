@@ -23,7 +23,7 @@ from util.logtracer import LogTracer
 from util.phoenixutil import PhoenixUtil
 
 
-class MentorBot(LoggedRobot):
+class Orion(LoggedRobot):
     """
     Our default robot class, pass it to wpilib.run
 
@@ -164,4 +164,4 @@ class MentorBot(LoggedRobot):
 
 
 if __name__ == "__main__":
-    wpilib.run(MentorBot)
+    wpilib.run(Orion)

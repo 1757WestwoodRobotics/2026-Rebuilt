@@ -13,7 +13,7 @@ from phoenix6.unmanaged import feed_enable
 from wpilib import RobotController
 from wpimath.geometry import Pose2d, Rotation2d, Transform2d
 from pyfrc.physics.core import PhysicsInterface
-from robot import MentorBot
+from robot import Orion
 from robotstate import RobotState
 from subsystems.drive.swervemoduleiotalonfx import SwerveModuleIOCTRE
 from subsystems.drive.drivesubsystem import DriveSubsystem
@@ -60,7 +60,7 @@ class PhysicsEngine:
     """
 
     # pylint: disable-next=unused-argument
-    def __init__(self, physics_controller: PhysicsInterface, robot: MentorBot):
+    def __init__(self, physics_controller: PhysicsInterface, robot: Orion):
         assert robot.container is not None
         self.physics_controller = physics_controller
         self.bot = robot
