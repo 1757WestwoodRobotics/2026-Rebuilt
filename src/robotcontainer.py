@@ -515,18 +515,18 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            ShootingCommands.shootBasedOnModeMovingWithOscillation(
-                self.indexer, self.hood, self.flywheel, self.intake
+            ShootingCommands.shootBasedOnOverride(
+                self.flywheel,
+                self.hood,
+                self.indexer,
+                self.turret,
+                self.intake,
+                self.drive,
+                self.oi.driverY,
+                self.oi.driverX,
+                self.oi.driverRotationX,
+                self.oi.driverRotationY,
             )
-            # ShootingCommands.TurretFixedDriveShoot(
-            #     self.flywheel,
-            #     self.hood,
-            #     self.turret,
-            #     self.indexer,
-            #     self.drive,
-            #     self.oi.driverY,
-            #     self.oi.driverX,
-            # )
         )
 
         self.oi.driverController.povDown().onTrue(
@@ -556,6 +556,9 @@ class RobotContainer:
         )
         NetworkTableButton("Override/Turret").whileTrue(
             OverrideCommands.overrideTurret(self.turret)
+        )
+        self.oi.operatorController.button(22).toggleOnTrue(
+            OverrideCommands.emergencyTurretOverride(self.turret)
         )
 
     def updateAlerts(self):

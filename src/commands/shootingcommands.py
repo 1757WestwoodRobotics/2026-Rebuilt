@@ -2,6 +2,7 @@ from commands2 import Command, cmd
 from wpilib import DriverStation
 from wpimath.controller import PIDController
 from wpimath.geometry import Rotation2d
+from commands.drive.absoluterelativedrive import AbsoluteRelativeDrive
 from robotstate import RobotState
 from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
@@ -274,9 +275,7 @@ class TurretFixedDriveShoot(Command):
         self.rotationPID = PIDController(kRotationPGain, kRotationIGain, kRotationDGain)
         self.rotationPID.setTolerance(kTurretTolerance.radians())
 
-        self.addRequirements(
-            self.indexer, self.flywheel, self.hood, self.turret, self.drive
-        )
+        self.addRequirements(self.indexer, self.flywheel, self.hood, self.drive)
 
     def initialize(self):
         self.lockedAngle = RobotState.turretRotation
@@ -346,18 +345,20 @@ def shootBasedOnOverride(
     hood: HoodSubsystem,
     indexer: IndexerSubsystem,
     turret: TurretSubsystem,
+    intake: IntakeSubsystem,
     drive: DriveSubsystem,
     forward: AnalogInput,
     sideways: AnalogInput,
+    driverRotX: AnalogInput,
+    driverRotY: AnalogInput,
 ) -> Command:
     return cmd.either(
         TurretFixedDriveShoot(
             flywheel, hood, turret, indexer, drive, forward, sideways
         ),
         cmd.parallel(
-            shootBasedOnModeMoving(indexer, hood, flywheel),
-            turret.getDefaultCommand(),
-            drive.getDefaultCommand(),
+            shootBasedOnModeMovingWithOscillation(indexer, hood, flywheel, intake),
+            AbsoluteRelativeDrive(drive, forward, sideways, driverRotX, driverRotY),
         ),
         lambda: RobotState.turretOverriden,
     )

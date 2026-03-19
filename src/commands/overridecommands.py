@@ -49,7 +49,27 @@ def overrideTurret(turret: TurretSubsystem) -> Command:
     return (
         angleTurret(turret, lambda: Rotation2d.fromDegrees(_turretSetpoint.value))
         .alongWith(cmd.runOnce(lambda: setattr(RobotState, "turretOverriden", True)))
-        .finallyDo(lambda _interrupted: setattr(RobotState, "turretOverriden", False))
+        .finallyDo(
+            lambda interrupted: setattr(RobotState, "turretOverriden", not interrupted)
+        )
         .withName("OverrideTurret")
         .ignoringDisable(True)
     )
+
+
+class emergencyTurretOverride(Command):
+    _emergencyOverride: Rotation2d
+
+    def __init__(self, turret: TurretSubsystem) -> None:
+        Command.__init__(self)
+        self.setName("EmergencyTurretOverride")
+        self.turret = turret
+        self.addRequirements(self.turret)
+
+    def initialize(self):
+        self._emergencyOverride = self.turret.inputs.turretPosition
+        RobotState.turretOverriden = True
+
+    def execute(self):
+        self.turret.setClosedLoop(True)
+        self.turret.setTurretGoal(self._emergencyOverride)
