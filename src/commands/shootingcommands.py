@@ -281,7 +281,6 @@ class TurretFixedDriveShoot(Command):
         self.lockedAngle = RobotState.turretRotation
 
     def execute(self):
-        self.turret.setTurretGoal(self.lockedAngle)
         objectiveDistance = RobotState.distanceToObjective()
         objectiveLocation = RobotState.objectiveLocation()
         robotLocation = (
