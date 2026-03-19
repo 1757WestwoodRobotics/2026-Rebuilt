@@ -27,7 +27,8 @@ from util.convenientmath import pose3dFrom2d
 
 def feedIfTurretAligned(indexer: IndexerSubsystem) -> Command:
     """
-    Command to feed balls into the flywheel when the turret is aligned, for use when feeding from the floor or a low station
+    Command to feed balls into the flywheel when the turret is aligned,
+    for use when feeding from the floor or a low station
     """
 
     return cmd.either(
@@ -49,7 +50,7 @@ def shootBallsStatic(
         FlywheelCommands.shootWithDistance(flywheel, RobotState.distanceToHub),
         HoodCommands.angleHoodWithDistance(hood, RobotState.distanceToHub),
         # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
-        # to shoot, then keep kicking regardless if we are out of tolerance
+        # to shoot
         cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
     )
 
@@ -64,7 +65,7 @@ def shootWithOscillation(
         FlywheelCommands.shootWithDistance(flywheel, RobotState.distanceToHub),
         HoodCommands.angleHoodWithDistance(hood, RobotState.distanceToHub),
         # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
-        # to shoot, then keep kicking regardless if we are out of tolerance
+        # to shoot
         cmd.waitUntil(RobotState.readyToShoot).andThen(
             cmd.parallel(
                 feedIfTurretAligned(indexer),
@@ -85,7 +86,7 @@ def feedBallsStatic(
         FlywheelCommands.feedWithDistance(flywheel, RobotState.distanceToObjective),
         HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
         # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
-        # to shoot, then keep kicking regardless if we are out of tolerance
+        # to shoot
         cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
     )
 
