@@ -123,7 +123,7 @@ class FuelSim:
             Rotation3d(0, 0, robotPose.rotation().radians())
         )
         turretVelocity = robotVelocity + ChassisSpeeds(
-            turretFieldRefVel.x, turretFieldRefVel.y, robotVelocity.omega
+            turretFieldRefVel.x, turretFieldRefVel.y, 0
         )
 
         turretExitPosition = RobotState.getSimTurretPose()
