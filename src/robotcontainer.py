@@ -515,19 +515,19 @@ class RobotContainer:
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(
-            # ShootingCommands.shootBasedOnModeMovingWithOscillation(
-            #     self.indexer, self.hood, self.flywheel, self.intake
-            # )
-            ShootingCommands.TurretFixedDriveShoot(
-                self.flywheel,
-                self.hood,
-                self.turret,
-                self.indexer,
-                self.drive,
-                self.oi.driverY,
-                self.oi.driverX,
+            ShootingCommands.shootBasedOnModeMovingWithOscillation(
+                self.indexer, self.hood, self.flywheel, self.intake
             )
-        ).onFalse(OverrideCommands.overrideTurret(self.turret))
+            # ShootingCommands.TurretFixedDriveShoot(
+            #     self.flywheel,
+            #     self.hood,
+            #     self.turret,
+            #     self.indexer,
+            #     self.drive,
+            #     self.oi.driverY,
+            #     self.oi.driverX,
+            # )
+        )
 
         self.oi.driverController.povDown().onTrue(
             ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
