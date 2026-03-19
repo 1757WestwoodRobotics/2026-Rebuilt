@@ -37,6 +37,7 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         self.kickerLowerMotor = TalonFX(kKickerLowerCANId)
         self.kickerUpperMotor = TalonFX(kKickerUpperCANId)
 
+        # we want the spindexer to stop spitting balls when comanded neutrally to
         self.spindexer1Config.motor_output.neutral_mode = NeutralModeValue.BRAKE
         self.spindexer2Config.motor_output.neutral_mode = NeutralModeValue.BRAKE
         self.kickerLowerConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
