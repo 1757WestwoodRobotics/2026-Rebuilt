@@ -73,3 +73,6 @@ class emergencyTurretOverride(Command):
     def execute(self):
         self.turret.setClosedLoop(True)
         self.turret.setTurretGoal(self._emergencyOverride)
+
+    def end(self, _interrupted: bool):
+        RobotState.turretOverriden = False
