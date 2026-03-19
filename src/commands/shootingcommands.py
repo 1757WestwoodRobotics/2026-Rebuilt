@@ -31,7 +31,9 @@ def feedIfTurretAligned(indexer: IndexerSubsystem) -> Command:
     """
 
     return cmd.either(
-        IndexerCommands.kickIndexer(indexer),
+        IndexerCommands.kickIndexer(indexer).onlyWhile(
+            lambda: RobotState.turretAtAngle
+        ),
         cmd.none(),
         lambda: RobotState.turretAtAngle,
     ).repeatedly()
