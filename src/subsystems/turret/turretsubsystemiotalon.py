@@ -7,6 +7,7 @@ from phoenix6.configs.talon_fx_configs import (
 )
 from phoenix6.controls import PositionVoltage, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
+from phoenix6.signals import NeutralModeValue
 from wpimath.geometry import Rotation2d
 
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
@@ -44,6 +45,7 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
 
         self.turretConfig.current_limits = kTurretCurrentLimit
         self.turretConfig.feedback.sensor_to_mechanism_ratio = kTurretGearRatio
+        self.turretConfig.motor_output.neutral_mode = NeutralModeValue.BRAKE
         self.turretConfig.slot0 = (
             Slot0Configs()
             .with_k_p(kTurretPGain)
