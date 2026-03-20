@@ -331,6 +331,7 @@ class RobotContainer:
             self.usbAlert.set(True)
         self.preflightAlert = wpilib.Alert(
             "preflight checking not complete", wpilib.Alert.AlertType.kError
+
         )
 
         # preflight checklist
@@ -352,6 +353,9 @@ class RobotContainer:
 
         NamedCommands.registerCommand(
             "deployIntake", IntakeCommands.deployIntake(self.intake)
+        )
+        NamedCommands.registerCommand(
+            "stopIntakeRollers", IntakeCommands.stopIntakeRollers(self.intake)
         )
 
         # Chooser
