@@ -99,9 +99,11 @@ class LEDSubsystem(Subsystem):
             else:
                 if RobotState.readyToShoot():
                     self.candle.set_control(kShootingAnim)
+                    self.candle.set_control(kEmptyZero)
                     self.candle.set_control(kEmptyOne)
                 else:
                     self.candle.set_control(kPrepAnim)
+                    self.candle.set_control(kEmptyZero)
                     self.candle.set_control(kEmptyOne)
 
         Logger.recordOutput("LED/lastEnabledAuto", self.lastEnabledAuto)
