@@ -326,7 +326,6 @@ class TurretFixedDriveShoot(Command):
 
         if (
             self.hood.atTarget
-            and self.turret.atTarget
             and self.rotationPID.atSetpoint()
         ):
             self.indexer.setTarget(IndexerSubsystemGoal.KICK)
