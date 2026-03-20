@@ -30,7 +30,10 @@ kSpindexer1ReverseVoltage = -3.0
 kSpindexer2ForwardVoltage = 3.0
 kSpindexer2ReverseVoltage = -3.0
 
+kSpindexerReverseSlowVoltage = -1.0
+
 kKickLowerForwardVoltage = 3.0
 kKickLowerReverseVoltage = -3.0
 kKickUpperForwardVoltage = -3.0
 kKickUpperReverseVoltage = 3.0
+

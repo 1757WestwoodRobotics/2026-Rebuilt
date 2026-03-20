@@ -10,6 +10,7 @@ from util.logtracer import LogTracer
 from constants.indexer import (
     kSpindexer1ForwardVoltage,
     kSpindexer1ReverseVoltage,
+    kSpindexerReverseSlowVoltage,
     kKickUpperForwardVoltage,
     kKickUpperReverseVoltage,
 )
@@ -19,6 +20,7 @@ class SpindexerMotorGoal(Enum):
     FORWARD = kSpindexer1ForwardVoltage
     NEUTRAL = 0.0
     REVERSE = kSpindexer1ReverseVoltage
+    SLOWREVERSE = kSpindexerReverseSlowVoltage
 
 
 class KickerMotorGoal(Enum):
@@ -33,7 +35,7 @@ class IndexerSubsystemGoal(Enum):
         KickerMotorGoal.FORWARD,
     )
     HOLD = (
-        SpindexerMotorGoal.NEUTRAL,
+        SpindexerMotorGoal.SLOWREVERSE,
         KickerMotorGoal.NEUTRAL,
     )
     EJECT = (
