@@ -65,6 +65,12 @@ def runIntakeRollers(intake: IntakeSubsystem) -> Command:
         .withName("RunIntakeRollers")
     )
 
+def stopIntakeRollers(intake: IntakeSubsystem) -> Command:
+    return (
+        Commands.runOnce(lambda: intake.setRollerGoal(RollerGoal.NEUTRAL))
+        .withName("StopIntakeRollers")
+    )
+
 
 def bumpIntakeDown(intake: IntakeSubsystem) -> Command:
     return Commands.runOnce(
