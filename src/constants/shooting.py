@@ -19,7 +19,7 @@ kSampleDistances = [
     2.71,
     2.97,
     3.30,
-    4.0,
+    3.8,
     5.0,
     6.0,
 ]  # in meters
