@@ -4,7 +4,7 @@ from wpimath.geometry import Rotation2d, Rotation3d, Translation3d, Transform3d
 from wpimath.system.plant import DCMotor
 
 kTurretStartingAngle = Rotation2d.fromDegrees(90)
-kTurretMinAngle = Rotation2d.fromDegrees(0)
+kTurretMinAngle = Rotation2d.fromDegrees(45)
 kTurretMaxAngle = Rotation2d.fromDegrees(270)
 
 kTurretGearRatio = (50 / 12) * (80 / 15)
