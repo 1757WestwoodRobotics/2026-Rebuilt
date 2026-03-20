@@ -149,13 +149,13 @@ kBackRightSteerMotorId = 50
 
 kDriveCurrentLimit = (
     CurrentLimitsConfigs()
-    .with_supply_current_limit(60)
+    .with_supply_current_limit(40)
     .with_supply_current_limit_enable(True)
 )
 
 kSteerCurrentLimit = (
     CurrentLimitsConfigs()
-    .with_supply_current_limit(40)
+    .with_supply_current_limit(20)
     .with_supply_current_limit_enable(True)
 )
 
