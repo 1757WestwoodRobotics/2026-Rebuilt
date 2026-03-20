@@ -145,16 +145,16 @@ class RobotState:
         cls.fieldEstimator.addVisionMeasurement(measurement)
         if len(measurement.tagsUsed) == 0:
             return
-        if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
-            cls.hubEstimator.addVisionMeasurement(measurement)
+        # if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
+        cls.hubEstimator.addVisionMeasurement(measurement)
 
     @classmethod
     def addTurretedVisionMeasurement(cls, measurement: TurretedVisionObservation):
         cls.fieldEstimator.addTurretedVisionMeasurement(measurement)
         if len(measurement.tagsUsed) == 0:
             return
-        if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
-            cls.hubEstimator.addTurretedVisionMeasurement(measurement)
+        # if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
+        cls.hubEstimator.addTurretedVisionMeasurement(measurement)
 
     @classmethod
     def getTurretPose(cls) -> Pose3d:
