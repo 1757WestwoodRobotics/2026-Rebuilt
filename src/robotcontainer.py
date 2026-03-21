@@ -366,18 +366,28 @@ class RobotContainer:
         )
         self.chooser.addOption("Hood SysID", self.hood.sysIdRoutine(self.hood))
 
+        # Register auto names in the chooser without constructing PathPlannerAuto objects.
+        # Autos are built on demand in getAutonomousCommand() to reduce boot time.
+        self.autoNames: dict[str, str] = {}  # display name -> file name
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
             relevantName = file.split(".")[0]
-            auton = PathPlannerAuto(relevantName)
-            self.chooser.addOption(relevantName, auton)
+            self.autoNames[relevantName] = relevantName
+            self.chooser.addOption(relevantName, relevantName)
 
         self.chooser.setDefaultOption("Do Nothing Auto", self.nothingAuto)
 
-        def changeStart(newAuto: commands2.Command):
-            if isinstance(newAuto, PathPlannerAuto):
+        # Cache constructed autos so we don't rebuild on every call
+        self._constructedAutos: dict[str, PathPlannerAuto] = {}
+
+        def changeStart(newAuto):
+            if isinstance(newAuto, str) and newAuto in self.autoNames:
+                # Construct the auto to read its starting pose
+                if newAuto not in self._constructedAutos:
+                    self._constructedAutos[newAuto] = PathPlannerAuto(newAuto)
+                auto = self._constructedAutos[newAuto]
                 # pylint: disable-next=protected-access
-                startingLocation = FlipUtil.fieldPose(newAuto._startingPose)
+                startingLocation = FlipUtil.fieldPose(auto._startingPose)
                 RobotState.setAutonomousStartingLocation(startingLocation)
 
         self.chooser.onChange(changeStart)
@@ -572,12 +582,22 @@ class RobotContainer:
                 self.oi.operatorController.getHID().getPort()
             )
         )
-        self.deadInTheWaterAlert.set(self.chooser.getSelected() == self.nothingAuto)
+        selected = self.chooser.getSelected()
+        self.deadInTheWaterAlert.set(
+            selected is None or selected == self.nothingAuto
+        )
         self.preflightAlert.set(not self.preflight.is_complete())
 
     def getAutonomousCommand(self) -> commands2.Command:
         selected = self.chooser.getSelected()
         if selected is None:
             return self.nothingAuto
-        assert isinstance(selected, commands2.Command)
-        return selected
+        # SysID routines and nothingAuto are stored as Command objects directly
+        if isinstance(selected, commands2.Command):
+            return selected
+        # PathPlanner autos are stored as name strings — construct on demand
+        if isinstance(selected, str) and selected in self.autoNames:
+            if selected not in self._constructedAutos:
+                self._constructedAutos[selected] = PathPlannerAuto(selected)
+            return self._constructedAutos[selected]
+        return self.nothingAuto

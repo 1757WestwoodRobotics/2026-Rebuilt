@@ -19,8 +19,8 @@ class DriveIOPigeon(DriveIO):
 
         print("Starting Pigeon")
         self.gyro = Pigeon2(kPigeonCANId, kCANivoreCANBus)
-        tryUntilOk(5, lambda: self.gyro.configurator.apply(self.gyroConfig, 0.25))
-        tryUntilOk(5, lambda: self.gyro.configurator.set_yaw(0, 0.25))
+        tryUntilOk(5, lambda: self.gyro.configurator.apply(self.gyroConfig, 0.25), "Pigeon config")
+        tryUntilOk(5, lambda: self.gyro.configurator.set_yaw(0, 0.25), "Pigeon set yaw")
         self.yaw_position = self.gyro.get_yaw()
         self.yaw_velocity = self.gyro.get_angular_velocity_z_world()
 

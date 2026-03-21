@@ -71,24 +71,28 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             lambda: self.spindexer1Motor.configurator.apply(
                 self.spindexer1Config, 0.25
             ),
+            "Indexer spindexer1 config",
         )
         tryUntilOk(
             5,
             lambda: self.spindexer2Motor.configurator.apply(
                 self.spindexer2Config, 0.25
             ),
+            "Indexer spindexer2 config",
         )
         tryUntilOk(
             5,
             lambda: self.kickerUpperMotor.configurator.apply(
                 self.kickerUpperConfig, 0.25
             ),
+            "Indexer kickerUpper config",
         )
         tryUntilOk(
             5,
             lambda: self.kickerLowerMotor.configurator.apply(
                 self.kickerLowerConfig, 0.25
             ),
+            "Indexer kickerLower config",
         )
 
         self.spindexer1Position = self.spindexer1Motor.get_position()

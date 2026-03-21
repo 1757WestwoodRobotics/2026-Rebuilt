@@ -79,9 +79,10 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             else InvertedValue.CLOCKWISE_POSITIVE
         )
         tryUntilOk(
-            5, lambda: self.driveMotor.configurator.apply(self.driveConfig, 0.25)
+            5, lambda: self.driveMotor.configurator.apply(self.driveConfig, 0.25),
+            f"{name} drive config",
         )
-        tryUntilOk(5, lambda: self.driveMotor.set_position(0, 0.25))
+        tryUntilOk(5, lambda: self.driveMotor.set_position(0, 0.25), f"{name} drive zero")
 
         self.steerConfig.motor_output.neutral_mode = NeutralModeValue.COAST
         self.steerConfig.slot0 = (
@@ -119,7 +120,8 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             else InvertedValue.CLOCKWISE_POSITIVE
         )
         tryUntilOk(
-            5, lambda: self.steerMotor.configurator.apply(self.steerConfig, 0.25)
+            5, lambda: self.steerMotor.configurator.apply(self.steerConfig, 0.25),
+            f"{name} steer config",
         )
 
         self.cancoderConfig = CANcoderConfiguration()
@@ -127,13 +129,15 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
         self.cancoderConfig.magnet_sensor.absolute_sensor_discontinuity_point = 0.5
 
         tryUntilOk(
-            5, lambda: self.swerveEncoder.configurator.apply(self.cancoderConfig, 0.25)
+            5, lambda: self.swerveEncoder.configurator.apply(self.cancoderConfig, 0.25),
+            f"{name} CANcoder config",
         )
         tryUntilOk(
             5,
             lambda: self.steerMotor.set_position(
                 self.swerveEncoder.get_position().value, 0.25
             ),
+            f"{name} steer seed position",
         )
 
         self.drivePosition = self.driveMotor.get_position()

@@ -41,7 +41,7 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
             .with_k_a(kClimberAGain)
         )
 
-        tryUntilOk(5, lambda: self.motor.configurator.apply(self.config))
+        tryUntilOk(5, lambda: self.motor.configurator.apply(self.config), "Climber config")
 
         self.position = self.motor.get_position()
         self.velocity = self.motor.get_velocity()
