@@ -26,8 +26,8 @@ kPivotKv = 1.1902
 kPivotKa = 0.011424
 kPivotKg = 0.036956
 
-kPivotMaxVelocity = 10.0  # rad / sec
-kPivotMaxAcceleration = 10.0  # rad / sec ^2
+kPivotMaxVelocity = 40.0  # rad / sec
+kPivotMaxAcceleration = 40.0  # rad / sec ^2
 kPivotConstraints = TrapezoidProfileRadians.Constraints(
     kPivotMaxVelocity, kPivotMaxAcceleration
 )
