@@ -214,8 +214,37 @@ class RobotState:
         )
 
     @classmethod
+    def shouldGoToHub(cls) -> bool:
+        if cls.hubAboutToChange() and not cls.hubActive():
+            return True
+        return False
+
+    @classmethod
+    def shouldGoToFeed(cls) -> bool:
+        time = DriverStation.getMatchTime()
+        if time <= 0:
+            return False  # safety net for negative time, assume it's not about to change (testing)
+        return (
+            any(
+                kEndgameDuration + kShiftDuration * i - 2
+                >= time
+                >= kEndgameDuration + kShiftDuration * i - 5
+                for i in range(0, 5)
+            )
+            and not cls.hubActive()
+        )
+
+    @classmethod
     def hubAboutToChangeTrigger(cls) -> Trigger:
         return Trigger(cls.hubAboutToChange)
+
+    @classmethod
+    def shouldGoToHubTrigger(cls) -> Trigger:
+        return Trigger(cls.shouldGoToHub)
+
+    @classmethod
+    def shouldGoToFeedTrigger(cls) -> Trigger:
+        return Trigger(cls.shouldGoToFeed)
 
     @classmethod
     def hubActive(cls) -> bool:
@@ -388,6 +417,8 @@ class RobotState:
         Logger.recordOutput("Game/WonAuto", cls.didWinAuto())
         Logger.recordOutput("Game/HubAboutToChange", cls.hubAboutToChange())
         Logger.recordOutput("Game/HubActive", cls.hubActive())
+        Logger.recordOutput("Game/ShouldGoToHub", cls.shouldGoToHub())
+        Logger.recordOutput("Game/ShouldGoToFeed", cls.shouldGoToFeed())
         Logger.recordOutput("Game/HubDistance", cls.distanceToHub())
 
         Logger.recordOutput("Robot/Overrides/Turret", cls.turretOverriden)

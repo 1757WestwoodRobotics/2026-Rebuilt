@@ -509,6 +509,13 @@ class RobotContainer:
             ).withName("Shift Change Rumble")
         )  # rumble 3 times when about to change
 
+        RobotState.shouldGoToHubTrigger().onTrue(
+            ShootingCommands.setShootObjective()
+        )
+        RobotState.shouldGoToFeedTrigger().onTrue(
+            ShootingCommands.setFeedObjective()
+        )
+
     def configureXboxControllerBinds(self) -> None:
         assert isinstance(self.oi.driverController, CommandXboxController)
         self.oi.driverController.rightBumper().whileTrue(
