@@ -36,7 +36,10 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
         poseObservations = []
         turretedObservations = []
 
-        for result in self.camera.getAllUnreadResults():
+        # get only the last 10 at most results
+        allResults = self.camera.getAllUnreadResults()
+        lastResults = allResults[-10:]
+        for result in lastResults:
             if result.multitagResult is not None:
                 fieldToCamera = result.multitagResult.estimatedPose.best
                 fieldToBase = fieldToCamera + self.robotToCamera.inverse()
