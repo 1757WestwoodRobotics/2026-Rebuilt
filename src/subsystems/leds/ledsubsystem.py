@@ -35,16 +35,33 @@ class LEDSubsystem(Subsystem):
     but it doesn't seem worth the effort at this time.
     """
 
+    # LED state identifiers for caching — avoids sending redundant CAN frames
+    _STATE_ESTOP = "estop"
+    _STATE_BROWNOUT = "brownout"
+    _STATE_DISABLED = "disabled"
+    _STATE_AUTO_FADE = "auto_fade"
+    _STATE_PREP = "prep"
+    _STATE_PREP_FLASH = "prep_flash"
+    _STATE_SHOOTING = "shooting"
+    _STATE_SHOOTING_FLASH = "shooting_flash"
+
     def __init__(self) -> None:
         Subsystem.__init__(self)
         self.setName(type(self).__name__)
 
         self.candle = CANdle(kCANdleCANId, kCANivoreCANBus)
 
-        self._last_control = None
-        self._last_control_2: Optional[Union[EmptyAnimation, SolidColor]] = None
+        self._lastState: Optional[str] = None
+        self._lastFadePercent: int = -1  # track fade level for auto-fade animation
         self.lastEnabledAuto = False
         self.lastEnabledTime = 0.0
+
+    def _setState(self, state: str) -> bool:
+        """Returns True if the state changed and CAN frames should be sent."""
+        if self._lastState == state:
+            return False
+        self._lastState = state
+        return True
 
     def periodic(self) -> None:
         LogTracer.resetOuter("LEDSubsystem.periodic")
@@ -53,58 +70,70 @@ class LEDSubsystem(Subsystem):
             self.lastEnabledTime = Timer.getFPGATimestamp()
 
         if DriverStation.isEStopped():
-            self.candle.set_control(kEstopAnim)
-            self.candle.set_control(kEmptyOne)
+            if self._setState(self._STATE_ESTOP):
+                self.candle.set_control(kEstopAnim)
+                self.candle.set_control(kEmptyOne)
         elif DriverStation.isDisabled():
             if (
                 self.lastEnabledAuto
                 and Timer.getFPGATimestamp() - self.lastEnabledTime < kAutoMaxFadeTime
             ):
+                # Auto-fade: only send CAN frames when the integer fade level changes
                 percent = (
                     1
                     - (Timer.getFPGATimestamp() - self.lastEnabledTime)
                     / kAutoMaxFadeTime
                 )
-                self.candle.set_control(kEmptyZero)
-                self.candle.set_control(kEmptyOne)
-                self.candle.set_control(
-                    SolidColor(
-                        kCANdleOnboardLedCount,
-                        int(percent * kCANdleExternalLedCount),
-                        kAutoOutColor,
+                fadeLevel = int(percent * kCANdleExternalLedCount)
+                if fadeLevel != self._lastFadePercent:
+                    self._lastState = self._STATE_AUTO_FADE
+                    self._lastFadePercent = fadeLevel
+                    self.candle.set_control(kEmptyZero)
+                    self.candle.set_control(kEmptyOne)
+                    self.candle.set_control(
+                        SolidColor(
+                            kCANdleOnboardLedCount,
+                            fadeLevel,
+                            kAutoOutColor,
+                        )
                     )
-                )
-                self.candle.set_control(
-                    SolidColor(
-                        kCANdleOnboardLedCount + int(percent * kCANdleExternalLedCount),
-                        kCANdleTotalLedCount,
-                        RGBWColor(0, 0, 0),
+                    self.candle.set_control(
+                        SolidColor(
+                            kCANdleOnboardLedCount + fadeLevel,
+                            kCANdleTotalLedCount,
+                            RGBWColor(0, 0, 0),
+                        )
                     )
-                )
             else:
                 if RobotState.brownoutFlag:
-                    self.candle.set_control(kBrownoutAnim)
-                    self.candle.set_control(kEmptyOne)
+                    if self._setState(self._STATE_BROWNOUT):
+                        self.candle.set_control(kBrownoutAnim)
+                        self.candle.set_control(kEmptyOne)
                 else:
-                    self.candle.set_control(kDisabledAnim)
-                    self.candle.set_control(kEmptyOne)
+                    if self._setState(self._STATE_DISABLED):
+                        self.candle.set_control(kDisabledAnim)
+                        self.candle.set_control(kEmptyOne)
         else:
             if RobotState.hubAboutToChange():
                 if RobotState.readyToShoot():
-                    self.candle.set_control(kShootingFlashAnim)
-                    self.candle.set_control(kEmptyOne)
+                    if self._setState(self._STATE_SHOOTING_FLASH):
+                        self.candle.set_control(kShootingFlashAnim)
+                        self.candle.set_control(kEmptyOne)
                 else:
-                    self.candle.set_control(kPrepFlashAnim)
-                    self.candle.set_control(kEmptyOne)
+                    if self._setState(self._STATE_PREP_FLASH):
+                        self.candle.set_control(kPrepFlashAnim)
+                        self.candle.set_control(kEmptyOne)
             else:
                 if RobotState.readyToShoot():
-                    self.candle.set_control(kShootingAnim)
-                    self.candle.set_control(kEmptyZero)
-                    self.candle.set_control(kEmptyOne)
+                    if self._setState(self._STATE_SHOOTING):
+                        self.candle.set_control(kShootingAnim)
+                        self.candle.set_control(kEmptyOne)
+                        self.candle.set_control(kEmptyZero)
                 else:
-                    self.candle.set_control(kPrepAnim)
-                    self.candle.set_control(kEmptyZero)
-                    self.candle.set_control(kEmptyOne)
+                    if self._setState(self._STATE_PREP):
+                        self.candle.set_control(kPrepAnim)
+                        self.candle.set_control(kEmptyOne)
+                        self.candle.set_control(kEmptyZero)
 
         Logger.recordOutput("LED/lastEnabledAuto", self.lastEnabledAuto)
         Logger.recordOutput("LED/lastEnabledTime", self.lastEnabledTime)

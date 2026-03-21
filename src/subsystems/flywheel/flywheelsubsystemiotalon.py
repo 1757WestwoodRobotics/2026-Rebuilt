@@ -70,10 +70,15 @@ class FlywheelSubsystemIOTalon(FlywheelSubsystemIO):
         self.flywheelApplied = self.motor.get_motor_voltage()
         self.flywheelSupply = self.motor.get_supply_current()
 
+        # Control-critical signals at full rate
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.flywheelPosition,
             self.flywheelVelocity,
+        )
+        # Diagnostic signals at reduced rate (logging only)
+        BaseStatusSignal.set_update_frequency_for_all(
+            10,
             self.flywheelApplied,
             self.flywheelSupply,
         )
@@ -84,6 +89,7 @@ class FlywheelSubsystemIOTalon(FlywheelSubsystemIO):
             self.flywheelApplied,
             self.flywheelSupply,
         )
+        self.motor.optimize_bus_utilization()
 
     def updateInputs(
         self, inputs: FlywheelSubsystemIO.FlywheelSubsystemIOInputs

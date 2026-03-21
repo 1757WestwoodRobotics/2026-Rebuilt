@@ -111,12 +111,25 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         self.kickerUpperSupply = self.kickerUpperMotor.get_supply_current()
         self.kickerUpperApplied = self.kickerUpperMotor.get_motor_voltage()
 
+        # Leader control-critical signals at full rate
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.spindexer1Position,
             self.spindexer1Velocity,
+            self.kickerUpperPosition,
+            self.kickerUpperVelocity,
+        )
+        # Leader diagnostic signals at reduced rate (logging only)
+        BaseStatusSignal.set_update_frequency_for_all(
+            10,
             self.spindexer1Supply,
             self.spindexer1Applied,
+            self.kickerUpperSupply,
+            self.kickerUpperApplied,
+        )
+        # Follower signals at reduced rate (redundant with leader, diagnostic only)
+        BaseStatusSignal.set_update_frequency_for_all(
+            10,
             self.spindexer2Position,
             self.spindexer2Velocity,
             self.spindexer2Supply,
@@ -125,10 +138,6 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.kickerLowerVelocity,
             self.kickerLowerSupply,
             self.kickerLowerApplied,
-            self.kickerUpperPosition,
-            self.kickerUpperVelocity,
-            self.kickerUpperSupply,
-            self.kickerUpperApplied,
         )
 
         PhoenixUtil.registerSignals(
@@ -150,6 +159,10 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
             self.kickerUpperSupply,
             self.kickerUpperApplied,
         )
+        self.spindexer1Motor.optimize_bus_utilization()
+        self.spindexer2Motor.optimize_bus_utilization()
+        self.kickerUpperMotor.optimize_bus_utilization()
+        self.kickerLowerMotor.optimize_bus_utilization()
 
     def updateInputs(self, inputs: IndexerSubsystemIO.IndexerSubsystemInputs) -> None:
         inputs.spindexer1Connected = BaseStatusSignal.is_all_good(

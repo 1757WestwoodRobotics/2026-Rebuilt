@@ -150,19 +150,24 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
 
         self.steerAbsolutePosition = self.swerveEncoder.get_absolute_position()
 
+        # Control-critical signals at full rate
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.drivePosition,
             self.driveVelocity,
+            self.steerPosition,
+            self.steerVelocity,
+            self.steerAbsolutePosition,
+        )
+        # Diagnostic signals at reduced rate (logging only, not used for control)
+        BaseStatusSignal.set_update_frequency_for_all(
+            10,
             self.driveApplied,
             self.driveSupplyCurrent,
             self.driveTorqueCurrent,
-            self.steerPosition,
-            self.steerVelocity,
             self.steerApplied,
             self.steerSupplyCurrent,
             self.steerTorqueCurrent,
-            self.steerAbsolutePosition,
         )
 
         PhoenixUtil.registerSignals(
@@ -179,6 +184,11 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             self.steerTorqueCurrent,
             self.steerAbsolutePosition,
         )
+
+        # Suppress unused default status frames to reduce CAN bus traffic
+        self.driveMotor.optimize_bus_utilization()
+        self.steerMotor.optimize_bus_utilization()
+        self.swerveEncoder.optimize_bus_utilization()
 
         print("... Done")
 

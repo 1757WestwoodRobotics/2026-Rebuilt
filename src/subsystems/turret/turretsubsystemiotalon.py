@@ -85,16 +85,22 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
 
         self.applied = self.motor.get_motor_voltage()
         self.supply = self.motor.get_supply_current()
+        # Control-critical signals at full rate
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.position,
             self.velocity,
+        )
+        # Diagnostic signals at reduced rate (logging only)
+        BaseStatusSignal.set_update_frequency_for_all(
+            10,
             self.applied,
             self.supply,
         )
         PhoenixUtil.registerSignals(
             kRioCANBus, self.position, self.velocity, self.applied, self.supply
         )
+        self.motor.optimize_bus_utilization()
 
     def updateInputs(self, inputs: TurretSubsystemIO.TurretSubsystemIOInputs):
         """Update state of motor per the appropriate specifc API."""
