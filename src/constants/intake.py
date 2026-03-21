@@ -37,6 +37,8 @@ kPivotMinAngle = Rotation2d()
 kPivotMaxAngle = Rotation2d.fromDegrees(125.5)
 kPivotStartAngle = Rotation2d.fromDegrees(125.5)
 
+kPivotRollersAllowedToMoveAngle = Rotation2d.fromDegrees(80)
+
 kPivotTolerance = Rotation2d.fromDegrees(2)
 
 kPivotCurrentLimit = (
