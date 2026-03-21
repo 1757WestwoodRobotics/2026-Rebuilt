@@ -201,7 +201,7 @@ class RobotContainer:
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
                 self.hood = HoodSubsystem(HoodSubsystemIOTalon())
-                self.leds = LEDSubsystem()
+                # self.leds = LEDSubsystem()
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
