@@ -24,6 +24,7 @@ from constants.intake import (
     kPivotOscillatedPosition,
     kPivotMinAngle,
     kPivotMaxAngle,
+    kPivotRollersAllowedToMoveAngle,
     kPivotStartAngle,
     kRollerForwardVoltage,
     kRollerReverseVoltage,
@@ -111,8 +112,13 @@ class IntakeSubsystem(Subsystem):
                 and goalAngle.radians() > kPivotSafePosition.radians()
             ):
                 goalAngle = kPivotSafePosition
+
+            rollerGoal = self.rollerGoal.value
+            if self.position.radians() > kPivotRollersAllowedToMoveAngle.radians():
+                rollerGoal = RollerGoal.NEUTRAL.value
+
             self.io.setIntakeTarget(
-                self.rollerGoal.value,
+                rollerGoal,
                 goalAngle,
             )
         LogTracer.record("SetIntakeTarget")
