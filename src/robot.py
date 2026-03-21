@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import time
 import typing
 
 from commands2.commandscheduler import CommandScheduler
@@ -89,7 +90,10 @@ class Orion(LoggedRobot):
                 Logger.setReplaySource(WPILOGReader(log_path))
                 Logger.addDataReciever(WPILOGWriter(log_path[:-7] + "_sim.wpilog"))
         Logger.start()
+        boot_start = time.monotonic()
         self.container = RobotContainer()
+        boot_elapsed = time.monotonic() - boot_start
+        print(f"[Boot] RobotContainer initialized in {boot_elapsed:.1f}s")
 
     def robotInit(self) -> None:
         """

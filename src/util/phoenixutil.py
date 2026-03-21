@@ -1,14 +1,27 @@
+import time
 from typing import Callable
 from phoenix6 import BaseStatusSignal, CANBus, StatusSignal
 
 from phoenix6.status_code import StatusCode
 
 
-def tryUntilOk(attempts: int, command: Callable[[], StatusCode]):
-    for _ in range(attempts):
+def tryUntilOk(
+    attempts: int, command: Callable[[], StatusCode], label: str = ""
+):
+    start = time.monotonic()
+    for attempt in range(attempts):
         code = command()
         if code.is_ok():
-            break
+            elapsed_ms = (time.monotonic() - start) * 1000
+            if attempt > 0:
+                print(
+                    f"[CAN Config] {label}: OK after {attempt + 1} attempts ({elapsed_ms:.0f}ms)"
+                )
+            return
+    elapsed_ms = (time.monotonic() - start) * 1000
+    print(
+        f"[CAN Config] WARNING: {label}: FAILED all {attempts} attempts ({elapsed_ms:.0f}ms) - last status: {code}"
+    )
 
 
 class PhoenixUtil:
