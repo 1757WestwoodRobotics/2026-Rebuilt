@@ -59,4 +59,4 @@ kShotTimeMap = partial(
 # Example mapping function for distance to shot time, where xp is the distance in
 # meters and fp is the corresponding shot time in seconds
 
-kSOTMIterations = 5
+kSOTMIterations = 1
