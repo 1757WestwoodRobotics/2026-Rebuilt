@@ -54,10 +54,15 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
         # We are forcing the position to be 0 at the start of the program.
         # This relies on the climber being fully retracted at every start up
 
+        # Control-critical signals at full rate
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.position,
             self.velocity,
+        )
+        # Diagnostic signals at reduced rate (logging only)
+        BaseStatusSignal.set_update_frequency_for_all(
+            10,
             self.applied,
             self.supply,
             self.torque,
@@ -70,6 +75,7 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
             self.supply,
             self.torque,
         )
+        self.motor.optimize_bus_utilization()
 
     def updateInputs(self, inputs: ClimberSubsystemIO.ClimberSubsystemIOInputs):
         inputs.climberConnected = BaseStatusSignal.is_all_good(

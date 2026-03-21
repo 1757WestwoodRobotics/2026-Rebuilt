@@ -93,14 +93,19 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
         self.rollerApplied = self.rollerMotor.get_motor_voltage()
         self.rollerSupply = self.rollerMotor.get_supply_current()
 
+        # Control-critical signals at full rate
         BaseStatusSignal.set_update_frequency_for_all(
             kRobotUpdateFrequency,
             self.pivotPosition,
             self.pivotVelocity,
-            self.pivotApplied,
-            self.pivotSupply,
             self.rollerPosition,
             self.rollerVelocity,
+        )
+        # Diagnostic signals at reduced rate (logging only)
+        BaseStatusSignal.set_update_frequency_for_all(
+            10,
+            self.pivotApplied,
+            self.pivotSupply,
             self.rollerApplied,
             self.rollerSupply,
         )
@@ -115,6 +120,8 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
             self.rollerApplied,
             self.rollerSupply,
         )
+        self.pivotMotor.optimize_bus_utilization()
+        self.rollerMotor.optimize_bus_utilization()
 
     def updateInputs(self, inputs: IntakeSubsystemIO.IntakeSubsystemIOInputs):
         inputs.pivotConnected = BaseStatusSignal.is_all_good(
