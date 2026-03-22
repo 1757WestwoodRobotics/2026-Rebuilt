@@ -5,6 +5,7 @@ import typing
 
 from commands2.commandscheduler import CommandScheduler
 from pathplannerlib.commands import PathPlannerLogging
+import phoenix6.unmanaged
 import wpilib
 import commands2
 from phoenix6.signal_logger import SignalLogger
@@ -36,6 +37,9 @@ class Orion(LoggedRobot):
 
     def __init__(self):
         super().__init__()
+        phoenix6.unmanaged.set_phoenix_diagnostics_start_time(
+            -1
+        )  # disable diagnostic server, before anything happens
         Logger.recordMetadata("Robot", type(self).__name__)
         match constants.kRobotMode:
             case constants.RobotModes.REAL:
