@@ -3,7 +3,6 @@ from wpilib import DriverStation
 from wpimath.controller import PIDController
 from wpimath.geometry import Rotation2d
 from commands.drive.absoluteoverridingrotation import AbsoluteOverridingRotationDrive
-from commands.drive.absoluterelativedrive import AbsoluteRelativeDrive
 from robotstate import RobotState
 from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
