@@ -36,4 +36,3 @@ kKickLowerForwardVoltage = 3.0
 kKickLowerReverseVoltage = -3.0
 kKickUpperForwardVoltage = -3.0
 kKickUpperReverseVoltage = 3.0
-

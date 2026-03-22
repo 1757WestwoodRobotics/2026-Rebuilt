@@ -5,7 +5,7 @@ from phoenix6.configs.talon_fx_configs import (
     SoftwareLimitSwitchConfigs,
     TalonFXConfiguration,
 )
-from phoenix6.controls import PositionVoltage, VoltageOut, MotionMagicVoltage
+from phoenix6.controls import VoltageOut, MotionMagicVoltage
 from phoenix6.hardware.talon_fx import TalonFX
 from phoenix6.signals import NeutralModeValue
 from wpimath.geometry import Rotation2d

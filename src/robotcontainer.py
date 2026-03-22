@@ -44,7 +44,6 @@ from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
 from subsystems.flywheel.flywheelsubsystemio import FlywheelSubsystemIO
 from subsystems.flywheel.flywheelsubsystemiosim import FlywheelSubsystemIOSim
 from subsystems.flywheel.flywheelsubsystemiotalon import FlywheelSubsystemIOTalon
-from subsystems.leds.ledsubsystem import LEDSubsystem
 from subsystems.turret.turretsubsystem import TurretSubsystem
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from subsystems.turret.turretsubsystemiotalon import TurretSubsystemIOTalon
@@ -331,7 +330,6 @@ class RobotContainer:
             self.usbAlert.set(True)
         self.preflightAlert = wpilib.Alert(
             "preflight checking not complete", wpilib.Alert.AlertType.kError
-
         )
 
         # preflight checklist
@@ -509,12 +507,8 @@ class RobotContainer:
             ).withName("Shift Change Rumble")
         )  # rumble 3 times when about to change
 
-        RobotState.shouldGoToHubTrigger().onTrue(
-            ShootingCommands.setShootObjective()
-        )
-        RobotState.shouldGoToFeedTrigger().onTrue(
-            ShootingCommands.setFeedObjective()
-        )
+        RobotState.shouldGoToHubTrigger().onTrue(ShootingCommands.setShootObjective())
+        RobotState.shouldGoToFeedTrigger().onTrue(ShootingCommands.setFeedObjective())
 
     def configureXboxControllerBinds(self) -> None:
         assert isinstance(self.oi.driverController, CommandXboxController)

@@ -7,10 +7,10 @@ from wpimath.geometry import Rotation2d
 from robotstate import RobotState
 from subsystems.drive.drivesubsystem import DriveSubsystem
 from util.angleoptimize import optimizeAngle
+from util.convenientmath import clampRotation
 
 from constants.trajectory import kRotationPGain, kRotationIGain, kRotationDGain
 from constants.turret import kTurretMinAngle, kTurretMaxAngle, kTurretTolerance
-from util.convenientmath import clampRotation
 
 
 class AbsoluteOverridingRotationDrive(Command):
@@ -65,7 +65,7 @@ class AbsoluteOverridingRotationDrive(Command):
         turretRequestedAngle = targetAngle - robotPose.rotation()
         turretRequestedAngle = optimizeAngle(
             Rotation2d((kTurretMinAngle.radians() + kTurretMinAngle.radians()) / 2),
-            turretRequestedAngle
+            turretRequestedAngle,
         )
 
         outsideOfBounds = (
