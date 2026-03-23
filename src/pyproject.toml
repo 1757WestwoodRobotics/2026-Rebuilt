@@ -26,7 +26,7 @@ components = [
 
 # Other pip packages to install
 requires = [
-    "robotpy-pykit==1.0.4",
+    "robotpy-pykit==1.0.5",
     "photonlibpy~=2026.1.1",
     "robotpy-pathplannerlib>=2026.1.1",
     "phoenix6>=26.1.0",

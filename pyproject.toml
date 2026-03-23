@@ -19,7 +19,7 @@ dependencies = [
     "robotpy-cli>=2026.0.1",
     "robotpy-halsim-gui>=2026.2.1",
     "robotpy-pathplannerlib>=2026.1.1",
-    "robotpy-pykit>=1.0.4",
+    "robotpy-pykit>=1.0.5",
     "robotpy-pykit-watch>=1.0.0",
     "wpilib>=2026.2.1",
 ]
