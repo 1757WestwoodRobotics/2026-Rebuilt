@@ -65,7 +65,7 @@ class Orion(LoggedRobot):
                         "Git Description", deploy_config.get("git-desc", "")
                     )
                 Logger.addDataReciever(NT4Publisher(True))
-                Logger.addDataReciever(WPILOGWriter())
+                Logger.addDataReciever(WPILOGWriter(filename=None, path="pyLogs"))
             case constants.RobotModes.SIMULATION:
                 Logger.addDataReciever(WPILOGWriter())
                 Logger.addDataReciever(NT4Publisher(True))
