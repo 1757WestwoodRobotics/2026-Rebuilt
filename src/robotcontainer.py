@@ -536,6 +536,9 @@ class RobotContainer:
         )
 
         self.oi.driverController.x().whileTrue(DefenseState(self.drive))
+        self.oi.driverController.a().whileTrue(
+            IntakeCommands.reverseIntake(self.intake)
+        )
 
         self.oi.driverController.leftBumper().onTrue(
             IntakeCommands.toggleIntakeDeployment(self.intake)
