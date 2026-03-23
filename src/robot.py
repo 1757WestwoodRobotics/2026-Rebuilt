@@ -61,10 +61,17 @@ class Orion(LoggedRobot):
                         "Git Description", deploy_config.get("git-desc", "")
                     )
                 Logger.addDataReciever(NT4Publisher(True))
-                if not os.path.exists("/U/logs"):
-                    Logger.addDataReciever(WPILOGWriter(filename=None, path="pyLogs"))
-                else:
+                usb_mount = "/U"
+                usb_logs = os.path.join(usb_mount, "logs")
+                if os.path.ismount(usb_mount) or os.path.exists(usb_mount):
+                    os.makedirs(usb_logs, exist_ok=True)
                     Logger.addDataReciever(WPILOGWriter())
+                else:
+                    fallback_dir = os.path.abspath("pyLogs")
+                    os.makedirs(fallback_dir, exist_ok=True)
+                    Logger.addDataReciever(
+                        WPILOGWriter(filename=None, path=fallback_dir)
+                    )
             case constants.RobotModes.SIMULATION:
                 Logger.addDataReciever(WPILOGWriter())
                 Logger.addDataReciever(NT4Publisher(True))
