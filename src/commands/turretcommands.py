@@ -114,6 +114,33 @@ def trackedTurretMoving(turret: TurretSubsystem) -> Command:
     )
 
 
+def trackedTurretBasedOnShooting(turret: TurretSubsystem) -> Command:
+    """
+    Track towards a target, compensating for relative velocity but only if desiring to shoot.
+    Otherwise, just track statically (so the turret doesn't move around too much while driving
+    if we're not shooting)
+    """
+
+    def getTurretRelativeGoal() -> Translation2d:
+        robotPose = (
+            RobotState.getHubPose()
+            if RobotState.objective == RobotState.RobotMetaObjective.SHOOT
+            else RobotState.getFieldPose()
+        )
+        turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
+        isShooting = RobotState.isShooting
+        objectiveLocation = (
+            RobotState.effectiveObjectiveLocation
+            if isShooting
+            else RobotState.objectiveLocation()
+        )
+        return objectiveLocation - turretLocation.translation()
+
+    return trackTurretAtGoal(turret, getTurretRelativeGoal).withName(
+        "TurretTrackingShooting"
+    )
+
+
 def runToGoal(turret: TurretSubsystem, goal) -> Command:
     """Move the turret toward the supplied goal angle until reached (using override)."""
     return runOverride(turret, goal).until(turret.atTarget).withName("TurretGoal")
