@@ -24,7 +24,7 @@ from constants.hood import (
     kHoodInvertedValue,
 )
 from constants.math import kRadiansPerRevolution
-from constants import kRobotUpdateFrequency, kRioCANBus
+from constants import kRobotUpdateFrequency, kRioCANBus, kRobotDiagnosticUpdateFrequency
 from util.phoenixutil import PhoenixUtil, tryUntilOk
 
 
@@ -76,7 +76,7 @@ class HoodSubsystemIOTalon(HoodSubsystemIO):
         )
         # Diagnostic signals at reduced rate (logging only)
         BaseStatusSignal.set_update_frequency_for_all(
-            10,
+            kRobotDiagnosticUpdateFrequency,
             self.applied,
             self.supply,
         )

@@ -4,7 +4,7 @@ from phoenix6.controls import PositionVoltage, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
 from subsystems.climber.climbersubsystemio import ClimberSubsystemIO
 
-from constants import kRobotUpdateFrequency, kRioCANBus
+from constants import kRobotUpdateFrequency, kRioCANBus, kRobotDiagnosticUpdateFrequency
 from constants.climber import (
     kClimberCANId,
     kClimberCurrentLimit,
@@ -62,7 +62,7 @@ class ClimberSubsystemIOTalon(ClimberSubsystemIO):
         )
         # Diagnostic signals at reduced rate (logging only)
         BaseStatusSignal.set_update_frequency_for_all(
-            10,
+            kRobotDiagnosticUpdateFrequency,
             self.applied,
             self.supply,
             self.torque,

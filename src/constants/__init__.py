@@ -33,6 +33,7 @@ from wpilib import RobotBase
 kRobotUpdatePeriod = 1 / 50
 kRobotUpdateFrequency = 1 / kRobotUpdatePeriod
 
+kRobotDiagnosticUpdateFrequency = 10
 kRioCANBus = CANBus()
 
 

@@ -9,7 +9,7 @@ from phoenix6.controls import MotionMagicVelocityVoltage, NeutralOut, VoltageOut
 from phoenix6.hardware.talon_fx import TalonFX
 from subsystems.flywheel.flywheelsubsystemio import FlywheelSubsystemIO
 
-from constants import kRobotUpdateFrequency, kRioCANBus
+from constants import kRobotUpdateFrequency, kRioCANBus, kRobotDiagnosticUpdateFrequency
 from constants.math import kRadiansPerRevolution
 from constants.flywheel import (
     kFlywheelCANId,
@@ -78,7 +78,7 @@ class FlywheelSubsystemIOTalon(FlywheelSubsystemIO):
         )
         # Diagnostic signals at reduced rate (logging only)
         BaseStatusSignal.set_update_frequency_for_all(
-            10,
+            kRobotDiagnosticUpdateFrequency,
             self.flywheelApplied,
             self.flywheelSupply,
         )
