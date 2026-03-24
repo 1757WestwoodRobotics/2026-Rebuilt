@@ -2,7 +2,6 @@ from commands2 import Command, cmd
 from wpilib import DriverStation
 from wpimath.controller import PIDController
 from wpimath.geometry import Rotation2d
-from commands.drive.absoluteoverridingrotation import AbsoluteOverridingRotationDrive
 from robotstate import RobotState
 from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.flywheel.flywheelsubsystem import FlywheelSubsystem
@@ -15,15 +14,18 @@ import commands.indexercommands as IndexerCommands  # module, not class
 import commands.flywheelcommands as FlywheelCommands
 import commands.intakecommands as IntakeCommands
 import commands.hoodcommands as HoodCommands
+from commands.drive.absoluteoverridingrotation import AbsoluteOverridingRotationDrive
 
 from constants.trajectory import kRotationPGain, kRotationIGain, kRotationDGain
 from constants.hood import kHoodMaxAngle
 from constants.shooting import kShootingMap, kHoodAngleMap, kFeedFlywheelMap
 from constants.turret import kTurretLocation, kTurretTolerance
+from constants.drive import kSOTMSpeedMultiplier
 
 from util.angleoptimize import optimizeAngle
 from util.controltype import AnalogInput
 from util.convenientmath import pose3dFrom2d
+from util.helpfultriggerwrappers import ConstantMul
 
 
 def feedIfTurretAligned(indexer: IndexerSubsystem) -> Command:
@@ -353,15 +355,28 @@ def shootBasedOnOverride(
     driverRotX: AnalogInput,
     driverRotY: AnalogInput,
 ) -> Command:
-    return cmd.either(
-        TurretFixedDriveShoot(
-            flywheel, hood, turret, indexer, drive, forward, sideways
-        ),
-        cmd.parallel(
-            shootBasedOnModeMovingWithOscillation(indexer, hood, flywheel, intake),
-            AbsoluteOverridingRotationDrive(
-                drive, forward, sideways, driverRotX, driverRotY
-            ),
-        ),
-        lambda: RobotState.turretOverriden,
+    return (
+        cmd.runOnce(lambda: setattr(RobotState, "isShooting", True))
+        .andThen(
+            cmd.either(
+                TurretFixedDriveShoot(
+                    flywheel, hood, turret, indexer, drive, forward, sideways
+                ),
+                cmd.parallel(
+                    shootBasedOnModeMovingWithOscillation(
+                        indexer, hood, flywheel, intake
+                    ),
+                    AbsoluteOverridingRotationDrive(
+                        drive,
+                        forward,
+                        sideways,
+                        driverRotX,
+                        driverRotY,
+                    ),
+                ),
+                lambda: RobotState.turretOverriden,
+            )
+        )
+        .finallyDo(lambda _interrupted: setattr(RobotState, "isShooting", False))
+        .withName("ShootBasedOnOverride")
     )

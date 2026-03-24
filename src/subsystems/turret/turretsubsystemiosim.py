@@ -1,4 +1,3 @@
-from phoenix6.signals import InvertedValue
 from wpilib import RobotController
 from wpilib.simulation import DCMotorSim
 from wpimath.system.plant import LinearSystemId
@@ -10,10 +9,6 @@ from constants.turret import (
     kTurretSimMotor,
     kTurretGearRatio,
     kTurretSimInertia,
-    kTurretMinAngle,
-    kTurretMaxAngle,
-    kTurretStartingAngle,
-    kTurretInvertedValue,
 )
 from constants.math import kRadiansPerRevolution
 from constants import kRobotUpdatePeriod
@@ -40,31 +35,6 @@ class TurretSubsystemIOSim(TurretSubsystemIOTalon):
 
         self.turretSimModel.setInputVoltage(turretAppliedVoltage)
         self.turretSimModel.update(kRobotUpdatePeriod)
-
-        positionFlip = (
-            1 if kTurretInvertedValue == InvertedValue.CLOCKWISE_POSITIVE else -1
-        )
-        effectiveTurretPosition = self.turretSimModel.getAngularPosition() * (
-            positionFlip
-        )
-        if (
-            effectiveTurretPosition
-            > kTurretMaxAngle.radians() - kTurretStartingAngle.radians()
-        ):
-            self.turretSimModel.setAngle(
-                (kTurretMaxAngle.radians() - kTurretStartingAngle.radians())
-                * positionFlip
-            )
-            self.turretSimModel.setAngularVelocity(0)
-        elif (
-            effectiveTurretPosition
-            < kTurretMinAngle.radians() - kTurretStartingAngle.radians()
-        ):
-            self.turretSimModel.setAngle(
-                (kTurretMinAngle.radians() - kTurretStartingAngle.radians())
-                * positionFlip
-            )
-            self.turretSimModel.setAngularVelocity(0)
 
         turretMotorSim.set_raw_rotor_position(
             self.turretSimModel.getAngularPositionRotations() * kTurretGearRatio

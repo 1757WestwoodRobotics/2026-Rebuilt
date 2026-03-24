@@ -64,7 +64,6 @@ from constants.vision import (
 )
 from constants.field import kAutoDuration
 from constants.drive import (
-    kNormalSpeedMultiplier,
     kFrontLeftModuleName,
     kFrontLeftDriveMotorId,
     kFrontLeftDriveInverted,
@@ -396,7 +395,9 @@ class RobotContainer:
         self.configureButtonBindings()
         self.configureOverrides()
 
-        self.turret.setDefaultCommand(TurretCommands.trackedTurretMoving(self.turret))
+        self.turret.setDefaultCommand(
+            TurretCommands.trackedTurretBasedOnShooting(self.turret)
+        )
         self.indexer.setDefaultCommand(IndexerCommands.holdIndexer(self.indexer))
         self.hood.setDefaultCommand(HoodCommands.moveToMin(self.hood))
         self.flywheel.setDefaultCommand(FlywheelCommands.idle(self.flywheel))
@@ -508,8 +509,8 @@ class RobotContainer:
         self.oi.driverController.rightBumper().whileTrue(
             AngleAlignDrive(
                 self.drive,
-                lambda: self.oi.driverY() * kNormalSpeedMultiplier,
-                lambda: self.oi.driverX() * kNormalSpeedMultiplier,
+                self.oi.driverY,
+                self.oi.driverX,
             ).repeatedly()
         )
         self.oi.driverController.rightTrigger().whileTrue(

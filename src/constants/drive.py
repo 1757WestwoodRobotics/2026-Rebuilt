@@ -223,7 +223,8 @@ kBackLeftAbsoluteEncoderOffset = 0.479248
 kBackRightAbsoluteEncoderOffset = 0.316162
 """rotations"""
 
-kNormalSpeedMultiplier = 0.50  # half full on normal
+kSOTMSpeedMultiplier = 0.50  # half full on sotm
+kNormalSpeedMultiplier = 0.75  # 3/4 full speed
 kTurboSpeedMultiplier = 0.95  # full speed!!!
 
 

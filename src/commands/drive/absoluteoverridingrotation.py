@@ -12,6 +12,8 @@ from util.convenientmath import clampRotation
 from constants.trajectory import kRotationPGain, kRotationIGain, kRotationDGain
 from constants.turret import kTurretMinAngle, kTurretMaxAngle, kTurretTolerance
 
+from constants.drive import kSOTMSpeedMultiplier
+
 
 class AbsoluteOverridingRotationDrive(Command):
     # pylint:disable-next=too-many-arguments, too-many-positional-arguments
@@ -95,18 +97,21 @@ class AbsoluteOverridingRotationDrive(Command):
         ):  # deadband should put to zero, put a delta errorbound for floats
             self.drive.defenseState()
         else:
+            forward = self.forward() * kSOTMSpeedMultiplier
+            sideways = self.sideways() * kSOTMSpeedMultiplier
+            rotation = rotation * kSOTMSpeedMultiplier
             if DriverStation.getAlliance() == DriverStation.Alliance.kRed:
                 # if we're on the other side, switch the controls around
                 self.drive.arcadeDriveWithFactors(
-                    -self.forward(),
-                    -self.sideways(),
+                    -forward,
+                    -sideways,
                     rotation,
                     DriveSubsystem.CoordinateMode.FieldRelative,
                 )
             else:
                 self.drive.arcadeDriveWithFactors(
-                    self.forward(),
-                    self.sideways(),
+                    forward,
+                    sideways,
                     rotation,
                     DriveSubsystem.CoordinateMode.FieldRelative,
                 )
