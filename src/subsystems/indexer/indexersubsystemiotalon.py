@@ -8,7 +8,7 @@ from phoenix6.signals import MotorAlignmentValue
 from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.phoenixutil import tryUntilOk, PhoenixUtil
 
-from constants import kRobotUpdateFrequency, kRioCANBus
+from constants import kRobotUpdateFrequency, kRioCANBus, kRobotDiagnosticUpdateFrequency
 from constants.indexer import (
     kKickerLowerCANId,
     kKickerUpperCANId,
@@ -121,7 +121,7 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         )
         # Leader diagnostic signals at reduced rate (logging only)
         BaseStatusSignal.set_update_frequency_for_all(
-            10,
+            kRobotDiagnosticUpdateFrequency,
             self.spindexer1Supply,
             self.spindexer1Applied,
             self.kickerUpperSupply,
@@ -129,7 +129,7 @@ class IndexerSubsystemIOTalon(IndexerSubsystemIO):
         )
         # Follower signals at reduced rate (redundant with leader, diagnostic only)
         BaseStatusSignal.set_update_frequency_for_all(
-            10,
+            kRobotDiagnosticUpdateFrequency,
             self.spindexer2Position,
             self.spindexer2Velocity,
             self.spindexer2Supply,

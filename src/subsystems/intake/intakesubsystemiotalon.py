@@ -33,7 +33,7 @@ from constants.intake import (
 )
 from constants.math import kRadiansPerRevolution
 
-from constants import kRobotUpdateFrequency, kRioCANBus
+from constants import kRobotUpdateFrequency, kRioCANBus, kRobotDiagnosticUpdateFrequency
 from util.convenientmath import clampRotation
 from util.phoenixutil import PhoenixUtil, tryUntilOk
 
@@ -103,7 +103,7 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
         )
         # Diagnostic signals at reduced rate (logging only)
         BaseStatusSignal.set_update_frequency_for_all(
-            10,
+            kRobotDiagnosticUpdateFrequency,
             self.pivotApplied,
             self.pivotSupply,
             self.rollerApplied,

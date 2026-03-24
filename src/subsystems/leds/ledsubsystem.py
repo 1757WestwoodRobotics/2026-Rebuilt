@@ -1,6 +1,6 @@
-from typing import Optional, Union
+from enum import Enum, auto
+from typing import Optional
 from commands2 import Subsystem
-from phoenix6.controls.empty_animation import EmptyAnimation
 from phoenix6.controls.solid_color import RGBWColor, SolidColor
 from phoenix6.hardware.candle import CANdle
 from pykit.logger import Logger
@@ -36,14 +36,15 @@ class LEDSubsystem(Subsystem):
     """
 
     # LED state identifiers for caching — avoids sending redundant CAN frames
-    _STATE_ESTOP = "estop"
-    _STATE_BROWNOUT = "brownout"
-    _STATE_DISABLED = "disabled"
-    _STATE_AUTO_FADE = "auto_fade"
-    _STATE_PREP = "prep"
-    _STATE_PREP_FLASH = "prep_flash"
-    _STATE_SHOOTING = "shooting"
-    _STATE_SHOOTING_FLASH = "shooting_flash"
+    class LEDStates(Enum):
+        STATE_ESTOP = auto()
+        STATE_BROWNOUT = auto()
+        STATE_DISABLED = auto()
+        STATE_AUTO_FADE = auto()
+        STATE_PREP = auto()
+        STATE_PREP_FLASH = auto()
+        STATE_SHOOTING = auto()
+        STATE_SHOOTING_FLASH = auto()
 
     def __init__(self) -> None:
         Subsystem.__init__(self)
