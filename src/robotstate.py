@@ -93,6 +93,8 @@ class RobotState:
     flywheelOverriden: bool = False
     hoodOverriden: bool = False
 
+    isShooting: bool = False
+
     effectiveObjectiveLocation: Translation2d = Translation2d()
     effectiveObjectiveDistance: float = 0.0
 
@@ -364,6 +366,7 @@ class RobotState:
             robotVelocity.omega,
         )
         cls.effectiveObjectiveDistance = targetRelativeToTurret.norm()
+        LogTracer.record("PreSOTMCalculations")
         for _ in range(kSOTMIterations):
             if cls.objective == cls.RobotMetaObjective.SHOOT:
                 shotTime = kShotTimeMap(cls.effectiveObjectiveDistance)
@@ -377,6 +380,7 @@ class RobotState:
                 turretLocation.translation()
             )
 
+        LogTracer.record("SOTMCalculations")
         Logger.recordOutput("Robot/ReadyToShoot", cls.readyToShoot())
         Logger.recordOutput(
             "Robot/SOTM/EffectiveObjectiveLocation", cls.effectiveObjectiveLocation
@@ -424,6 +428,7 @@ class RobotState:
         Logger.recordOutput("Robot/Overrides/Turret", cls.turretOverriden)
         Logger.recordOutput("Robot/Overrides/Flywheel", cls.flywheelOverriden)
         Logger.recordOutput("Robot/Overrides/Hood", cls.hoodOverriden)
+        LogTracer.record("Logging")
 
         if kRobotMode == RobotModes.SIMULATION:
             Logger.recordOutput("Robot/SimPose", cls.getSimPose())
