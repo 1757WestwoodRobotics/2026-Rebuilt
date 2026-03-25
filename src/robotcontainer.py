@@ -16,7 +16,6 @@ from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
 import commands.intakecommands as IntakeCommands
 import commands.turretcommands as TurretCommands  # module, not class
-import commands.climbcommands as ClimbCommands  # module, not class
 import commands.indexercommands as IndexerCommands  # module, not class
 import commands.hoodcommands as HoodCommands
 import commands.overridecommands as OverrideCommands
@@ -27,10 +26,6 @@ from commands.resetgyro import ResetGyro
 from preflight import PreflightChecklist
 from robotmechanism import RobotMechanism
 from robotstate import RobotState
-from subsystems.climber.climbersubsystem import ClimberSubsystem
-from subsystems.climber.climbersubsystemio import ClimberSubsystemIO
-from subsystems.climber.climbersubsystemiosim import ClimberSubsystemIOSim
-from subsystems.climber.climbersubsystemiotalon import ClimberSubsystemIOTalon
 from subsystems.drive.driveiopigeon import DriveIOPigeon
 from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.drive.swervemoduleio import SwerveModuleConfigParams, SwerveModuleIO
@@ -195,7 +190,6 @@ class RobotContainer:
                     ],
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOTalon())
-                self.climber = ClimberSubsystem(ClimberSubsystemIOTalon())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOTalon())
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
@@ -279,7 +273,6 @@ class RobotContainer:
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIOSim())
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOSIM())
-                self.climber = ClimberSubsystem(ClimberSubsystemIOSim())
                 self.intake = IntakeSubsystem(IntakeSubsystemIOSim())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOSim())
                 self.hood = HoodSubsystem(HoodSubsystemIOSim())
@@ -301,7 +294,6 @@ class RobotContainer:
                 )
                 self.turret = TurretSubsystem(TurretSubsystemIO())
                 self.indexer = IndexerSubsystem(IndexerSubsystemIO())
-                self.climber = ClimberSubsystem(ClimberSubsystemIO())
                 self.intake = IntakeSubsystem(IntakeSubsystemIO())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIO())
                 self.hood = HoodSubsystem(HoodSubsystemIO())
@@ -361,7 +353,6 @@ class RobotContainer:
             LoggedDashboardChooser("Autonomous")
         )
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
-        self.chooser.addOption("Climb SysID", self.climber.sysIdRoutine(self.climber))
         self.chooser.addOption("Intake SysID", self.intake.sysIdRoutine(self.intake))
         self.chooser.addOption(
             "Flywheel SysID", self.flywheel.sysIdRoutine(self.flywheel)
@@ -432,7 +423,6 @@ class RobotContainer:
             RobotMechanism.getPoses(
                 self.turret.position,
                 self.intake.position,
-                self.climber.position,
             ),
         )
 
@@ -458,19 +448,6 @@ class RobotContainer:
         # Operator Controller (Farm Box) Section
         # these buttons come from our strategy spreadsheet,
         # they are magic numbers but all buttons are labeled properly on the controller
-
-        self.oi.operatorController.button(1).onTrue(
-            ClimbCommands.deployClimber(self.climber)
-        )
-        self.oi.operatorController.button(6).onTrue(
-            ClimbCommands.retractClimber(self.climber)
-        )
-        self.oi.operatorController.button(2).whileTrue(
-            ClimbCommands.bumpUp(self.climber).repeatedly()
-        )
-        self.oi.operatorController.button(7).whileTrue(
-            ClimbCommands.bumpDown(self.climber).repeatedly()
-        )
 
         self.oi.operatorController.button(3).whileTrue(
             IntakeCommands.reverseIntake(self.intake)
