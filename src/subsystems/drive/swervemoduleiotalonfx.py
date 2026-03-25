@@ -20,7 +20,11 @@ from wpimath.geometry import Rotation2d
 from subsystems.drive.swervemoduleio import SwerveModuleIO, SwerveModuleConfigParams
 from util.phoenixutil import PhoenixUtil, tryUntilOk
 
-from constants import kRobotUpdateFrequency, kRobotUpdatePeriod
+from constants import (
+    kRobotUpdateFrequency,
+    kRobotUpdatePeriod,
+    kRobotDiagnosticUpdateFrequency,
+)
 from constants.drive import (
     kDrivePGain,
     kDriveIGain,
@@ -161,7 +165,7 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
         )
         # Diagnostic signals at reduced rate (logging only, not used for control)
         BaseStatusSignal.set_update_frequency_for_all(
-            10,
+            kRobotDiagnosticUpdateFrequency,
             self.driveApplied,
             self.driveSupplyCurrent,
             self.driveTorqueCurrent,
