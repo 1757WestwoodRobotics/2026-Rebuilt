@@ -60,7 +60,9 @@ class HoodSubsystemIOTalon(HoodSubsystemIO):
             )
         )
         self.hoodConfig.motor_output.inverted = kHoodInvertedValue
-        tryUntilOk(5, lambda: self.motor.configurator.apply(self.hoodConfig), "Hood config")
+        tryUntilOk(
+            5, lambda: self.motor.configurator.apply(self.hoodConfig), "Hood config"
+        )
 
         self.position = self.motor.get_position()
         self.velocity = self.motor.get_velocity()

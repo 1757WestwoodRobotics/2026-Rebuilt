@@ -5,9 +5,7 @@ from phoenix6 import BaseStatusSignal, CANBus, StatusSignal
 from phoenix6.status_code import StatusCode
 
 
-def tryUntilOk(
-    attempts: int, command: Callable[[], StatusCode], label: str = ""
-):
+def tryUntilOk(attempts: int, command: Callable[[], StatusCode], label: str = ""):
     start = time.monotonic()
     for attempt in range(attempts):
         code = command()

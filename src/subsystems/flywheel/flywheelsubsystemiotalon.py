@@ -62,7 +62,9 @@ class FlywheelSubsystemIOTalon(FlywheelSubsystemIO):
             )
         )
 
-        tryUntilOk(5, lambda: self.motor.configurator.apply(self.config), "Flywheel config")
+        tryUntilOk(
+            5, lambda: self.motor.configurator.apply(self.config), "Flywheel config"
+        )
 
         self.flywheelPosition = self.motor.get_position()
         self.flywheelVelocity = self.motor.get_velocity()

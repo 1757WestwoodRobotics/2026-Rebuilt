@@ -76,12 +76,20 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
                 kPivotMaxVelocity / kRadiansPerRevolution
             )
         )
-        tryUntilOk(5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig), "Intake pivot config")
+        tryUntilOk(
+            5,
+            lambda: self.pivotMotor.configurator.apply(self.pivotConfig),
+            "Intake pivot config",
+        )
 
         self.rollerConfig.current_limits = kRollerCurrentLimit
         self.rollerConfig.feedback.sensor_to_mechanism_ratio = kRollerGearRatio
         self.rollerConfig.motor_output.inverted = kRollerInvertedValue
-        tryUntilOk(5, lambda: self.rollerMotor.configurator.apply(self.rollerConfig), "Intake roller config")
+        tryUntilOk(
+            5,
+            lambda: self.rollerMotor.configurator.apply(self.rollerConfig),
+            "Intake roller config",
+        )
 
         self.pivotPosition = self.pivotMotor.get_position()
         self.pivotVelocity = self.pivotMotor.get_velocity()

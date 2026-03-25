@@ -78,7 +78,9 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
                 kTurretMinAngle.radians() / kRadiansPerRevolution
             )
         )
-        tryUntilOk(5, lambda: self.motor.configurator.apply(self.turretConfig), "Turret config")
+        tryUntilOk(
+            5, lambda: self.motor.configurator.apply(self.turretConfig), "Turret config"
+        )
 
         self.position = self.motor.get_position()
         self.velocity = self.motor.get_velocity()
