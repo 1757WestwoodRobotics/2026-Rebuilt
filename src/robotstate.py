@@ -24,6 +24,7 @@ from util.robotposeestimator import (
     VisionObservation,
 )
 from util.logtracer import LogTracer
+from util.firecontrol import FireControlSolver
 from constants import kRobotMode, RobotModes
 from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
@@ -38,13 +39,11 @@ from constants.field import (
 )
 from constants.vision import kRedHubAprilTags, kBlueHubAprilTags
 from constants.shooting import (
-    kSOTMIterations,
     kShotTimeMap,
     kFeedShotTimeMap,
     kFireControlConfig,
     kMinShootConfidence,
 )
-from util.firecontrol import FireControlSolver
 
 
 # pylint: disable-next=too-many-public-methods
@@ -394,7 +393,6 @@ class RobotState:
             target_location=cls.objectiveLocation(),
             turret_location=turretLocation.translation(),
             turret_velocity=turretVelocity,
-            robot_pose=robotPose,
             robot_speed=robotSpeed,
             is_shooting=(cls.objective == cls.RobotMetaObjective.SHOOT),
             heading_error_rad=turretHeadingError,

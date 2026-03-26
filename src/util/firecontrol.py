@@ -28,7 +28,9 @@ class FireControlConfig:
 
     # Newton solver parameters
     max_iterations: int = 10
-    convergence_tolerance: float = 0.001  # seconds — stop iterating when TOF changes less than this
+    convergence_tolerance: float = (
+        0.001  # seconds — stop iterating when TOF changes less than this
+    )
 
     # TOF bounds (prevents runaway solver)
     tof_min: float = 0.05
@@ -197,7 +199,9 @@ class FireControlSolver:
             dist_score = 0.0
         else:
             range_span = cfg.max_scoring_distance - cfg.min_scoring_distance
-            range_fraction = (effective_distance - cfg.min_scoring_distance) / range_span
+            range_fraction = (
+                effective_distance - cfg.min_scoring_distance
+            ) / range_span
             dist_score = max(0.0, 1.0 - 2.0 * abs(range_fraction - 0.5))
         components.append((dist_score, cfg.w_distance_in_range))
 
@@ -215,12 +219,12 @@ class FireControlSolver:
 
         return 100.0 * math.exp(log_sum / total_weight)
 
+    # pylint: disable-next=too-many-statements,too-many-locals
     def solve(
         self,
         target_location: Translation2d,
         turret_location: Translation2d,
         turret_velocity: ChassisSpeeds,
-        robot_pose: Pose2d,
         robot_speed: float,
         is_shooting: bool,
         heading_error_rad: float = 0.0,
@@ -232,7 +236,6 @@ class FireControlSolver:
             target_location: Field-frame position of the scoring target
             turret_location: Field-frame position of the turret
             turret_velocity: Field-frame velocity of the turret (includes robot + turret rotation)
-            robot_pose: Current robot pose (used for latency compensation)
             robot_speed: Scalar speed of the robot (m/s)
             is_shooting: True for shoot mode, False for feed mode
             heading_error_rad: Current turret heading error (for confidence scoring)
@@ -250,7 +253,9 @@ class FireControlSolver:
         if robot_speed < self.config.min_sotm_speed:
             result.effective_location = target_location
             result.effective_distance = raw_distance
-            result.time_of_flight = self._get_tof_for_distance(raw_distance, is_shooting)
+            result.time_of_flight = self._get_tof_for_distance(
+                raw_distance, is_shooting
+            )
             result.is_static = True
             result.converged = True
             result.iterations_used = 0
@@ -286,10 +291,7 @@ class FireControlSolver:
             ry = target_relative.Y()
             proj_x = rx - vx * drift_tof
             proj_y = ry - vy * drift_tof
-            proj_dist = math.sqrt(proj_x * proj_x + proj_y * proj_y)
-
-            if proj_dist < 0.01:
-                proj_dist = 0.01  # prevent division by zero
+            proj_dist = max(math.sqrt(proj_x * proj_x + proj_y * proj_y), 0.01)
 
             # Look up expected TOF at the projected distance
             lookup_tof = self._get_tof_for_distance(proj_dist, is_shooting)
@@ -335,7 +337,11 @@ class FireControlSolver:
         result.converged = converged
         result.iterations_used = iterations
         result.confidence = self._compute_confidence(
-            iterations, converged, robot_speed, result.effective_distance, heading_error_rad
+            iterations,
+            converged,
+            robot_speed,
+            result.effective_distance,
+            heading_error_rad,
         )
 
         # Save state for next cycle
