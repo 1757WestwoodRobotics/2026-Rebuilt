@@ -178,7 +178,7 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
             vel / kRadiansPerRevolution
         )
         tryUntilOk(
-            5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig.motion_magic)
+            5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig.motion_magic)  # type: ignore
         )
 
     def setMaxAccel(self, accel: float) -> None:
@@ -186,5 +186,5 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
             accel / kRadiansPerRevolution
         )
         tryUntilOk(
-            5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig.motion_magic)
+            5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig.motion_magic)  # type: ignore
         )
