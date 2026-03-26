@@ -42,3 +42,13 @@ class IntakeSubsystemIO:
         """
         Sets the pivot motor to a voltage, for open loop control
         """
+
+    def setMaxVel(self, vel: float) -> None:
+        """
+        Sets the maximum velocity of the pivot in radians per second
+        """
+
+    def setMaxAccel(self, accel: float) -> None:
+        """
+        Sets the maximum acceleration of the pivot in radians per second squared
+        """

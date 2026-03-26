@@ -172,3 +172,15 @@ class IntakeSubsystemIOTalon(IntakeSubsystemIO):
 
     def setPivotVolts(self, volt: float) -> None:
         self.pivotMotor.set_control(self.pivotVoltageRequest.with_output(volt))
+
+    def setMaxVel(self, vel: float) -> None:
+        self.pivotConfig.motion_magic.motion_magic_cruise_velocity = (
+            vel / kRadiansPerRevolution
+        )
+        tryUntilOk(5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig))
+
+    def setMaxAccel(self, accel: float) -> None:
+        self.pivotConfig.motion_magic.motion_magic_acceleration = (
+            accel / kRadiansPerRevolution
+        )
+        tryUntilOk(5, lambda: self.pivotMotor.configurator.apply(self.pivotConfig))

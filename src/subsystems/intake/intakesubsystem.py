@@ -26,12 +26,15 @@ from constants.intake import (
     kPivotMaxAngle,
     kPivotRollersAllowedToMoveAngle,
     kPivotStartAngle,
+    kPivotMaxVelocity,
+    kPivotMaxAcceleration,
     kRollerForwardVoltage,
     kRollerReverseVoltage,
     kPivotTolerance,
 )
 from util.convenientmath import clampRotation
 from util.logtracer import LogTracer
+from util.logtunablenumber import LoggedTunableNumber
 
 
 class PivotGoal(Enum):
@@ -82,6 +85,14 @@ class IntakeSubsystem(Subsystem):
         self.pivotFudge = Rotation2d()  # fudge factor, ideally stays at 0
 
         self._oscillationGoal = PivotGoal.OSCILLATE
+
+        self.maxVel = LoggedTunableNumber("Intake/pivot maxVel", kPivotMaxVelocity)
+        self.maxAccel = LoggedTunableNumber(
+            "Intake/pivot maxAccel", kPivotMaxAcceleration
+        )
+
+        self.maxVel.onChange(self.io.setMaxVel)
+        self.maxAccel.onChange(self.io.setMaxAccel)
 
     def periodic(self) -> None:
         LogTracer.resetOuter("IntakeSubsystem Periodic")
