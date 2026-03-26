@@ -101,14 +101,18 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
         self.turretConfig.motion_magic.motion_magic_cruise_velocity = (
             vel.radians() / kRadiansPerRevolution
         )
-        tryUntilOk(5, lambda: self.motor.configurator.apply(self.turretConfig))
+        tryUntilOk(
+            5, lambda: self.motor.configurator.apply(self.turretConfig.motion_magic)
+        )
 
     def set_max_accel(self, accel: Rotation2d):
         """Set the maximum acceleration of the turret in radians per second squared."""
         self.turretConfig.motion_magic.motion_magic_acceleration = (
             accel.radians() / kRadiansPerRevolution
         )
-        tryUntilOk(5, lambda: self.motor.configurator.apply(self.turretConfig))
+        tryUntilOk(
+            5, lambda: self.motor.configurator.apply(self.turretConfig.motion_magic)
+        )
 
     def updateInputs(self, inputs: TurretSubsystemIO.TurretSubsystemIOInputs):
         """Update state of motor per the appropriate specifc API."""
