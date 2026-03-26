@@ -78,8 +78,9 @@ class LoggedTunableNumber:
     @staticmethod
     def updateAll() -> None:
         """calls periodic on all LoggedTunableNumbers to check for changes and call callbacks"""
-        for tunableNumber in LoggedTunableNumber._tunableNumbers:
-            tunableNumber.periodic()
+        if kTuningMode:
+            for tunableNumber in LoggedTunableNumber._tunableNumbers:
+                tunableNumber.periodic()
 
 
 class AutoUpdateGroup:
@@ -114,5 +115,6 @@ class AutoUpdateGroup:
     @staticmethod
     def updateAll() -> None:
         """calls periodic on all AutoUpdateGroups to check for changes and call callbacks"""
-        for updateGroup in AutoUpdateGroup._updateGroups:
-            updateGroup.periodic()
+        if kTuningMode:
+            for updateGroup in AutoUpdateGroup._updateGroups:
+                updateGroup.periodic()
