@@ -10,6 +10,7 @@ from functools import partial
 
 from numpy import interp
 from wpimath.geometry import Rotation2d
+from util.firecontrol import FireControlConfig
 
 kSampleDistances = [
     1.24 + 0.3,
@@ -66,8 +67,6 @@ kShotTimeMap = partial(
 kSOTMIterations = 1  # legacy — kept for reference, replaced by FireControlSolver
 
 # Fire control solver configuration
-from util.firecontrol import FireControlConfig
-
 kFireControlConfig = FireControlConfig(
     max_iterations=10,
     convergence_tolerance=0.001,  # seconds
