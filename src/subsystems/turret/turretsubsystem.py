@@ -10,6 +10,7 @@ from robotstate import RobotState
 from subsystems.turret.turretsubsystemio import TurretSubsystemIO
 from util.convenientmath import clampRotation
 from util.logtracer import LogTracer
+from util.logtunablenumber import LoggedTunableNumber
 
 from constants.intake import kPivotDangerZoneStart
 from constants.turret import (
@@ -17,6 +18,8 @@ from constants.turret import (
     kTurretMaxAngle,
     kTurretTolerance,
     kTurretStartingAngle,
+    kTurretMaxAcceleration,
+    kTurretMaxVelocity,
 )
 
 
@@ -33,6 +36,18 @@ class TurretSubsystem(Subsystem):
         self.isClosedLoop = True
         self.turretGoal = Rotation2d()
         self.turretGoalVel = 0.0  # rad / s
+
+        self.maxVel = LoggedTunableNumber("Turret/maxVel", kTurretMaxVelocity.degrees())
+        self.maxAccel = LoggedTunableNumber(
+            "Turret/maxAccel", kTurretMaxAcceleration.degrees()
+        )
+
+        self.maxVel.onChange(
+            lambda newVel: self.io.set_max_vel(Rotation2d.fromDegrees(newVel))
+        )
+        self.maxAccel.onChange(
+            lambda newAccel: self.io.set_max_accel(Rotation2d.fromDegrees(newAccel))
+        )
 
     def periodic(self) -> None:
         """Run ongoing subsystem periodic process."""
