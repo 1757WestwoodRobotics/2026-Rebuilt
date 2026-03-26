@@ -357,7 +357,7 @@ class RobotContainer:
         )
 
         # Chooser
-        self.chooser: LoggedDashboardChooser[commands2.Command] = (
+        self.chooser: LoggedDashboardChooser[commands2.Command | str] = (
             LoggedDashboardChooser("Autonomous")
         )
         self.chooser.addOption("Turret SysID", self.turret.sysIdRoutine(self.turret))
@@ -373,9 +373,14 @@ class RobotContainer:
         self.autoNames: dict[str, str] = {}  # display name -> file name
         pathsPath = os.path.join(wpilib.getDeployDirectory(), "pathplanner", "autos")
         for file in os.listdir(pathsPath):
-            relevantName = file.split(".")[0]
-            self.autoNames[relevantName] = relevantName
-            self.chooser.addOption(relevantName, relevantName)
+            name, ext = os.path.splitext(file)
+            if ext.lower() != ".auto":
+                print(
+                    "[RobotContainer] Skipping non-auto file in autos directory:", file
+                )
+                continue
+            self.autoNames[name] = name
+            self.chooser.addOption(name, name)
 
         self.chooser.setDefaultOption("Do Nothing Auto", self.nothingAuto)
 
