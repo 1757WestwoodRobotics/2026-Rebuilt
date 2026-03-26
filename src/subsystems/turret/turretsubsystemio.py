@@ -38,3 +38,13 @@ class TurretSubsystemIO:
         sets the current position of the turret in radians
         used for startup, or "re-zeroing"
         """
+
+    def set_max_accel(self, accel: Rotation2d):
+        """
+        sets the maximum acceleration of the turret in radians per second squared
+        """
+
+    def set_max_vel(self, vel: Rotation2d):
+        """
+        sets the maximum velocity of the turret in radians per second
+        """
