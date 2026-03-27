@@ -8,9 +8,7 @@ from util.convenientmath import map_range
 
 class RobotMechanism:
     @staticmethod
-    def getPoses(
-        turretRotation: Rotation2d, intakePivot: Rotation2d
-    ) -> list[Pose3d]:
+    def getPoses(turretRotation: Rotation2d, intakePivot: Rotation2d) -> list[Pose3d]:
         # Order is turret, bin wall, pivot
         intakeRotation = -intakePivot.radians()
         return [
