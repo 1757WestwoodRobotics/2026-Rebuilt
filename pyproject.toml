@@ -14,14 +14,14 @@ dependencies = [
     "phoenix6>=26.1.0",
     "photonlibpy~=2026.1.1",
     "pylint>=4.0.2",
-    "robotpy>=2026.2.1",
-    "robotpy-apriltag>=2026.2.1",
+    "robotpy>=2026.2.2",
+    "robotpy-apriltag>=2026.2.2",
     "robotpy-cli>=2026.0.1",
-    "robotpy-halsim-gui>=2026.2.1",
-    "robotpy-pathplannerlib>=2026.1.1",
+    "robotpy-halsim-gui>=2026.2.2",
+    "robotpy-pathplannerlib>=2026.1.2",
     "robotpy-pykit>=1.0.5",
     "robotpy-pykit-watch>=1.0.0",
-    "wpilib>=2026.2.1",
+    "wpilib>=2026.2.2",
 ]
 
 [tool.mypy]
