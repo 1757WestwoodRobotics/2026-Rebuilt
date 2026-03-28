@@ -1,5 +1,4 @@
-from enum import Enum, auto
-from typing import Optional
+from enum import Enum
 from commands2 import Subsystem
 from phoenix6.controls.solid_color import RGBWColor, SolidColor
 from phoenix6.hardware.candle import CANdle
@@ -41,7 +40,7 @@ class LEDSubsystem(Subsystem):
         STATE_BROWNOUT = (kBrownoutAnim, kEmptyOne)
         STATE_DISABLED = (kDisabledAnim, kEmptyOne)
         STATE_AUTO_FADE = (kEmptyZero, kEmptyOne)
-        STATE_PREP = (kShootingAnim, kEmptyOne, kEmptyZero)
+        STATE_PREP = (kPrepAnim, kEmptyOne, kEmptyZero)
         STATE_PREP_FLASH = (kPrepFlashAnim, kEmptyOne)
         STATE_SHOOTING = (kShootingAnim, kEmptyOne, kEmptyZero)
         STATE_SHOOTING_FLASH = (kShootingFlashAnim, kEmptyOne)
