@@ -26,6 +26,7 @@ from commands.resetgyro import ResetGyro
 from preflight import PreflightChecklist
 from robotmechanism import RobotMechanism
 from robotstate import RobotState
+from subsystems.leds.ledsubsystem import LEDSubsystem
 from subsystems.drive.driveiopigeon import DriveIOPigeon
 from subsystems.drive.drivesubsystem import DriveSubsystem
 from subsystems.drive.swervemoduleio import SwerveModuleConfigParams, SwerveModuleIO
@@ -194,7 +195,7 @@ class RobotContainer:
                 self.indexer = IndexerSubsystem(IndexerSubsystemIOTalon())
                 self.flywheel = FlywheelSubsystem(FlywheelSubsystemIOTalon())
                 self.hood = HoodSubsystem(HoodSubsystemIOTalon())
-                # self.leds = LEDSubsystem()
+                self.leds = LEDSubsystem()
 
             case RobotModes.SIMULATION:
                 self.drive = DriveSubsystem(
