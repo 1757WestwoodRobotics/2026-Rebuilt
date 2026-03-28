@@ -57,6 +57,7 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
     steerRequest: MotionMagicVoltage = MotionMagicVoltage(0)
     driveRequest: VelocityTorqueCurrentFOC = VelocityTorqueCurrentFOC(0)
 
+    # pylint: disable-next=too-many-statements
     def __init__(self, name: str, config: SwerveModuleConfigParams) -> None:
         SwerveModuleIO.__init__(self, name)
         print(f"Initializing swerve module: {self.name}")
