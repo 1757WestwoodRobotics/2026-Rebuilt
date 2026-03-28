@@ -72,7 +72,7 @@ class Orion(LoggedRobot):
                     os.makedirs(usb_logs, exist_ok=True)
                     Logger.addDataReciever(WPILOGWriter())
                 else:
-                    fallback_dir = os.path.abspath("pyLogs")
+                    fallback_dir = "/home/lvuser/pyLogs"
                     os.makedirs(fallback_dir, exist_ok=True)
                     Logger.addDataReciever(
                         WPILOGWriter(filename=None, path=fallback_dir)
