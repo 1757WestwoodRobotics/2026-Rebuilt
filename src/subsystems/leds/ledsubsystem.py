@@ -36,15 +36,15 @@ class LEDSubsystem(Subsystem):
 
     # LED state identifiers for caching — avoids sending redundant CAN frames
     class LEDStates(Enum):
-        STATE_ESTOP = (kEstopAnim, kEmptyOne)
-        STATE_BROWNOUT = (kBrownoutAnim, kEmptyOne)
-        STATE_DISABLED = (kDisabledAnim, kEmptyOne)
-        STATE_AUTO_FADE = (kEmptyZero, kEmptyOne)
-        STATE_PREP = (kPrepAnim, kEmptyOne, kEmptyZero)
-        STATE_PREP_FLASH = (kPrepFlashAnim, kEmptyOne)
-        STATE_SHOOTING = (kShootingAnim, kEmptyOne, kEmptyZero)
-        STATE_SHOOTING_FLASH = (kShootingFlashAnim, kEmptyOne)
-        STATE_NEUTRAL = ()
+        ESTOP = (kEstopAnim, kEmptyOne)
+        BROWNOUT = (kBrownoutAnim, kEmptyOne)
+        DISABLED = (kDisabledAnim, kEmptyOne)
+        AUTO_FADE = (kEmptyZero, kEmptyOne)
+        PREP = (kPrepAnim, kEmptyOne, kEmptyZero)
+        PREP_FLASH = (kPrepFlashAnim, kEmptyOne)
+        SHOOTING = (kShootingAnim, kEmptyOne, kEmptyZero)
+        SHOOTING_FLASH = (kShootingFlashAnim, kEmptyOne)
+        NEUTRAL = ()
 
     def __init__(self) -> None:
         Subsystem.__init__(self)
@@ -53,24 +53,9 @@ class LEDSubsystem(Subsystem):
         self.candle = CANdle(kCANdleCANId, kCANivoreCANBus)
 
         self._lastFadePercent: int = -1  # track fade level for auto-fade animation
-        self._lastState = self.LEDStates.STATE_NEUTRAL
+        self._lastState = self.LEDStates.NEUTRAL
         self.lastEnabledAuto = False
         self.lastEnabledTime = 0.0
-        # self.estopState = "estop"
-        # self.brownoutState = "brownout"
-        # self.disabledState = "disabled"
-        # self.autoFadeState = "auto_fade"
-        # self.prepState = "prep"
-        # self.prepFlashState = "prep_flash"
-        # self.shootingState = "shooting"
-        # self.shootingFlashState = "shooting_flash"
-
-    # def _setState(self, state: str) -> bool:
-    #     """Returns True if the state changed and CAN frames should be sent."""
-    #     if self._lastState == state:
-    #         return False
-    #     self._lastState = state
-    #     return True
 
     def setStateAnim(self, state: LEDStates) -> None:
         """Sets the last state and executes animations."""
@@ -88,10 +73,7 @@ class LEDSubsystem(Subsystem):
             self.lastEnabledTime = Timer.getFPGATimestamp()
 
         if DriverStation.isEStopped():
-            self.setStateAnim(self.LEDStates.STATE_ESTOP)
-            # if self._setState(self.estopState):
-            #     self.candle.set_control(kEstopAnim)
-            #     self.candle.set_control(kEmptyOne)
+            self.setStateAnim(self.LEDStates.ESTOP)
         elif DriverStation.isDisabled():
             if (
                 self.lastEnabledAuto
@@ -106,11 +88,7 @@ class LEDSubsystem(Subsystem):
                 fadeLevel = int(percent * kCANdleExternalLedCount)
                 if fadeLevel != self._lastFadePercent:
                     self._lastFadePercent = fadeLevel
-                    self.setStateAnim(self.LEDStates.STATE_AUTO_FADE)
-                    # self._lastState = self.LEDStates.STATE_AUTO_FADE
-
-                    # self.candle.set_control(kEmptyZero)
-                    # self.candle.set_control(kEmptyOne)
+                    self.setStateAnim(self.LEDStates.AUTO_FADE)
                     self.candle.set_control(
                         SolidColor(
                             kCANdleOnboardLedCount,
@@ -127,46 +105,20 @@ class LEDSubsystem(Subsystem):
                     )
             else:
                 if RobotState.brownoutFlag:
-                    self.setStateAnim(self.LEDStates.STATE_BROWNOUT)
-                    # if self._setState(self.brownoutState):
-                    #     self.candle.set_control(kBrownoutAnim)
-                    #     self.candle.set_control(kEmptyOne)
+                    self.setStateAnim(self.LEDStates.BROWNOUT)
                 else:
-                    self.setStateAnim(self.LEDStates.STATE_DISABLED)
-
-                    # if self._setState(self.disabledState):
-
-                    #     self.candle.set_control(kDisabledAnim)
-                    #     self.candle.set_control(kEmptyOne)
+                    self.setStateAnim(self.LEDStates.DISABLED)
         else:
             if RobotState.hubAboutToChange():
                 if RobotState.readyToShoot():
-                    self.setStateAnim(self.LEDStates.STATE_SHOOTING_FLASH)
-
-                    # if self._setState(self.shootingFlashState):
-                    #     self.candle.set_control(kShootingFlashAnim)
-                    #     self.candle.set_control(kEmptyOne)
+                    self.setStateAnim(self.LEDStates.SHOOTING_FLASH)
                 else:
-                    self.setStateAnim(self.LEDStates.STATE_PREP_FLASH)
-
-                    # if self._setState(self.prepFlashState):
-                    #     self.candle.set_control(kPrepFlashAnim)
-                    #     self.candle.set_control(kEmptyOne)
+                    self.setStateAnim(self.LEDStates.PREP_FLASH)
             else:
                 if RobotState.readyToShoot():
-                    self.setStateAnim(self.LEDStates.STATE_SHOOTING)
-
-                    # if self._setState(self.shootingState):
-                    #     self.candle.set_control(kShootingAnim)
-                    #     self.candle.set_control(kEmptyOne)
-                    #     self.candle.set_control(kEmptyZero)
+                    self.setStateAnim(self.LEDStates.SHOOTING)
                 else:
-                    self.setStateAnim(self.LEDStates.STATE_PREP)
-
-                    # if self._setState(self.prepState):
-                    #     self.candle.set_control(kPrepAnim)
-                    #     self.candle.set_control(kEmptyOne)
-                    #     self.candle.set_control(kEmptyZero)
+                    self.setStateAnim(self.LEDStates.PREP)
 
         Logger.recordOutput("LED/lastEnabledAuto", self.lastEnabledAuto)
         Logger.recordOutput("LED/lastEnabledTime", self.lastEnabledTime)
