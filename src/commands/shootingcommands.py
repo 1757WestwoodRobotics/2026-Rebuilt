@@ -20,12 +20,10 @@ from constants.trajectory import kRotationPGain, kRotationIGain, kRotationDGain
 from constants.hood import kHoodMaxAngle
 from constants.shooting import kShootingMap, kHoodAngleMap, kFeedFlywheelMap
 from constants.turret import kTurretLocation, kTurretTolerance
-from constants.drive import kSOTMSpeedMultiplier
 
 from util.angleoptimize import optimizeAngle
 from util.controltype import AnalogInput
 from util.convenientmath import pose3dFrom2d
-from util.helpfultriggerwrappers import ConstantMul
 
 
 def feedIfTurretAligned(indexer: IndexerSubsystem) -> Command:
@@ -87,9 +85,9 @@ def feedBallsStatic(
     return cmd.parallel(
         FlywheelCommands.feedWithDistance(flywheel, RobotState.distanceToObjective),
         HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
-        # wait until the flywheel is at speed and the hood is at angle before kicking the indexer
-        # to shoot
-        cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
+        cmd.waitUntil(RobotState.readyToFeed).andThen(
+            IndexerCommands.kickIndexer(indexer).repeatedly()
+        ),
     )
 
 
@@ -159,7 +157,9 @@ def feedBallsMoving(
             flywheel, lambda: RobotState.effectiveObjectiveDistance
         ),
         HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
-        cmd.waitUntil(RobotState.readyToShoot).andThen(feedIfTurretAligned(indexer)),
+        cmd.waitUntil(RobotState.readyToFeed).andThen(
+            IndexerCommands.kickIndexer(indexer).repeatedly()
+        ),
     )
 
 
@@ -348,7 +348,6 @@ def shootBasedOnOverride(
     hood: HoodSubsystem,
     indexer: IndexerSubsystem,
     turret: TurretSubsystem,
-    intake: IntakeSubsystem,
     drive: DriveSubsystem,
     forward: AnalogInput,
     sideways: AnalogInput,
@@ -363,9 +362,7 @@ def shootBasedOnOverride(
                     flywheel, hood, turret, indexer, drive, forward, sideways
                 ),
                 cmd.parallel(
-                    shootBasedOnModeMovingWithOscillation(
-                        indexer, hood, flywheel, intake
-                    ),
+                    shootBasedOnModeMoving(indexer, hood, flywheel),
                     AbsoluteOverridingRotationDrive(
                         drive,
                         forward,
