@@ -519,7 +519,6 @@ class RobotContainer:
                 self.hood,
                 self.indexer,
                 self.turret,
-                self.intake,
                 self.drive,
                 self.oi.driverY,
                 self.oi.driverX,

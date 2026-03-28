@@ -127,6 +127,14 @@ class RobotState:
         return cls.flywheelAtSpeed and cls.turretAtAngle and cls.hoodAtAngle
 
     @classmethod
+    def readyToFeed(cls) -> bool:
+        """
+        Returns true if the robot is ready to feed, which is determined by whether the flywheel
+        is at speed and the hood is at the correct angle
+        """
+        return cls.flywheelAtSpeed and cls.hoodAtAngle
+
+    @classmethod
     def hubTags(cls) -> list[int]:
         """
         Returns the april tag IDs of the hubs we are scoring on
