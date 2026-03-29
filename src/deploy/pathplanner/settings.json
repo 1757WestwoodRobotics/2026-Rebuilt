@@ -9,8 +9,8 @@
     "Full Autos",
     "Raw Movement Autos"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 1.5,
+  "defaultMaxVel": 4.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 540.0,
   "defaultNominalVoltage": 12.0,
