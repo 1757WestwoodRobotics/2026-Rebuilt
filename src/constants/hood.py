@@ -5,6 +5,7 @@ from wpimath.system.plant import DCMotor
 
 kHoodMinAngle = Rotation2d.fromDegrees(0)
 kHoodMaxAngle = Rotation2d.fromDegrees(37)
+kHoodFeedAngle = Rotation2d.fromDegrees(36)
 kHoodStartAngle = kHoodMinAngle
 kHoodTolerance = Rotation2d.fromDegrees(1)
 kHoodMaxVelocity = Rotation2d.fromDegrees(360)
@@ -16,7 +17,7 @@ kHoodGearRatio = (48 / 16) * (24 / 18) * (170 / 15)
 
 kHoodCANId = 8
 
-kHoodPGain = 160.0
+kHoodPGain = 200.0
 kHoodIGain = 0.0
 kHoodDGain = 0.0
 kHoodSGain = 0.326

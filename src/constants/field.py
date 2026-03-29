@@ -82,7 +82,7 @@ kTrenchCenters = [
     kRightFarTrenchCenter,
 ]
 
-kFeedObjectiveRight = Translation2d(3 * kMetersPerFoot, 3 * kMetersPerFoot)
+kFeedObjectiveRight = Translation2d(3 * kMetersPerFoot, 4 * kMetersPerFoot)
 """The objective to feed balls to"""
-kFeedObjectiveLeft = Translation2d(3 * kMetersPerFoot, kFieldWidth - 3 * kMetersPerFoot)
+kFeedObjectiveLeft = Translation2d(3 * kMetersPerFoot, kFieldWidth - 4 * kMetersPerFoot)
 """The objective to feed balls to"""
