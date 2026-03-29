@@ -17,7 +17,7 @@ import commands.hoodcommands as HoodCommands
 from commands.drive.absoluteoverridingrotation import AbsoluteOverridingRotationDrive
 
 from constants.trajectory import kRotationPGain, kRotationIGain, kRotationDGain
-from constants.hood import kHoodMaxAngle
+from constants.hood import kHoodFeedAngle
 from constants.shooting import kShootingMap, kHoodAngleMap, kFeedFlywheelMap
 from constants.turret import kTurretLocation, kTurretTolerance
 
@@ -84,7 +84,7 @@ def feedBallsStatic(
     """
     return cmd.parallel(
         FlywheelCommands.feedWithDistance(flywheel, RobotState.distanceToObjective),
-        HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
+        HoodCommands.angleHood(hood, lambda: kHoodFeedAngle),
         cmd.waitUntil(RobotState.readyToFeed).andThen(
             IndexerCommands.kickIndexer(indexer).repeatedly()
         ),
@@ -156,7 +156,7 @@ def feedBallsMoving(
         FlywheelCommands.feedWithDistance(
             flywheel, lambda: RobotState.effectiveObjectiveDistance
         ),
-        HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
+        HoodCommands.angleHood(hood, lambda: kHoodFeedAngle),
         cmd.waitUntil(RobotState.readyToFeed).andThen(
             IndexerCommands.kickIndexer(indexer).repeatedly()
         ),
@@ -176,7 +176,7 @@ def feedBallsMovingWithOscillation(
         FlywheelCommands.feedWithDistance(
             flywheel, lambda: RobotState.effectiveObjectiveDistance
         ),
-        HoodCommands.angleHood(hood, lambda: kHoodMaxAngle),
+        HoodCommands.angleHood(hood, lambda: kHoodFeedAngle),
         cmd.waitUntil(RobotState.readyToShoot).andThen(
             cmd.parallel(
                 feedIfTurretAligned(indexer),
@@ -296,7 +296,7 @@ class TurretFixedDriveShoot(Command):
             self.hood.setHoodGoal(kHoodAngleMap(objectiveDistance))
         else:
             self.flywheel.setGoal(float(kFeedFlywheelMap(objectiveDistance)))
-            self.hood.setHoodGoal(kHoodMaxAngle)
+            self.hood.setHoodGoal(kHoodFeedAngle)
 
         objectiveRelativeToRobot = objectiveLocation - turretLocation.translation()
 
