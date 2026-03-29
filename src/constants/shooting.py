@@ -12,16 +12,16 @@ from numpy import interp
 from wpimath.geometry import Rotation2d
 
 kSampleDistances = [
-    1.24,
-    1.71,
-    1.93,
-    2.11,
-    2.71,
-    2.97,
-    3.30,
-    3.8,
-    5.0,
-    6.0,
+    1.24 + 0.3,
+    1.71 + 0.3,
+    1.93 + 0.3,
+    2.11 + 0.3,
+    2.71 + 0.3,
+    2.97 + 0.3,
+    3.30 + 0.3,
+    3.8 + 0.3,
+    5.0 + 0.3,
+    6.0 + 0.3,
 ]  # in meters
 
 kShootingMap = partial(
