@@ -11,6 +11,7 @@ import commands2
 import commands2.cmd as Commands
 from pathplannerlib.auto import PathPlannerAuto, NamedCommands
 
+from commands.drive.absoluteoverridingrotation import AbsoluteOverridingRotationDrive
 from commands.drive.absoluterelativedrive import AbsoluteRelativeDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
@@ -338,7 +339,13 @@ class RobotContainer:
         NamedCommands.registerCommand("Nothing", self.nothingAuto)
         NamedCommands.registerCommand(
             "shoot",
-            ShootingCommands.shootBallsStatic(self.indexer, self.hood, self.flywheel),
+            ShootingCommands.shootBallsStatic(
+                self.indexer, self.hood, self.flywheel
+            ).alongWith(
+                AbsoluteOverridingRotationDrive(
+                    self.drive, lambda: 0, lambda: 0, lambda: 0, lambda: 0
+                )
+            ),
         )
 
         NamedCommands.registerCommand(
@@ -346,6 +353,9 @@ class RobotContainer:
         )
         NamedCommands.registerCommand(
             "stopIntakeRollers", IntakeCommands.stopIntakeRollers(self.intake)
+        )
+        NamedCommands.registerCommand(
+            "partialRetract", IntakeCommands.oscillateIntake(self.intake)
         )
 
         # Chooser
