@@ -41,14 +41,18 @@ kHoodAngleMap = lambda x: Rotation2d.fromDegrees(
     )
 )
 
+kFeedSampleDistances = [*kSampleDistances, 8.0, 10.0]
+
 kFeedFlywheelMap = partial(
-    interp, xp=kSampleDistances, fp=[110, 135, 145, 150, 175, 185, 195, 220, 250, 274]
+    interp,
+    xp=kFeedSampleDistances,
+    fp=[110, 135, 145, 150, 175, 185, 195, 220, 250, 274, 320, 360],
 )  # rad / s
 
 kFeedShotTimeMap = partial(
     interp,
-    xp=kSampleDistances,
-    fp=[0.59, 0.66, 0.69, 0.73, 0.81, 0.84, 0.88, 0.95, 1.04, 1.14],
+    xp=kFeedSampleDistances,
+    fp=[0.59, 0.66, 0.69, 0.73, 0.81, 0.84, 0.88, 0.95, 1.04, 1.14, 1.30, 1.45],
 )
 
 kShotTimeMap = partial(
