@@ -108,7 +108,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 robotPose,
                                 target.poseAmbiguity,
                                 1,
-                                target.fiducialId,
+                                1 << target.fiducialId - 1,
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
@@ -120,7 +120,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 fieldToBase,
                                 target.poseAmbiguity,
                                 1,
-                                target.fiducialId,
+                                1 << target.fiducialId - 1,
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
