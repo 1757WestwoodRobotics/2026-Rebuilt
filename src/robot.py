@@ -21,7 +21,6 @@ from pykit.logger import Logger
 import constants
 from robotcontainer import RobotContainer
 from util import elasticlib
-from util.logtracer import LogTracer
 from util.phoenixutil import PhoenixUtil
 
 
@@ -137,14 +136,28 @@ class Orion(LoggedRobot):
         elasticlib.select_tab("PREFLIGHT")
 
     def robotPeriodic(self) -> None:
-        LogTracer.resetOuter("RobotPeriodic")
+        periodicStart = wpilib.RobotController.getFPGATime()
         PhoenixUtil.updateSignals()
-        LogTracer.record("PhoenixUpdate")
+        phoenixUpdate = wpilib.RobotController.getFPGATime()
         self.container.robotPeriodic()
-        LogTracer.record("ContainerPeriodic")
+        robotPeriodic = wpilib.RobotController.getFPGATime()
         commands2.CommandScheduler.getInstance().run()
-        LogTracer.record("CommandsPeriodic")
-        LogTracer.recordTotal()
+        schedulerUpdate = wpilib.RobotController.getFPGATime()
+        Logger.recordOutput(
+            "Timing/RobotPeriodic/PhoenixUpdateMS",
+            (phoenixUpdate - periodicStart) / 1000.0,
+        )
+        Logger.recordOutput(
+            "Timing/RobotPeriodic/ContainerUpdateMS",
+            (robotPeriodic - phoenixUpdate) / 1000.0,
+        )
+        Logger.recordOutput(
+            "Timing/RobotPeriodic/SchedulerUpdateMS",
+            (schedulerUpdate - robotPeriodic) / 1000.0,
+        )
+        Logger.recordOutput(
+            "Timing/RobotPeriodic/TotalMS", (schedulerUpdate - periodicStart) / 1000.0
+        )
 
     def disabledInit(self) -> None:
         """This function is called once each time the robot enters Disabled mode."""
