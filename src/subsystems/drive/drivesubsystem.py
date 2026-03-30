@@ -257,12 +257,10 @@ class DriveSubsystem(Subsystem):
         LogTracer.record("StateUpdate")
         Logger.processInputs("Drive", self.inputs)
         LogTracer.record("LoggerProcessInputs")
+        LogTracer.recordTotal()
 
         for module in self.modules:
             module.periodic()
-
-        LogTracer.record("ModulesPeriodic")
-        LogTracer.recordTotal()
 
     def arcadeDriveWithFactors(
         self,
