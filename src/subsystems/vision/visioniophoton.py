@@ -9,6 +9,7 @@ from subsystems.vision.visionio import (
 )
 
 from constants.vision import kApriltagFieldLayout
+from util.logtracer import LogTracer
 
 
 class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
@@ -26,12 +27,14 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
         self.camera = PhotonCamera(name)
         self.robotToCamera = robotToCamera
         self.isTurreted = isTurreted
+        self.name = name
 
     def updateCameraPosition(self, transform: Transform3d) -> None:
         self.robotToCamera = transform
 
     def updateInputs(self, inputs: VisionSubsystemIO.VisionSubsystemIOInputs):
         inputs.connected = self.camera.isConnected()
+        LogTracer.record(f"Camera{self.name} Connected")
         tagIds = []
         poseObservations = []
         turretedObservations = []
@@ -39,6 +42,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
         # get only the last 10 at most results
         allResults = self.camera.getAllUnreadResults()
         lastResults = allResults[-10:]
+        LogTracer.record(f"Camera{self.name} GetAllUnreadResults")
         for result in lastResults:
             if result.multitagResult is not None:
                 fieldToCamera = result.multitagResult.estimatedPose.best
@@ -125,7 +129,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 ObservationType.PHOTONVISION.value,
                             )
                         )
-
+        LogTracer.record(f"Camera{self.name} ProcessResults")
         inputs.poseObservations = poseObservations
         inputs.tagIds = tagIds
         inputs.turretedObservations = turretedObservations
