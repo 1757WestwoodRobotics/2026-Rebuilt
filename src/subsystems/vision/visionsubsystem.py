@@ -38,7 +38,6 @@ class VisionSubsystem(Subsystem):
         for idx, (i, inp) in enumerate(zip(self.io, self.inputs)):
             i.updateInputs(inp)
             Logger.processInputs(f"Vision/Camera{idx}", self.inputs[idx])
-            LogTracer.record(f"Camera{idx} UpdateInputs")
         LogTracer.record("All Cameras UpdateInputs")
 
         allTagPoses = []
