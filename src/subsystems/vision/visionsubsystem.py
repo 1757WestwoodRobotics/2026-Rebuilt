@@ -17,6 +17,10 @@ from util.logtracer import LogTracer
 from util.robotposeestimator import TurretedVisionObservation, VisionObservation
 
 
+# Number of April tags on the field — limits bitmask iteration
+_MAX_TAG_ID = 22
+
+
 class VisionSubsystem(Subsystem):
     def __init__(
         self,
@@ -31,6 +35,17 @@ class VisionSubsystem(Subsystem):
         self.inputs: list[VisionSubsystemIO.VisionSubsystemIOInputs] = []
         for _ in io:
             self.inputs.append(VisionSubsystemIO.VisionSubsystemIOInputs())
+
+        # Cache tag poses at init to avoid repeated field layout lookups
+        self._tagPoseCache: dict[int, object] = {}
+        for i in range(1, _MAX_TAG_ID + 1):
+            pose = kApriltagFieldLayout.getTagPose(i)
+            if pose is not None:
+                self._tagPoseCache[i] = pose
+
+        # Cache field bounds to avoid method calls in the hot loop
+        self._fieldLength = kApriltagFieldLayout.getFieldLength()
+        self._fieldWidth = kApriltagFieldLayout.getFieldWidth()
 
     # pylint:disable-next=too-many-locals, too-many-statements, too-many-branches
     def periodic(self) -> None:
@@ -62,7 +77,7 @@ class VisionSubsystem(Subsystem):
             turretedTransformsRejected = []
 
             for tagId in camera.tagIds:
-                tagPose = kApriltagFieldLayout.getTagPose(tagId)
+                tagPose = self._tagPoseCache.get(tagId)
                 if tagPose is not None:
                     tagPoses.append(tagPose)
 
@@ -75,9 +90,9 @@ class VisionSubsystem(Subsystem):
                     )
                     or abs(observation.pose.Z()) > kMaxVisionZError
                     or observation.pose.X() < 0.0
-                    or observation.pose.X() > kApriltagFieldLayout.getFieldLength()
+                    or observation.pose.X() > self._fieldLength
                     or observation.pose.Y() < 0.0
-                    or observation.pose.Y() > kApriltagFieldLayout.getFieldWidth()
+                    or observation.pose.Y() > self._fieldWidth
                 )
 
                 robotPoses.append(observation.pose)
@@ -95,15 +110,14 @@ class VisionSubsystem(Subsystem):
                 linearStdDev = kXyStdDevCoeff * stdDevFactor
                 angularStdDev = kThetaStdDevCoeff * stdDevFactor
 
-                # here you can also factor in per-camera weighting
-
+                # Extract tag IDs from bitmask — only iterate up to _MAX_TAG_ID
                 observedTags = []
                 tagsList = observation.tagsList
-                for tagId in range(32):
+                for tagId in range(_MAX_TAG_ID):
                     if tagsList & (1 << tagId):
                         observedTags.append(
                             tagId + 1
-                        )  # need to add 1 since tag IDs are 1 indexed but our bitmask is 0 indexed
+                        )  # add 1 since tag IDs are 1-indexed but bitmask is 0-indexed
 
                 self.consumer(
                     VisionObservation(
@@ -128,11 +142,9 @@ class VisionSubsystem(Subsystem):
                     )
                     > kMaxVisionZError  # work backwards onto what the robot pose would be
                     or observation.fieldToTurret.X() < 0.0
-                    or observation.fieldToTurret.X()
-                    > kApriltagFieldLayout.getFieldLength()
+                    or observation.fieldToTurret.X() > self._fieldLength
                     or observation.fieldToTurret.Y() < 0.0
-                    or observation.fieldToTurret.Y()
-                    > kApriltagFieldLayout.getFieldWidth()
+                    or observation.fieldToTurret.Y() > self._fieldWidth
                 )
                 turretPose = pose3dFromTransform3d(observation.fieldToTurret)
                 turretedTransforms.append(turretPose)
@@ -149,11 +161,11 @@ class VisionSubsystem(Subsystem):
                 )
                 linearStdDev = kXyStdDevCoeff * stdDevFactor
                 angularStdDev = kThetaStdDevCoeff * stdDevFactor
-                # here you can also factor in per-camera weighting
+
+                # Extract tag IDs from bitmask — only iterate up to _MAX_TAG_ID
                 observedTags = []
                 tagsList = observation.tagsList
-                # extract tag list from bit masks
-                for tagId in range(32):
+                for tagId in range(_MAX_TAG_ID):
                     if tagsList & (1 << tagId):
                         observedTags.append(tagId + 1)
 
@@ -166,25 +178,29 @@ class VisionSubsystem(Subsystem):
                     )
                 )
 
-            Logger.recordOutput(f"Vision/Camera{idx}/TagPose", tagPoses)
-            Logger.recordOutput(f"Vision/Camera{idx}/RobotPoses", robotPoses)
-            Logger.recordOutput(
-                f"Vision/Camera{idx}/RobotPosesRejected", robotPosesRejected
-            )
-            Logger.recordOutput(
-                f"Vision/Camera{idx}/RobotPosesAccepted", robotPosesAccepted
-            )
-            Logger.recordOutput(
-                f"Vision/Camera{idx}/TurretedTransforms", turretedTransforms
-            )
-            Logger.recordOutput(
-                f"Vision/Camera{idx}/TurretedTransformsRejected",
-                turretedTransformsRejected,
-            )
-            Logger.recordOutput(
-                f"Vision/Camera{idx}/TurretedTransformsAccepted",
-                turretedTransformsAccepted,
-            )
+            # Only log per-camera data when there are observations to report
+            if len(tagPoses) > 0:
+                Logger.recordOutput(f"Vision/Camera{idx}/TagPose", tagPoses)
+            if len(robotPoses) > 0:
+                Logger.recordOutput(f"Vision/Camera{idx}/RobotPoses", robotPoses)
+                Logger.recordOutput(
+                    f"Vision/Camera{idx}/RobotPosesRejected", robotPosesRejected
+                )
+                Logger.recordOutput(
+                    f"Vision/Camera{idx}/RobotPosesAccepted", robotPosesAccepted
+                )
+            if len(turretedTransforms) > 0:
+                Logger.recordOutput(
+                    f"Vision/Camera{idx}/TurretedTransforms", turretedTransforms
+                )
+                Logger.recordOutput(
+                    f"Vision/Camera{idx}/TurretedTransformsRejected",
+                    turretedTransformsRejected,
+                )
+                Logger.recordOutput(
+                    f"Vision/Camera{idx}/TurretedTransformsAccepted",
+                    turretedTransformsAccepted,
+                )
             allTagPoses.extend(tagPoses)
             allRobotPoses.extend(robotPoses)
             allRobotPosesAccepted.extend(robotPosesAccepted)
@@ -194,17 +210,27 @@ class VisionSubsystem(Subsystem):
             allTurretedTransformsRejected.extend(turretedTransformsRejected)
         LogTracer.record("All Cameras ProcessObservations")
 
-        Logger.recordOutput("Vision/Summary/TagPose", allTagPoses)
-        Logger.recordOutput("Vision/Summary/RobotPoses", allRobotPoses)
-        Logger.recordOutput("Vision/Summary/RobotPosesRejected", allRobotPosesRejected)
-        Logger.recordOutput("Vision/Summary/RobotPosesAccepted", allRobotPosesAccepted)
-        Logger.recordOutput("Vision/Summary/TurretedTransforms", allTurretedTransforms)
-        Logger.recordOutput(
-            "Vision/Summary/TurretedTransformsRejected",
-            allTurretedTransformsRejected,
-        )
-        Logger.recordOutput(
-            "Vision/Summary/TurretedTransformsAccepted",
-            allTurretedTransformsAccepted,
-        )
+        # Only log summary data when there are observations
+        if len(allTagPoses) > 0:
+            Logger.recordOutput("Vision/Summary/TagPose", allTagPoses)
+        if len(allRobotPoses) > 0:
+            Logger.recordOutput("Vision/Summary/RobotPoses", allRobotPoses)
+            Logger.recordOutput(
+                "Vision/Summary/RobotPosesRejected", allRobotPosesRejected
+            )
+            Logger.recordOutput(
+                "Vision/Summary/RobotPosesAccepted", allRobotPosesAccepted
+            )
+        if len(allTurretedTransforms) > 0:
+            Logger.recordOutput(
+                "Vision/Summary/TurretedTransforms", allTurretedTransforms
+            )
+            Logger.recordOutput(
+                "Vision/Summary/TurretedTransformsRejected",
+                allTurretedTransformsRejected,
+            )
+            Logger.recordOutput(
+                "Vision/Summary/TurretedTransformsAccepted",
+                allTurretedTransformsAccepted,
+            )
         LogTracer.recordTotal()

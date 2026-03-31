@@ -27,18 +27,38 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
         self.robotToCamera = robotToCamera
         self.isTurreted = isTurreted
 
+        # Cache tag poses at init to avoid repeated field layout lookups in the hot loop
+        self._tagPoseCache: dict[int, Pose3d | None] = {
+            i: kApriltagFieldLayout.getTagPose(i) for i in range(1, 23)
+        }
+
     def updateCameraPosition(self, transform: Transform3d) -> None:
         self.robotToCamera = transform
 
     def updateInputs(self, inputs: VisionSubsystemIO.VisionSubsystemIOInputs):
         inputs.connected = self.camera.isConnected()
+
+        # Skip getAllUnreadResults() when camera is disconnected.
+        # This avoids the expensive _versionCheck() inside photonlibpy which
+        # generates full Python stack traces via wpilib.reportWarning() every 5 seconds,
+        # each costing significant CPU time on the roboRIO.
+        if not inputs.connected:
+            inputs.poseObservations = []
+            inputs.tagIds = []
+            inputs.turretedObservations = []
+            return
+
         tagIds = []
         poseObservations = []
         turretedObservations = []
 
-        # get only the last 10 at most results
+        # Limit to last 2 results per cycle instead of 10.
+        # PhotonVision runs at 30-90 FPS while the robot loop is 50 Hz,
+        # so results accumulate. Processing 10 results means 10x the
+        # Transform3d math per cycle. The most recent 2 are sufficient
+        # since older results have increasingly stale timestamps.
         allResults = self.camera.getAllUnreadResults()
-        lastResults = allResults[-10:]
+        lastResults = allResults[-2:]
         for result in lastResults:
             if result.multitagResult is not None:
                 fieldToCamera = result.multitagResult.estimatedPose.best
@@ -53,11 +73,8 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                 tagIds.extend(result.multitagResult.fiducialIDsUsed)
 
                 idsCondensed = 0
-                # this is stored in a 32 bit unsigned integer, this is OK since only 32 tags exist on the field
                 for tagId in result.multitagResult.fiducialIDsUsed:
-                    idsCondensed |= (
-                        1 << tagId - 1
-                    )  # condense the tag IDs into a single integer using bitwise OR. This allows us to store up to 32 tag IDs in a single integer, which is more efficient than storing a list of integers.
+                    idsCondensed |= 1 << (tagId - 1)
 
                 if not self.isTurreted:
                     poseObservations.append(
@@ -87,7 +104,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
             elif len(result.targets) > 0:
                 target = result.targets[0]
 
-                tagPose = kApriltagFieldLayout.getTagPose(target.fiducialId)
+                tagPose = self._tagPoseCache.get(target.fiducialId)
                 if tagPose is not None:
                     fieldToTarget = Transform3d(
                         tagPose.translation(), tagPose.rotation()
@@ -101,6 +118,9 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
 
                     tagIds.append(target.fiducialId)
 
+                    # Encode as bitmask: tag ID 1 -> bit 0, tag ID 2 -> bit 1, etc.
+                    tagBitmask = 1 << (target.fiducialId - 1)
+
                     if not self.isTurreted:
                         poseObservations.append(
                             VisionSubsystemPoseObservation(
@@ -108,7 +128,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 robotPose,
                                 target.poseAmbiguity,
                                 1,
-                                target.fiducialId,
+                                tagBitmask,
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
@@ -120,7 +140,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 fieldToBase,
                                 target.poseAmbiguity,
                                 1,
-                                target.fiducialId,
+                                tagBitmask,
                                 cameraToTarget.translation().norm(),
                                 ObservationType.PHOTONVISION.value,
                             )
