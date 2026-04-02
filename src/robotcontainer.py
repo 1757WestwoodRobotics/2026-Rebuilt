@@ -534,7 +534,7 @@ class RobotContainer:
         )
 
         self.oi.driverController.x().whileTrue(DefenseState(self.drive))
-        self.oi.driverController.a().whileTrue(
+        self.oi.driverController.b().whileTrue(
             IntakeCommands.reverseIntake(self.intake)
         )
 
