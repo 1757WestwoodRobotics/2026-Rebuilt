@@ -34,10 +34,10 @@ class IntakeSubsystemIOSim(IntakeSubsystemIOTalon):
             kPivotMotor,
             kPivotGearRatio,
             kPivotArmLength,
-            -kPivotMaxAngle.radians(),
             kPivotMinAngle.radians(),
+            kPivotMaxAngle.radians(),
             True,
-            -kPivotStartAngle.radians(),  # negate such that the zero offset is set properly
+            kPivotStartAngle.radians(),  # negate such that the zero offset is set properly
         )
         self.rollerSimModel = DCMotorSim(
             LinearSystemId.DCMotorSystem(kRollerMotor, 0.04, kRollerGearRatio),

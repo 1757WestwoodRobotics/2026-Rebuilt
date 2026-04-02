@@ -50,7 +50,7 @@ kPivotCurrentLimit = (
 kRollerMotor = DCMotor.krakenX60FOC(1)
 kRollerGearRatio = 24 / 18
 
-kPivotRetractedPosition = Rotation2d.fromDegrees(125.5)
+kPivotRetractedPosition = Rotation2d.fromDegrees(119)
 
 kPivotSafePosition = Rotation2d.fromDegrees(100)
 # A position that the intake can go to while it waits for the turret to rotate to a safe position.
