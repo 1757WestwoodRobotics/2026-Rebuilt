@@ -34,8 +34,8 @@ kPivotConstraints = TrapezoidProfileRadians.Constraints(
 
 # Positive angle is upwards, 0 angle is horizontal, and positive is upwards
 kPivotMinAngle = Rotation2d()
-kPivotMaxAngle = Rotation2d.fromDegrees(125.5)
-kPivotStartAngle = Rotation2d.fromDegrees(125.5)
+kPivotMaxAngle = Rotation2d.fromDegrees(119)
+kPivotStartAngle = Rotation2d.fromDegrees(119)
 
 kPivotRollersAllowedToMoveAngle = Rotation2d.fromDegrees(80)
 
