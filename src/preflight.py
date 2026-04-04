@@ -55,7 +55,10 @@ class PreflightChecklist:
                 "Farm is Connected", "Preflight/Farm", True
             ),
             PreflightChecklist.PreflightCheck(
-                "Autonomous is Selected", "Preflight/Autonomous", True
+                "Autonomous is Selected (operator)", "Preflight/AutonomousOp", True
+            ),
+            PreflightChecklist.PreflightCheck(
+                "Autonomous is Selected (driver)", "Preflight/AutonomousDr", True
             ),
             PreflightChecklist.PreflightCheck(
                 "Robot in correct autonomous position", "Preflight/AutoLoc", True
