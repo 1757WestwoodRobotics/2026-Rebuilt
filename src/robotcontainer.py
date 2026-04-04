@@ -474,6 +474,10 @@ class RobotContainer:
             IntakeCommands.bumpIntakeDown(self.intake)
         )
 
+        self.oi.operatorController.button(8).whileTrue(
+            IntakeCommands.oscillateIntake(self.intake)
+        )
+
         # indexer related
         self.oi.operatorController.button(5).whileTrue(
             IndexerCommands.kickIndexer(self.indexer)

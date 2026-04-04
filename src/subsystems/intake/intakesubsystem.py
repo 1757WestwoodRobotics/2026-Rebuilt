@@ -67,6 +67,10 @@ class IntakeSubsystemGoal(Enum):
         RollerGoal.REVERSE,
         PivotGoal.DEPLOYED,
     )
+    OSCILLATE = (
+        RollerGoal.FORWARD,
+        PivotGoal.OSCILLATE,
+    )
 
 
 @autologgable_output
@@ -101,15 +105,6 @@ class IntakeSubsystem(Subsystem):
         LogTracer.record("UpdateInputs")
 
         pivotGoal = self.pivotGoal.value
-        if self.pivotGoal == PivotGoal.OSCILLATE:
-            if (
-                self.isAtGoal(PivotGoal.OSCILLATE.value)
-                or self.rollerGoal == RollerGoal.FORWARD
-            ):
-                self._oscillationGoal = PivotGoal.DEPLOYED
-            elif self.isAtGoal(PivotGoal.DEPLOYED.value):
-                self._oscillationGoal = PivotGoal.OSCILLATE
-            pivotGoal = self._oscillationGoal.value
         if self.isClosedLoop:
             goalAngle = (
                 clampRotation(pivotGoal, kPivotMinAngle, kPivotMaxAngle)

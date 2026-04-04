@@ -42,8 +42,10 @@ def retractIntake(intake: IntakeSubsystem) -> Command:
 
 def oscillateIntake(intake: IntakeSubsystem) -> Command:
     return (
-        Commands.run(partial(intake.setPivotGoal, PivotGoal.OSCILLATE))
-        .finallyDo(lambda _interrupted: intake.setPivotGoal(PivotGoal.DEPLOYED))
+        Commands.run(partial(intake.setSubsystemGoal, IntakeSubsystemGoal.OSCILLATE))
+        .finallyDo(
+            lambda _interrupted: intake.setSubsystemGoal(IntakeSubsystemGoal.EXTENDED)
+        )
         .withName("OscillateIntake")
     )
 
