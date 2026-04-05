@@ -487,6 +487,25 @@ class RobotState:
         return cls.getFieldPose().rotation()
 
     @classmethod
+    def resetGyro(cls, rotation: Rotation2d = Rotation2d()) -> None:
+        cls.headingOffset = rotation - cls.robotHeading
+        odoPose = cls.odometry.getPose()
+        cls.odometry.resetPosition(
+            rotation, cls.modulePositions, Pose2d(odoPose.x, odoPose.y, rotation)
+        )
+        fieldPose = cls.fieldEstimator.estimatedPose
+        cls.fieldEstimator.resetPosition(
+            rotation, cls.modulePositions, Pose2d(fieldPose.x, fieldPose.y, rotation)
+        )
+        hubPose = cls.hubEstimator.estimatedPose
+        cls.hubEstimator.resetPosition(
+            rotation, cls.modulePositions, Pose2d(hubPose.x, hubPose.y, rotation)
+        )
+
+        if RobotBase.isSimulation() and not Logger.isReplay():
+            cls.resetSimPose(Pose2d(rotation=rotation))
+
+    @classmethod
     def resetPose(cls, pose: Pose2d = Pose2d()) -> None:
         cls.headingOffset = cls.robotHeading - pose.rotation()
         cls.odometry.resetPosition(cls.robotHeading, cls.modulePositions, pose)
