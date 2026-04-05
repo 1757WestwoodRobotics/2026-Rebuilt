@@ -16,6 +16,7 @@ from commands.drive.absoluterelativedrive import AbsoluteRelativeDrive
 from commands.drive.anglealign import AngleAlignDrive
 from commands.defensestate import DefenseState
 import commands.intakecommands as IntakeCommands
+from commands.resetdrive import ResetDrive
 import commands.turretcommands as TurretCommands  # module, not class
 import commands.indexercommands as IndexerCommands  # module, not class
 import commands.hoodcommands as HoodCommands
@@ -542,7 +543,12 @@ class RobotContainer:
         )
 
         self.oi.driverController.povDown().onTrue(
-            ResetGyro(self.drive, Pose2d(0, 0, 0)).andThen(
+            ResetGyro(self.drive).andThen(
+                self.oi.rumbleControllersCommand().withTimeout(0.5)
+            )
+        )
+        self.oi.driverController.povUp().onTrue(
+            ResetDrive(self.drive, Pose2d(0, 0, 0)).andThen(
                 self.oi.rumbleControllersCommand().withTimeout(0.5)
             )
         )
