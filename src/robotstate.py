@@ -503,7 +503,7 @@ class RobotState:
         )
 
         if RobotBase.isSimulation() and not Logger.isReplay():
-            cls.resetSimPose(Pose2d(rotation=rotation))
+            cls.resetSimPose(Pose2d().rotateBy(rotation))
 
     @classmethod
     def resetPose(cls, pose: Pose2d = Pose2d()) -> None:
