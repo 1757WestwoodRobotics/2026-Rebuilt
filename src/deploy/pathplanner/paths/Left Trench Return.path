@@ -8,37 +8,51 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0412244303707814,
-        "y": 5.649669985596307
+        "x": 3.697828703703704,
+        "y": 5.931866102430556
       },
       "isLocked": false,
       "linkedName": "Left Return Ending"
     },
     {
       "anchor": {
-        "x": 0.6367349137931042,
-        "y": 5.931099137931035
+        "x": 3.580946469907408,
+        "y": 7.487426215277778
       },
       "prevControl": {
-        "x": 1.422880143112701,
-        "y": 6.347119856887299
+        "x": 2.580946469907408,
+        "y": 7.487426215277778
+      },
+      "nextControl": {
+        "x": 4.580946469907408,
+        "y": 7.487426215277778
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.776769892939814,
+        "y": 7.487426215277778
+      },
+      "prevControl": {
+        "x": 6.035349942918044,
+        "y": 7.487426215277778
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Depot"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5979447355289427,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "deployIntake",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -49,12 +63,12 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 180.0
   },
   "useDefaultConstraints": true
