@@ -8,27 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.742219827586206,
-        "y": 7.856519396551725
+        "x": 8.771540948275863,
+        "y": 4.855991379310344
       },
       "isLocked": false,
       "linkedName": "Left Center"
-    },
-    {
-      "anchor": {
-        "x": 4.340969827586208,
-        "y": 7.563308189655173
-      },
-      "prevControl": {
-        "x": 5.474719827586207,
-        "y": 7.582855603448276
-      },
-      "nextControl": {
-        "x": 3.790595531013244,
-        "y": 7.553818977645294
-      },
-      "isLocked": false,
-      "linkedName": "Left Starting Config"
     },
     {
       "anchor": {
@@ -36,8 +20,8 @@
         "y": 5.931866102430556
       },
       "prevControl": {
-        "x": 3.5311149227849765,
-        "y": 6.252360802077199
+        "x": 1.5710613471760064,
+        "y": 5.931866102430556
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,20 +30,17 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.135135135135135,
+      "waypointRelativePos": 0.3738304640718562,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "shoot",
-      "waypointRelativePos": 1.572289156626506,
-      "endWaypointRelativePos": 2.0,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -73,9 +54,9 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Done editing",
+  "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": -90.0
   },
   "useDefaultConstraints": true
