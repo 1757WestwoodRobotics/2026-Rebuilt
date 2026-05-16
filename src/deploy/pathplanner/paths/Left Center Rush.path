@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.146023706896552,
-        "y": 7.631724137931036
+        "x": 8.249156646917596,
+        "y": 7.631476001006815
       },
       "isLocked": false,
       "linkedName": "Left Starting Config"
@@ -20,15 +20,20 @@
         "y": 4.855991379310344
       },
       "prevControl": {
-        "x": 7.739090143266919,
-        "y": 7.354703364999072
+        "x": 7.98027314707249,
+        "y": 7.412090158379801
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Left Center"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
@@ -52,10 +57,10 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "Done editing",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
