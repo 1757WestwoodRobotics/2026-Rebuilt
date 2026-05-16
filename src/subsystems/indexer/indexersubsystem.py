@@ -4,9 +4,11 @@ from commands2 import Subsystem
 from pykit.autolog import autologgable_output
 from pykit.logger import Logger
 
+from robotstate import RobotState
 from subsystems.indexer.indexersubsystemio import IndexerSubsystemIO
 from util.logtracer import LogTracer
 
+from constants.intake import kPivotDangerZoneStart
 from constants.indexer import (
     kSpindexer1ForwardVoltage,
     kSpindexer1ReverseVoltage,
@@ -63,10 +65,16 @@ class IndexerSubsystem(Subsystem):
         self.io.updateInputs(self.inputs)
         Logger.processInputs("Indexer", self.inputs)
         LogTracer.record("UpdateInputs")
+        spindexerMotorGoal = self.spindexerMotorGoal.value
+        kickerMotorGoal = self.kickerMotorGoal.value
+
+        if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
+            spindexerMotorGoal = SpindexerMotorGoal.NEUTRAL.value
+            kickerMotorGoal = KickerMotorGoal.NEUTRAL.value
 
         self.io.setIndexerTarget(
-            self.spindexerMotorGoal.value,
-            self.kickerMotorGoal.value,
+            spindexerMotorGoal,
+            kickerMotorGoal,
         )
 
         LogTracer.record("SetIndexerTarget")
