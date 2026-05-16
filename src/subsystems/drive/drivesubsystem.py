@@ -311,7 +311,7 @@ class DriveSubsystem(Subsystem):
         self, chassisSpeeds: ChassisSpeeds, coordinateMode: CoordinateMode
     ) -> None:
         Logger.recordOutput("drive/swerve/commandedSpeeds", chassisSpeeds)
-        discritizedSpeeds = ChassisSpeeds.discretize(chassisSpeeds, kRobotUpdatePeriod)
+        discritizedSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.1)
 
         robotChassisSpeeds = None
         if coordinateMode is DriveSubsystem.CoordinateMode.RobotRelative:
