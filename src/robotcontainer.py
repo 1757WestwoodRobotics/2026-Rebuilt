@@ -358,6 +358,12 @@ class RobotContainer:
         NamedCommands.registerCommand(
             "partialRetract", IntakeCommands.oscillateIntake(self.intake)
         )
+        NamedCommands.registerCommand(
+            "shooterDown",
+            HoodCommands.moveToMin(self.hood)
+            .alongWith(FlywheelCommands.idle(self.flywheel))
+            .withName("SuperstructureReset"),
+        )
 
         # Chooser
         self.chooser: LoggedDashboardChooser[commands2.Command | str] = (
