@@ -20,7 +20,7 @@ kTurretPGain = 40.321
 kTurretIGain = 0.0
 kTurretDGain = 0.80233
 kTurretSGain = 0.5
-kTurretVGain = 0.32494
+kTurretVGain = 0.5
 kTurretAGain = 0.0039108
 
 
