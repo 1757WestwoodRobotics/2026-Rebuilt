@@ -6,7 +6,7 @@ from pykit.alertlogger import AlertLogger
 from pykit.networktables.loggeddashboardchooser import LoggedDashboardChooser
 
 import wpilib
-from wpimath.geometry import Pose2d
+from wpimath.geometry import Pose2d, Rotation2d
 import commands2
 import commands2.cmd as Commands
 from pathplannerlib.auto import PathPlannerAuto, NamedCommands
@@ -472,7 +472,10 @@ class RobotContainer:
             IntakeCommands.bumpIntakeUp(self.intake)
         )
         self.oi.operatorController.button(16).onTrue(
-            IntakeCommands.bumpIntakeDown(self.intake)
+            TurretCommands.fudgeTurret(self.turret, Rotation2d.fromDegrees(-5))
+        )
+        self.oi.operatorController.button(14).onTrue(
+            TurretCommands.fudgeTurret(self.turret, Rotation2d.fromDegrees(5))
         )
 
         self.oi.operatorController.button(8).whileTrue(
