@@ -73,7 +73,7 @@ kFireControlConfig = FireControlConfig(
     sotm_drag_coeff=0.24,  # 1/s, tune based on ball aerodynamics
     min_sotm_speed=0.1,  # m/s, below this use static aiming
     vision_latency=0.030,  # seconds, vision pipeline delay
-    mechanism_latency=0.020,  # seconds, turret/hood/flywheel response
+    mechanism_latency=0.050,  # seconds, turret/hood/flywheel response
     min_scoring_distance=1.0,  # meters
     max_scoring_distance=6.0,  # meters
 )
