@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right Center Rush"
+                  "pathName": "Left Center Rush"
                 }
               }
             ]
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Center Return"
+            "pathName": "Left Center Return"
           }
         },
         {
@@ -53,24 +53,43 @@
                 }
               },
               {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              },
-              {
                 "type": "wait",
                 "data": {
                   "waitTime": 10.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Right return back to field"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "deployIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shooterDown"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Trench Return"
+                }
+              }
+            ]
           }
         }
       ]

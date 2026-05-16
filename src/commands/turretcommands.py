@@ -174,3 +174,10 @@ def angleTurret(turret: TurretSubsystem, goal: Callable[[], Rotation2d]) -> Comm
         turret.setTurretGoal(goal())
 
     return cmd.run(overrideFunc, turret).withName("AngleTurret")
+
+
+def fudgeTurret(turret: TurretSubsystem, amount: Rotation2d) -> Command:
+    def fudgeFunc():
+        turret.turretFudge += amount
+
+    return cmd.runOnce(fudgeFunc).withName("FudgeTurret")

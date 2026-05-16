@@ -1,3 +1,4 @@
+import math
 from enum import Enum, auto
 from typing import Callable
 from commands2.button import Trigger
@@ -23,6 +24,7 @@ from util.robotposeestimator import (
     VisionObservation,
 )
 from util.logtracer import LogTracer
+from util.firecontrol import FireControlSolver
 from constants import kRobotMode, RobotModes
 from constants.drive import kDriveKinematics
 from constants.turret import kTurretLocation
@@ -36,7 +38,12 @@ from constants.field import (
     kFieldWidth,
 )
 from constants.vision import kRedHubAprilTags, kBlueHubAprilTags
-from constants.shooting import kSOTMIterations, kShotTimeMap, kFeedShotTimeMap
+from constants.shooting import (
+    kShotTimeMap,
+    kFeedShotTimeMap,
+    kFireControlConfig,
+    kMinShootConfidence,
+)
 
 
 # pylint: disable-next=too-many-public-methods
@@ -97,6 +104,11 @@ class RobotState:
 
     effectiveObjectiveLocation: Translation2d = Translation2d()
     effectiveObjectiveDistance: float = 0.0
+    sotmConfidence: float = 0.0
+
+    fireControlSolver: FireControlSolver = FireControlSolver(
+        kFireControlConfig, kShotTimeMap, kFeedShotTimeMap
+    )
 
     @classmethod
     def objectiveLocation(cls) -> Translation2d:
@@ -122,9 +134,11 @@ class RobotState:
     def readyToShoot(cls) -> bool:
         """
         Returns true if the robot is ready to shoot, which is determined by whether the flywheel
-        is at speed, the turret is facing the hub, and the hood is at the correct angle
+        is at speed, the turret is facing the hub, the hood is at the correct angle,
+        and the SOTM solver has sufficient confidence in the shot.
         """
-        return cls.flywheelAtSpeed and cls.turretAtAngle and cls.hoodAtAngle
+        mechanisms_ready = cls.flywheelAtSpeed and cls.turretAtAngle and cls.hoodAtAngle
+        return mechanisms_ready and cls.sotmConfidence >= kMinShootConfidence
 
     @classmethod
     def readyToFeed(cls) -> bool:
@@ -373,20 +387,30 @@ class RobotState:
             robotVelocity.vy + turretFieldRefVel.y,
             robotVelocity.omega,
         )
-        cls.effectiveObjectiveDistance = targetRelativeToTurret.norm()
-        LogTracer.record("PreSOTMCalculations")
-        for _ in range(kSOTMIterations):
-            if cls.objective == cls.RobotMetaObjective.SHOOT:
-                shotTime = kShotTimeMap(cls.effectiveObjectiveDistance)
-            else:
-                shotTime = kFeedShotTimeMap(cls.effectiveObjectiveDistance)
-            cls.effectiveObjectiveLocation = cls.objectiveLocation() - Translation2d(
-                turretVelocity.vx * shotTime,
-                turretVelocity.vy * shotTime,
-            )
-            cls.effectiveObjectiveDistance = cls.effectiveObjectiveLocation.distance(
-                turretLocation.translation()
-            )
+        # Compute turret heading error for confidence scoring
+        turretHeadingError = 0.0
+        if cls.turretAtAngle is not None:
+            # Approximate heading error from the turret's current vs desired angle
+            targetAngle = targetRelativeToTurret.angle()
+            currentTurretAngle = turretRotation + robotPose.rotation()
+            turretHeadingError = (targetAngle - currentTurretAngle).radians()
+
+        robotSpeed = math.sqrt(
+            robotVelocity.vx * robotVelocity.vx + robotVelocity.vy * robotVelocity.vy
+        )
+
+        sotmResult = cls.fireControlSolver.solve(
+            target_location=cls.objectiveLocation(),
+            turret_location=turretLocation.translation(),
+            turret_velocity=turretVelocity,
+            robot_speed=robotSpeed,
+            is_shooting=(cls.objective == cls.RobotMetaObjective.SHOOT),
+            heading_error_rad=turretHeadingError,
+        )
+
+        cls.effectiveObjectiveLocation = sotmResult.effective_location
+        cls.effectiveObjectiveDistance = sotmResult.effective_distance
+        cls.sotmConfidence = sotmResult.confidence
 
         LogTracer.record("SOTMCalculations")
         Logger.recordOutput("Robot/ReadyToShoot", cls.readyToShoot())
@@ -396,6 +420,7 @@ class RobotState:
         Logger.recordOutput(
             "Robot/SOTM/EffectiveObjectiveDistance", cls.effectiveObjectiveDistance
         )
+        Logger.recordOutput("Robot/SOTM/Confidence", cls.sotmConfidence)
         Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
         Logger.recordOutput(
             "Robot/Pose/Estimator/LastVisionUpdate",

@@ -10,6 +10,7 @@ from functools import partial
 
 from numpy import interp
 from wpimath.geometry import Rotation2d
+from util.firecontrol import FireControlConfig
 
 kSampleDistances = [
     1.24 + 0.3,
@@ -63,4 +64,19 @@ kShotTimeMap = partial(
 # Example mapping function for distance to shot time, where xp is the distance in
 # meters and fp is the corresponding shot time in seconds
 
-kSOTMIterations = 1
+kSOTMIterations = 1  # legacy — kept for reference, replaced by FireControlSolver
+
+# Fire control solver configuration
+kFireControlConfig = FireControlConfig(
+    max_iterations=10,
+    convergence_tolerance=0.001,  # seconds
+    sotm_drag_coeff=0.24,  # 1/s, tune based on ball aerodynamics
+    min_sotm_speed=0.1,  # m/s, below this use static aiming
+    vision_latency=0.030,  # seconds, vision pipeline delay
+    mechanism_latency=0.050,  # seconds, turret/hood/flywheel response
+    min_scoring_distance=1.0,  # meters
+    max_scoring_distance=6.0,  # meters
+)
+
+# Minimum confidence to allow shooting (0-100)
+kMinShootConfidence = 30.0
