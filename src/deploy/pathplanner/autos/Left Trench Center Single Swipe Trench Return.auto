@@ -68,9 +68,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Left Trench Return"
+            "name": "shooterDown"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "deployIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Trench Return"
+                }
+              }
+            ]
           }
         }
       ]
