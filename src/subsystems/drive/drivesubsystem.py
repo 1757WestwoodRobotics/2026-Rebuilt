@@ -54,7 +54,6 @@ from constants.trajectory import (
     kPathFollowingTranslationConstantsAuto,
     kPathFollowingRotationConstants,
 )
-from constants import kRobotUpdatePeriod
 from util.logtracer import LogTracer
 from util import convenientmath
 

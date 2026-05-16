@@ -16,7 +16,6 @@ from util.convenientmath import pose3dFromTransform3d
 from util.logtracer import LogTracer
 from util.robotposeestimator import TurretedVisionObservation, VisionObservation
 
-
 # Number of April tags on the field — limits bitmask iteration
 _MAX_TAG_ID = 22
 
