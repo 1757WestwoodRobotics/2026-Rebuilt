@@ -37,6 +37,8 @@ class TurretSubsystem(Subsystem):
         self.turretGoal = Rotation2d()
         self.turretGoalVel = 0.0  # rad / s
 
+        self.turretFudge = Rotation2d()
+
         self.maxVel = LoggedTunableNumber("Turret/maxVel", kTurretMaxVelocity.degrees())
         self.maxAccel = LoggedTunableNumber(
             "Turret/maxAccel", kTurretMaxAcceleration.degrees()
@@ -67,7 +69,9 @@ class TurretSubsystem(Subsystem):
                 goalVel = 0.0
             Logger.recordOutput("Turret/goal after clamp", goalAngle)
             Logger.recordOutput("Turret/goalVel after clamp", goalVel)
-            self.io.set_turret_angle(goalAngle, goalVel)
+            self.io.set_turret_angle(
+                Rotation2d(goalAngle.radians() + self.turretFudge.radians()), goalVel
+            )
         LogTracer.record("Closed Loop Control")
         Logger.recordOutput("Turret/goal", self.turretGoal)
         Logger.recordOutput("Turret/goalVel", self.turretGoalVel)
@@ -134,7 +138,9 @@ class TurretSubsystem(Subsystem):
 
     @autolog_output(key="Turret/at target")
     def atTarget(self) -> bool:
-        return self.isAtGoal(self.turretGoal)
+        return self.isAtGoal(
+            Rotation2d(self.turretGoal.radians() + self.turretFudge.radians())
+        )
 
     def sysIdRoutine(self, subsystem: Subsystem) -> Command:
         """Model the behavior of the system (for better control) by sweeping through the max and min angles."""
