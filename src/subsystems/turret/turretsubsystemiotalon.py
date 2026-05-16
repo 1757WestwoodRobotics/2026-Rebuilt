@@ -139,7 +139,9 @@ class TurretSubsystemIOTalon(TurretSubsystemIO):
     def set_turret_angle(self, position: Rotation2d, velocity: float):
         """Move the motor a specified amount of radians."""
         self.motor.set_control(
-            self.closedDemand.with_position(position.radians() / kRadiansPerRevolution)
+            self.closedDemand.with_position(
+                position.radians() / kRadiansPerRevolution
+            ).with_feed_forward(velocity / kRadiansPerRevolution * kTurretVGain)
         )
 
     def set_turret_volts(self, volts: float):
