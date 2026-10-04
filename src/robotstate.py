@@ -149,7 +149,7 @@ class RobotState:
         return cls.flywheelAtSpeed and cls.hoodAtAngle
 
     @classmethod
-    def hubTags(cls) -> list[int]:
+    def hubTags(cls) -> set[int]:
         """
         Returns the april tag IDs of the hubs we are scoring on
         This is determined by the alliance color
@@ -167,17 +167,21 @@ class RobotState:
     @classmethod
     def addVisionMeasurement(cls, measurement: VisionObservation):
         cls.fieldEstimator.addVisionMeasurement(measurement)
-        if len(measurement.tagsUsed) == 0:
+        tags = measurement.tagsUsed
+        if not tags:
             return
-        if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
+        hub_set = cls.hubTags()
+        if all(tag in hub_set for tag in tags):
             cls.hubEstimator.addVisionMeasurement(measurement)
 
     @classmethod
     def addTurretedVisionMeasurement(cls, measurement: TurretedVisionObservation):
         cls.fieldEstimator.addTurretedVisionMeasurement(measurement)
-        if len(measurement.tagsUsed) == 0:
+        tags = measurement.tagsUsed
+        if not tags:
             return
-        if set(measurement.tagsUsed).issubset(set(cls.hubTags())):
+        hub_set = cls.hubTags()
+        if all(tag in hub_set for tag in tags):
             cls.hubEstimator.addTurretedVisionMeasurement(measurement)
 
     @classmethod
@@ -230,33 +234,26 @@ class RobotState:
         time = DriverStation.getMatchTime()
         if time <= 0:
             return False  # safety net for negative time, assume it's not about to change (testing)
-        return any(
-            kEndgameDuration + kShiftDuration * i + 3
-            >= time
-            >= kEndgameDuration + kShiftDuration * i
-            for i in range(0, 5)
-        )
+        rem = time - kEndgameDuration
+        if rem < 0 or rem > 5 * kShiftDuration:
+            return False
+        mod = rem % kShiftDuration
+        return mod <= 3.0
 
     @classmethod
     def shouldGoToHub(cls) -> bool:
-        if cls.hubAboutToChange() and not cls.hubActive():
-            return True
-        return False
+        return cls.hubAboutToChange() and not cls.hubActive()
 
     @classmethod
     def shouldGoToFeed(cls) -> bool:
         time = DriverStation.getMatchTime()
         if time <= 0:
             return False  # safety net for negative time, assume it's not about to change (testing)
-        return (
-            any(
-                kEndgameDuration + kShiftDuration * i - 2
-                >= time
-                >= kEndgameDuration + kShiftDuration * i - 5
-                for i in range(0, 5)
-            )
-            and not cls.hubActive()
-        )
+        rem = time - kEndgameDuration
+        if rem < 0 or rem > 5 * kShiftDuration:
+            return False
+        mod = rem % kShiftDuration
+        return (kShiftDuration - 5.0) <= mod <= (kShiftDuration - 2.0) and not cls.hubActive()
 
     @classmethod
     def hubAboutToChangeTrigger(cls) -> Trigger:
@@ -371,8 +368,10 @@ class RobotState:
             else cls.getHubPose()
         )
         robotVelocity = cls.robotFieldVelocity
-        turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
-        targetRelativeToTurret = cls.objectiveLocation() - turretLocation.translation()
+        turretLocationTranslation = robotPose.translation() + kTurretLocation.translation().toTranslation2d().rotateBy(robotPose.rotation())
+        turretLocation = Pose2d(turretLocationTranslation, robotPose.rotation() + kTurretLocation.rotation().toRotation2d())
+        objLoc = cls.objectiveLocation()
+        targetRelativeToTurret = objLoc - turretLocationTranslation
         turretRobotFrameVel = (
             Translation2d(
                 -kTurretLocation.rotation().toRotation2d().sin(),
