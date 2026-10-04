@@ -188,15 +188,20 @@ class SwerveModuleIOCTRE(SwerveModuleIO):
             config.canbus,
             self.drivePosition,
             self.driveVelocity,
+            self.steerPosition,
+            self.steerVelocity,
+            self.steerAbsolutePosition,
+            is_diagnostic=False,
+        )
+        PhoenixUtil.registerSignals(
+            config.canbus,
             self.driveApplied,
             self.driveSupplyCurrent,
             self.driveTorqueCurrent,
-            self.steerPosition,
-            self.steerVelocity,
             self.steerApplied,
             self.steerSupplyCurrent,
             self.steerTorqueCurrent,
-            self.steerAbsolutePosition,
+            is_diagnostic=True,
         )
 
         # Suppress unused default status frames to reduce CAN bus traffic
