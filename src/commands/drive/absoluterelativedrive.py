@@ -34,43 +34,47 @@ class AbsoluteRelativeDrive(Command):
         self.setName(type(self).__name__)
 
     def rotation(self) -> float:
-        targetRotation = atan2(
-            self.rotationX(), self.rotationY()
-        )  # rotate to be relative to driver
-        if self.rotationX() == 0 and self.rotationY() == 0:
-            return 0
+        rx = self.rotationX()
+        ry = self.rotationY()
+        if rx == 0.0 and ry == 0.0:
+            return 0.0
+
+        targetRotation = atan2(rx, ry)  # rotate to be relative to driver
 
         if DriverStation.getAlliance() == DriverStation.Alliance.kRed:
             targetRotation += pi
 
+        currentRot = RobotState.getRotation()
         optimizedDirection = optimizeAngle(
-            RobotState.getRotation(), Rotation2d(targetRotation)
+            currentRot, Rotation2d(targetRotation)
         ).radians()
         return self.rotationPid.calculate(
-            RobotState.getRotation().radians(), optimizedDirection
+            currentRot.radians(), optimizedDirection
         )
 
     def execute(self) -> None:
-        rotation = self.rotation()
+        fwd = self.forward()
+        side = self.sideways()
+        rot = self.rotation()
         if (
-            abs(self.forward()) < 0.01
-            and abs(self.sideways()) < 0.01
-            and abs(rotation) < 0.01
+            abs(fwd) < 0.01
+            and abs(side) < 0.01
+            and abs(rot) < 0.01
         ):  # deadband should put to zero, put a delta errorbound for floats
             self.drive.defenseState()
         else:
             if DriverStation.getAlliance() == DriverStation.Alliance.kRed:
                 # if we're on the other side, switch the controls around
                 self.drive.arcadeDriveWithFactors(
-                    -self.forward(),
-                    -self.sideways(),
-                    rotation,
+                    -fwd,
+                    -side,
+                    rot,
                     DriveSubsystem.CoordinateMode.FieldRelative,
                 )
             else:
                 self.drive.arcadeDriveWithFactors(
-                    self.forward(),
-                    self.sideways(),
-                    rotation,
+                    fwd,
+                    side,
+                    rot,
                     DriveSubsystem.CoordinateMode.FieldRelative,
                 )

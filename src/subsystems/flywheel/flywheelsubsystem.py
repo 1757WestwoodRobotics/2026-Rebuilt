@@ -43,20 +43,13 @@ class FlywheelSubsystem(Subsystem):
 
         if DriverStation.isDisabled() or self.state == FlywheelSubsystemState.IDLE:
             self.stop()
+            RobotState.flywheelAtSpeed = False
         elif self.state == FlywheelSubsystemState.FIRING:
             if self.isClosedLoop:
                 self.io.set_speed(self.goal)
+            RobotState.flywheelAtSpeed = self.isAtGoal() and self.goal > 0
 
         LogTracer.record("Closed Loop Control")
-
-        if DriverStation.isDisabled() or self.state == FlywheelSubsystemState.IDLE:
-            RobotState.flywheelAtSpeed = False
-        else:
-            RobotState.flywheelAtSpeed = (
-                self.state == FlywheelSubsystemState.FIRING
-                and self.isAtGoal()
-                and self.goal > 0
-            )
         Logger.recordOutput("Flywheel/goal", self.goal)
         Logger.recordOutput("Flywheel/ClosedLoop", self.isClosedLoop)
         Logger.recordOutput("Flywheel/State", self.state.name)

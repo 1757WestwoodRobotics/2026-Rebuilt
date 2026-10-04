@@ -320,7 +320,7 @@ class RobotState:
         return Trigger(cls.hubActive)
 
     @classmethod
-    # pylint: disable-next=too-many-statements
+    # pylint: disable-next=too-many-statements,too-many-locals
     def periodic(
         cls,
         heading: Rotation2d,
@@ -368,17 +368,23 @@ class RobotState:
             else cls.getHubPose()
         )
         robotVelocity = cls.robotFieldVelocity
-        turretLocationTranslation = robotPose.translation() + kTurretLocation.translation().toTranslation2d().rotateBy(robotPose.rotation())
-        turretLocation = Pose2d(turretLocationTranslation, robotPose.rotation() + kTurretLocation.rotation().toRotation2d())
+        turretOffset2d = kTurretLocation.translation().toTranslation2d()
+        turretRotOffset2d = kTurretLocation.rotation().toRotation2d()
+        turretSin = turretRotOffset2d.sin()
+        turretCos = turretRotOffset2d.cos()
+        turretNorm = turretOffset2d.norm()
+
+        turretLocationTranslation = robotPose.translation() + turretOffset2d.rotateBy(robotPose.rotation())
         objLoc = cls.objectiveLocation()
+
         targetRelativeToTurret = objLoc - turretLocationTranslation
         turretRobotFrameVel = (
             Translation2d(
-                -kTurretLocation.rotation().toRotation2d().sin(),
-                kTurretLocation.rotation().toRotation2d().cos(),
+                -turretSin,
+                turretCos,
             )
             * robotVelocity.omega
-            * kTurretLocation.translation().toTranslation2d().norm()
+            * turretNorm
         )
         turretFieldRefVel = turretRobotFrameVel.rotateBy(robotPose.rotation())
         turretVelocity = ChassisSpeeds(  # the velocity the turret moves in field space
@@ -399,8 +405,8 @@ class RobotState:
         )
 
         sotmResult = cls.fireControlSolver.solve(
-            target_location=cls.objectiveLocation(),
-            turret_location=turretLocation.translation(),
+            target_location=objLoc,
+            turret_location=turretLocationTranslation,
             turret_velocity=turretVelocity,
             robot_speed=robotSpeed,
             is_shooting=(cls.objective == cls.RobotMetaObjective.SHOOT),
@@ -437,7 +443,8 @@ class RobotState:
         Logger.recordOutput("Robot/Velocity", fieldRelativeRobotVelocity)
         Logger.recordOutput("Robot/HeadingOffset", cls.headingOffset)
         Logger.recordOutput("Robot/Objective", cls.objective.name)
-        Logger.recordOutput("Robot/ObjectiveLocation", cls.objectiveLocation())
+        Logger.recordOutput("Robot/ObjectiveLocation", objLoc)
+
 
         autoPositionDelta = estimatedFieldPose - cls.targetAutonomousStartingLocation
         Logger.recordOutput("Auto/PositionOffset", autoPositionDelta)
@@ -494,17 +501,16 @@ class RobotState:
         """
         Returns the distance from the robot to the hub in meters, based on the hub estimator
         """
-        return cls.hubLocation().distance(
-            (pose3dFrom2d(cls.getHubPose()) + kTurretLocation).toPose2d().translation()
-        )
+        hubPose = cls.getHubPose()
+        turretTranslation = hubPose.translation() + kTurretLocation.translation().toTranslation2d().rotateBy(hubPose.rotation())
+        return cls.hubLocation().distance(turretTranslation)
 
     @classmethod
     def distanceToObjective(cls) -> float:
-        return cls.objectiveLocation().distance(
-            (pose3dFrom2d(cls.getFieldPose()) + kTurretLocation)
-            .toPose2d()
-            .translation()
-        )
+        fieldPose = cls.getFieldPose()
+        turretTranslation = fieldPose.translation() + kTurretLocation.translation().toTranslation2d().rotateBy(fieldPose.rotation())
+        return cls.objectiveLocation().distance(turretTranslation)
+
 
     @classmethod
     def getRotation(cls) -> Rotation2d:

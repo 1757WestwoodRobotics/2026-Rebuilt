@@ -65,16 +65,17 @@ class IndexerSubsystem(Subsystem):
         self.io.updateInputs(self.inputs)
         Logger.processInputs("Indexer", self.inputs)
         LogTracer.record("UpdateInputs")
-        spindexerMotorGoal = self.spindexerMotorGoal.value
-        kickerMotorGoal = self.kickerMotorGoal.value
+
+        spindexerGoalVal = self.spindexerMotorGoal.value
+        kickerGoalVal = self.kickerMotorGoal.value
 
         if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
-            spindexerMotorGoal = SpindexerMotorGoal.NEUTRAL.value
-            kickerMotorGoal = KickerMotorGoal.NEUTRAL.value
+            spindexerGoalVal = 0.0
+            kickerGoalVal = 0.0
 
         self.io.setIndexerTarget(
-            spindexerMotorGoal,
-            kickerMotorGoal,
+            spindexerGoalVal,
+            kickerGoalVal,
         )
 
         LogTracer.record("SetIndexerTarget")

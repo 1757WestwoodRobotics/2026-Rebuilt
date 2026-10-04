@@ -104,10 +104,9 @@ class IntakeSubsystem(Subsystem):
         Logger.processInputs("Intake", self.inputs)
         LogTracer.record("UpdateInputs")
 
-        pivotGoal = self.pivotGoal.value
         if self.isClosedLoop:
             goalAngle = (
-                clampRotation(pivotGoal, kPivotMinAngle, kPivotMaxAngle)
+                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle)
                 + self.pivotFudge
             )
             if (

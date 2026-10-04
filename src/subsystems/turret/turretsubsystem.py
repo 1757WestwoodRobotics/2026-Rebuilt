@@ -67,6 +67,13 @@ class TurretSubsystem(Subsystem):
             if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
                 goalAngle = kTurretStartingAngle
                 goalVel = 0.0
+
+            targetAngle = Rotation2d(goalAngle.radians() + self.turretFudge.radians())
+            self.io.set_turret_angle(targetAngle, goalVel)
+            RobotState.turretAtAngle = self.isAtGoal(targetAngle)
+        else:
+            RobotState.turretAtAngle = self.atTarget()
+
             Logger.recordOutput("Turret/goal after clamp", goalAngle)
             Logger.recordOutput("Turret/goalVel after clamp", goalVel)
             self.io.set_turret_angle(
@@ -76,8 +83,6 @@ class TurretSubsystem(Subsystem):
         Logger.recordOutput("Turret/goal", self.turretGoal)
         Logger.recordOutput("Turret/goalVel", self.turretGoalVel)
         Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
-        RobotState.turretAtAngle = self.atTarget()
-
         LogTracer.recordTotal()
 
     def setClosedLoop(self, closedLoop: bool) -> None:
