@@ -60,7 +60,12 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
         # Transform3d math per cycle. The most recent 2 are sufficient
         # since older results have increasingly stale timestamps.
         allResults = self.camera.getAllUnreadResults()
-        lastResults = allResults[-2:]
+        if not allResults:
+            inputs.poseObservations = []
+            inputs.tagIds = []
+            inputs.turretedObservations = []
+            return
+        lastResults = [allResults[-1]]
         for result in lastResults:
             if result.multitagResult is not None:
                 fieldToCamera = result.multitagResult.estimatedPose.best
