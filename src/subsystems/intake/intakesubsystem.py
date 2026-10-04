@@ -99,39 +99,39 @@ class IntakeSubsystem(Subsystem):
         self.maxAccel.onChange(self.io.setMaxAccel)
 
     def periodic(self) -> None:
-        LogTracer.resetOuter("IntakeSubsystem Periodic")
-        self.io.updateInputs(self.inputs)
-        Logger.processInputs("Intake", self.inputs)
-        LogTracer.record("UpdateInputs")
+        with LogTracer.trace("IntakeSubsystemPeriodic"):
+            with LogTracer.trace("UpdateInputs"):
+                self.io.updateInputs(self.inputs)
+                Logger.processInputs("Intake", self.inputs)
 
-        if self.isClosedLoop:
-            goalAngle = (
-                clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle)
-                + self.pivotFudge
-            )
-            if (
-                abs(
-                    RobotState.turretRotation.radians() - kTurretStartingAngle.radians()
+            if self.isClosedLoop:
+                goalAngle = (
+                    clampRotation(self.pivotGoal.value, kPivotMinAngle, kPivotMaxAngle)
+                    + self.pivotFudge
                 )
-                > kTurretSafetyTolerance.radians()
-                and goalAngle.radians() > kPivotSafePosition.radians()
-            ):
-                goalAngle = kPivotSafePosition
+                if (
+                    abs(
+                        RobotState.turretRotation.radians() - kTurretStartingAngle.radians()
+                    )
+                    > kTurretSafetyTolerance.radians()
+                    and goalAngle.radians() > kPivotSafePosition.radians()
+                ):
+                    goalAngle = kPivotSafePosition
 
-            rollerGoal = self.rollerGoal.value
-            if self.position.radians() > kPivotRollersAllowedToMoveAngle.radians():
-                rollerGoal = RollerGoal.NEUTRAL.value
+                rollerGoal = self.rollerGoal.value
+                if self.position.radians() > kPivotRollersAllowedToMoveAngle.radians():
+                    rollerGoal = RollerGoal.NEUTRAL.value
 
-            self.io.setIntakeTarget(
-                rollerGoal,
-                goalAngle,
-            )
-        LogTracer.record("SetIntakeTarget")
+                self.io.setIntakeTarget(
+                    rollerGoal,
+                    goalAngle,
+                )
 
-        Logger.recordOutput("Intake/Roller Goal", self.rollerGoal.name)
-        Logger.recordOutput("Intake/Pivot Goal", self.pivotGoal.name)
-        Logger.recordOutput("Intake/Pivot/Fudge", self.pivotFudge)
-        LogTracer.recordTotal()
+            with LogTracer.trace("Logging"):
+                Logger.recordOutput("Intake/Roller Goal", self.rollerGoal.name)
+                Logger.recordOutput("Intake/Pivot Goal", self.pivotGoal.name)
+                Logger.recordOutput("Intake/Pivot/Fudge", self.pivotFudge)
+
 
     def bumpPivotFudge(self, bumpAmount: Rotation2d) -> None:
         self.pivotFudge += bumpAmount

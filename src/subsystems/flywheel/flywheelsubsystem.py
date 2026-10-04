@@ -36,24 +36,24 @@ class FlywheelSubsystem(Subsystem):
         self.goal = 0.0  # rad/s
 
     def periodic(self) -> None:
-        LogTracer.resetOuter("FlywheelSubsystem Periodic")
-        self.io.updateInputs(self.inputs)
-        Logger.processInputs("Flywheel", self.inputs)
-        LogTracer.record("UpdateInputs")
+        with LogTracer.trace("FlywheelSubsystemPeriodic"):
+            with LogTracer.trace("UpdateInputs"):
+                self.io.updateInputs(self.inputs)
+                Logger.processInputs("Flywheel", self.inputs)
 
-        if DriverStation.isDisabled() or self.state == FlywheelSubsystemState.IDLE:
-            self.stop()
-            RobotState.flywheelAtSpeed = False
-        elif self.state == FlywheelSubsystemState.FIRING:
-            if self.isClosedLoop:
-                self.io.set_speed(self.goal)
-            RobotState.flywheelAtSpeed = self.isAtGoal() and self.goal > 0
+            if DriverStation.isDisabled() or self.state == FlywheelSubsystemState.IDLE:
+                self.stop()
+                RobotState.flywheelAtSpeed = False
+            elif self.state == FlywheelSubsystemState.FIRING:
+                if self.isClosedLoop:
+                    self.io.set_speed(self.goal)
+                RobotState.flywheelAtSpeed = self.isAtGoal() and self.goal > 0
 
-        LogTracer.record("Closed Loop Control")
-        Logger.recordOutput("Flywheel/goal", self.goal)
-        Logger.recordOutput("Flywheel/ClosedLoop", self.isClosedLoop)
-        Logger.recordOutput("Flywheel/State", self.state.name)
-        LogTracer.recordTotal()
+            with LogTracer.trace("Logging"):
+                Logger.recordOutput("Flywheel/goal", self.goal)
+                Logger.recordOutput("Flywheel/ClosedLoop", self.isClosedLoop)
+                Logger.recordOutput("Flywheel/State", self.state.name)
+
 
     def setClosedLoop(self, closedLoop: bool) -> None:
         """

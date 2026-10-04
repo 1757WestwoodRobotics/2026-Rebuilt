@@ -16,14 +16,11 @@ class SwerveModule:
         self.prevPosition = SwerveModulePosition()
 
     def periodic(self) -> None:
-        LogTracer.resetOuter("SwerveModule/" + self.name)
-        self.prevPosition = self.getPosition()
-        LogTracer.record("GetPosition")
-        self.io.updateInputs(self.inputs)
-        LogTracer.record("UpdateInputs")
-        Logger.processInputs("Drive/Module" + self.name, self.inputs)
-        LogTracer.record("ProcessInputs")
-        LogTracer.recordTotal()
+        with LogTracer.trace("SwerveModule/" + self.name):
+            self.prevPosition = self.getPosition()
+            self.io.updateInputs(self.inputs)
+            Logger.processInputs("Drive/Module" + self.name, self.inputs)
+
 
     def getSwerveAngle(self) -> Rotation2d:
         return Rotation2d(self.inputs.turn_position)

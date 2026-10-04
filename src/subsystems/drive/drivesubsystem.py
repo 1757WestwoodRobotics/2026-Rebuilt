@@ -240,26 +240,24 @@ class DriveSubsystem(Subsystem):
         Called periodically when it can be called. Updates the robot's
         odometry with sensor data.
         """
-
-        LogTracer.resetOuter("DriveSubsystemPeriodic")
-        self.io.updateInputs(self.inputs)
-        LogTracer.record("IOUpdate")
-        if self.inputs.connected:
-            self.rawGyroRotation = Rotation2d(self.inputs.gyro_yaw_rad)
-        else:
-            self.rawGyroRotation += Rotation2d(
-                kDriveKinematics.toTwist2d(
-                    self.lastModulePositions, self.getModulePositions()
-                ).dtheta
-            )  # base the gyro off of the swerves
-        self.lastModulePositions = self.getModulePositions()
-        LogTracer.record("StateUpdate")
-        Logger.processInputs("Drive", self.inputs)
-        LogTracer.record("LoggerProcessInputs")
-        LogTracer.recordTotal()
+        with LogTracer.trace("DriveSubsystemPeriodic"):
+            with LogTracer.trace("IOUpdate"):
+                self.io.updateInputs(self.inputs)
+            if self.inputs.connected:
+                self.rawGyroRotation = Rotation2d(self.inputs.gyro_yaw_rad)
+            else:
+                self.rawGyroRotation += Rotation2d(
+                    kDriveKinematics.toTwist2d(
+                        self.lastModulePositions, self.getModulePositions()
+                    ).dtheta
+                )  # base the gyro off of the swerves
+            self.lastModulePositions = self.getModulePositions()
+            with LogTracer.trace("LoggerProcessInputs"):
+                Logger.processInputs("Drive", self.inputs)
 
         for module in self.modules:
             module.periodic()
+
 
     def arcadeDriveWithFactors(
         self,

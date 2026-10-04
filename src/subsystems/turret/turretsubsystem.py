@@ -53,37 +53,37 @@ class TurretSubsystem(Subsystem):
 
     def periodic(self) -> None:
         """Run ongoing subsystem periodic process."""
-        LogTracer.resetOuter("TurretSubsystem periodic")
-        self.io.updateInputs(self.inputs)  # update state of motor
-        Logger.processInputs("Turret", self.inputs)
-        LogTracer.record("UpdateInputs")
+        with LogTracer.trace("TurretSubsystemPeriodic"):
+            with LogTracer.trace("UpdateInputs"):
+                self.io.updateInputs(self.inputs)  # update state of motor
+                Logger.processInputs("Turret", self.inputs)
 
-        if self.isClosedLoop:
-            goalAngle = clampRotation(
-                self.turretGoal, kTurretMinAngle, kTurretMaxAngle
-            )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
-            goalVel = self.turretGoalVel
+            if self.isClosedLoop:
+                goalAngle = clampRotation(
+                    self.turretGoal, kTurretMinAngle, kTurretMaxAngle
+                )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
+                goalVel = self.turretGoalVel
 
-            if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
-                goalAngle = kTurretStartingAngle
-                goalVel = 0.0
+                if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
+                    goalAngle = kTurretStartingAngle
+                    goalVel = 0.0
 
-            targetAngle = Rotation2d(goalAngle.radians() + self.turretFudge.radians())
-            self.io.set_turret_angle(targetAngle, goalVel)
-            RobotState.turretAtAngle = self.isAtGoal(targetAngle)
-        else:
-            RobotState.turretAtAngle = self.atTarget()
+                targetAngle = Rotation2d(goalAngle.radians() + self.turretFudge.radians())
+                self.io.set_turret_angle(targetAngle, goalVel)
+                RobotState.turretAtAngle = self.isAtGoal(targetAngle)
+            else:
+                RobotState.turretAtAngle = self.atTarget()
 
-            Logger.recordOutput("Turret/goal after clamp", goalAngle)
-            Logger.recordOutput("Turret/goalVel after clamp", goalVel)
-            self.io.set_turret_angle(
-                Rotation2d(goalAngle.radians() + self.turretFudge.radians()), goalVel
-            )
-        LogTracer.record("Closed Loop Control")
-        Logger.recordOutput("Turret/goal", self.turretGoal)
-        Logger.recordOutput("Turret/goalVel", self.turretGoalVel)
-        Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
-        LogTracer.recordTotal()
+                Logger.recordOutput("Turret/goal after clamp", goalAngle)
+                Logger.recordOutput("Turret/goalVel after clamp", goalVel)
+                self.io.set_turret_angle(
+                    Rotation2d(goalAngle.radians() + self.turretFudge.radians()), goalVel
+                )
+            with LogTracer.trace("Logging"):
+                Logger.recordOutput("Turret/goal", self.turretGoal)
+                Logger.recordOutput("Turret/goalVel", self.turretGoalVel)
+                Logger.recordOutput("Turret/ClosedLoop", self.isClosedLoop)
+
 
     def setClosedLoop(self, closedLoop: bool) -> None:
         self.isClosedLoop = closedLoop

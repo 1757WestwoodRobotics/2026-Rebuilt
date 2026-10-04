@@ -336,150 +336,147 @@ class RobotState:
         turretRotation: Rotation2d,
         intakeRotation: Rotation2d,
     ) -> None:
-        LogTracer.resetOuter("RobotState")
-        cls.turretRotation = turretRotation
-        cls.intakeRotation = intakeRotation
-        cls.robotHeading = heading
-        cls.modulePositions = modulePositions
-        cls.odometry.update(heading, modulePositions)
+        with LogTracer.trace("RobotState"):
+            cls.turretRotation = turretRotation
+            cls.intakeRotation = intakeRotation
+            cls.robotHeading = heading
+            cls.modulePositions = modulePositions
+            cls.odometry.update(heading, modulePositions)
 
-        cls.robotFieldVelocity = fieldRelativeRobotVelocity
-        LogTracer.record("OdometryUpdate")
-        cls.fieldEstimator.addOdometryMeasurement(
-            OdometryObservation(modulePositions, heading, headingTimestamp)
-        )
-        cls.fieldEstimator.addTurretMeasurement(
-            TurretObservation(turretRotation, headingTimestamp)
-        )
-        cls.hubEstimator.addOdometryMeasurement(
-            OdometryObservation(modulePositions, heading, headingTimestamp)
-        )
-        cls.hubEstimator.addTurretMeasurement(
-            TurretObservation(turretRotation, headingTimestamp)
-        )
-        LogTracer.record("EstimatorUpdate")
+            cls.robotFieldVelocity = fieldRelativeRobotVelocity
+            with LogTracer.trace("OdometryUpdate"):
+                cls.fieldEstimator.addOdometryMeasurement(
+                    OdometryObservation(modulePositions, heading, headingTimestamp)
+                )
+                cls.fieldEstimator.addTurretMeasurement(
+                    TurretObservation(turretRotation, headingTimestamp)
+                )
+                cls.hubEstimator.addOdometryMeasurement(
+                    OdometryObservation(modulePositions, heading, headingTimestamp)
+                )
+                cls.hubEstimator.addTurretMeasurement(
+                    TurretObservation(turretRotation, headingTimestamp)
+                )
 
-        estimatedFieldPose = cls.getFieldPose()
-        estimatedHubPose = cls.getHubPose()
+            estimatedFieldPose = cls.getFieldPose()
+            estimatedHubPose = cls.getHubPose()
 
-        robotPose = (
-            cls.getFieldPose()
-            if cls.objective == cls.RobotMetaObjective.FEED
-            else cls.getHubPose()
-        )
-        robotVelocity = cls.robotFieldVelocity
-        turretOffset2d = kTurretLocation.translation().toTranslation2d()
-        turretRotOffset2d = kTurretLocation.rotation().toRotation2d()
-        turretSin = turretRotOffset2d.sin()
-        turretCos = turretRotOffset2d.cos()
-        turretNorm = turretOffset2d.norm()
-
-        turretLocationTranslation = robotPose.translation() + turretOffset2d.rotateBy(robotPose.rotation())
-        objLoc = cls.objectiveLocation()
-
-        targetRelativeToTurret = objLoc - turretLocationTranslation
-        turretRobotFrameVel = (
-            Translation2d(
-                -turretSin,
-                turretCos,
+            robotPose = (
+                cls.getFieldPose()
+                if cls.objective == cls.RobotMetaObjective.FEED
+                else cls.getHubPose()
             )
-            * robotVelocity.omega
-            * turretNorm
-        )
-        turretFieldRefVel = turretRobotFrameVel.rotateBy(robotPose.rotation())
-        turretVelocity = ChassisSpeeds(  # the velocity the turret moves in field space
-            robotVelocity.vx + turretFieldRefVel.x,
-            robotVelocity.vy + turretFieldRefVel.y,
-            robotVelocity.omega,
-        )
-        # Compute turret heading error for confidence scoring
-        turretHeadingError = 0.0
-        if cls.turretAtAngle is not None:
-            # Approximate heading error from the turret's current vs desired angle
-            targetAngle = targetRelativeToTurret.angle()
-            currentTurretAngle = turretRotation + robotPose.rotation()
-            turretHeadingError = (targetAngle - currentTurretAngle).radians()
+            robotVelocity = cls.robotFieldVelocity
+            turretOffset2d = kTurretLocation.translation().toTranslation2d()
+            turretRotOffset2d = kTurretLocation.rotation().toRotation2d()
+            turretSin = turretRotOffset2d.sin()
+            turretCos = turretRotOffset2d.cos()
+            turretNorm = turretOffset2d.norm()
 
-        robotSpeed = math.sqrt(
-            robotVelocity.vx * robotVelocity.vx + robotVelocity.vy * robotVelocity.vy
-        )
+            turretLocationTranslation = robotPose.translation() + turretOffset2d.rotateBy(robotPose.rotation())
+            objLoc = cls.objectiveLocation()
 
-        sotmResult = cls.fireControlSolver.solve(
-            target_location=objLoc,
-            turret_location=turretLocationTranslation,
-            turret_velocity=turretVelocity,
-            robot_speed=robotSpeed,
-            is_shooting=(cls.objective == cls.RobotMetaObjective.SHOOT),
-            heading_error_rad=turretHeadingError,
-        )
+            targetRelativeToTurret = objLoc - turretLocationTranslation
+            turretRobotFrameVel = (
+                Translation2d(
+                    -turretSin,
+                    turretCos,
+                )
+                * robotVelocity.omega
+                * turretNorm
+            )
+            turretFieldRefVel = turretRobotFrameVel.rotateBy(robotPose.rotation())
+            turretVelocity = ChassisSpeeds(  # the velocity the turret moves in field space
+                robotVelocity.vx + turretFieldRefVel.x,
+                robotVelocity.vy + turretFieldRefVel.y,
+                robotVelocity.omega,
+            )
+            # Compute turret heading error for confidence scoring
+            turretHeadingError = 0.0
+            if cls.turretAtAngle is not None:
+                # Approximate heading error from the turret's current vs desired angle
+                targetAngle = targetRelativeToTurret.angle()
+                currentTurretAngle = turretRotation + robotPose.rotation()
+                turretHeadingError = (targetAngle - currentTurretAngle).radians()
 
-        cls.effectiveObjectiveLocation = sotmResult.effective_location
-        cls.effectiveObjectiveDistance = sotmResult.effective_distance
-        cls.sotmConfidence = sotmResult.confidence
+            robotSpeed = math.sqrt(
+                robotVelocity.vx * robotVelocity.vx + robotVelocity.vy * robotVelocity.vy
+            )
 
-        LogTracer.record("SOTMCalculations")
-        Logger.recordOutput("Robot/ReadyToShoot", cls.readyToShoot())
-        Logger.recordOutput(
-            "Robot/SOTM/EffectiveObjectiveLocation", cls.effectiveObjectiveLocation
-        )
-        Logger.recordOutput(
-            "Robot/SOTM/EffectiveObjectiveDistance", cls.effectiveObjectiveDistance
-        )
-        Logger.recordOutput("Robot/SOTM/Confidence", cls.sotmConfidence)
-        Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
-        Logger.recordOutput(
-            "Robot/Pose/Estimator/LastVisionUpdate",
-            cls.fieldEstimator.lastMeasurementTime,
-        )
-        Logger.recordOutput("Robot/Pose/OdometryPose", cls.odometry.getPose())
-        Logger.recordOutput("Robot/Pose/HubEstimator/Pose", estimatedHubPose)
-        Logger.recordOutput(
-            "Robot/Pose/HubEstimator/LastVisionUpdate",
-            cls.hubEstimator.lastMeasurementTime,
-        )
-        Logger.recordOutput("Robot/TurretRotation", cls.turretRotation)
-        Logger.recordOutput("Robot/Heading", cls.robotHeading)
-        Logger.recordOutput("Robot/HeadingVelocity", robotYawVelocity)
-        Logger.recordOutput("Robot/Velocity", fieldRelativeRobotVelocity)
-        Logger.recordOutput("Robot/HeadingOffset", cls.headingOffset)
-        Logger.recordOutput("Robot/Objective", cls.objective.name)
-        Logger.recordOutput("Robot/ObjectiveLocation", objLoc)
+            with LogTracer.trace("SOTMCalculations"):
+                sotmResult = cls.fireControlSolver.solve(
+                    target_location=objLoc,
+                    turret_location=turretLocationTranslation,
+                    turret_velocity=turretVelocity,
+                    robot_speed=robotSpeed,
+                    is_shooting=(cls.objective == cls.RobotMetaObjective.SHOOT),
+                    heading_error_rad=turretHeadingError,
+                )
 
+                cls.effectiveObjectiveLocation = sotmResult.effective_location
+                cls.effectiveObjectiveDistance = sotmResult.effective_distance
+                cls.sotmConfidence = sotmResult.confidence
 
-        autoPositionDelta = estimatedFieldPose - cls.targetAutonomousStartingLocation
-        Logger.recordOutput("Auto/PositionOffset", autoPositionDelta)
-        Logger.recordOutput(
-            "Auto/PositionCorrect",
-            autoPositionDelta.translation().norm() < kAutoDistanceTolerance,
-        )
-        Logger.recordOutput(
-            "Auto/RotationCorrect",
-            abs(autoPositionDelta.rotation().radians()) < kAutoRotationTolerance,
-        )
-        Logger.recordOutput("Auto/StartingPose", cls.targetAutonomousStartingLocation)
-        Logger.recordOutput("Game/WonAuto", cls.didWinAuto())
-        Logger.recordOutput("Game/HubAboutToChange", cls.hubAboutToChange())
-        Logger.recordOutput("Game/HubActive", cls.hubActive())
-        Logger.recordOutput("Game/ShouldGoToHub", cls.shouldGoToHub())
-        Logger.recordOutput("Game/ShouldGoToFeed", cls.shouldGoToFeed())
-        Logger.recordOutput("Game/HubDistance", cls.distanceToHub())
+            with LogTracer.trace("Logging"):
+                Logger.recordOutput("Robot/ReadyToShoot", cls.readyToShoot())
+                Logger.recordOutput(
+                    "Robot/SOTM/EffectiveObjectiveLocation", cls.effectiveObjectiveLocation
+                )
+                Logger.recordOutput(
+                    "Robot/SOTM/EffectiveObjectiveDistance", cls.effectiveObjectiveDistance
+                )
+                Logger.recordOutput("Robot/SOTM/Confidence", cls.sotmConfidence)
+                Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
+                Logger.recordOutput(
+                    "Robot/Pose/Estimator/LastVisionUpdate",
+                    cls.fieldEstimator.lastMeasurementTime,
+                )
+                Logger.recordOutput("Robot/Pose/OdometryPose", cls.odometry.getPose())
+                Logger.recordOutput("Robot/Pose/HubEstimator/Pose", estimatedHubPose)
+                Logger.recordOutput(
+                    "Robot/Pose/HubEstimator/LastVisionUpdate",
+                    cls.hubEstimator.lastMeasurementTime,
+                )
+                Logger.recordOutput("Robot/TurretRotation", cls.turretRotation)
+                Logger.recordOutput("Robot/Heading", cls.robotHeading)
+                Logger.recordOutput("Robot/HeadingVelocity", robotYawVelocity)
+                Logger.recordOutput("Robot/Velocity", fieldRelativeRobotVelocity)
+                Logger.recordOutput("Robot/HeadingOffset", cls.headingOffset)
+                Logger.recordOutput("Robot/Objective", cls.objective.name)
+                Logger.recordOutput("Robot/ObjectiveLocation", objLoc)
 
-        Logger.recordOutput("Robot/Overrides/Turret", cls.turretOverriden)
-        Logger.recordOutput("Robot/Overrides/Flywheel", cls.flywheelOverriden)
-        Logger.recordOutput("Robot/Overrides/Hood", cls.hoodOverriden)
-        LogTracer.record("Logging")
+                autoPositionDelta = estimatedFieldPose - cls.targetAutonomousStartingLocation
+                Logger.recordOutput("Auto/PositionOffset", autoPositionDelta)
+                Logger.recordOutput(
+                    "Auto/PositionCorrect",
+                    autoPositionDelta.translation().norm() < kAutoDistanceTolerance,
+                )
+                Logger.recordOutput(
+                    "Auto/RotationCorrect",
+                    abs(autoPositionDelta.rotation().radians()) < kAutoRotationTolerance,
+                )
+                Logger.recordOutput("Auto/StartingPose", cls.targetAutonomousStartingLocation)
+                Logger.recordOutput("Game/WonAuto", cls.didWinAuto())
+                Logger.recordOutput("Game/HubAboutToChange", cls.hubAboutToChange())
+                Logger.recordOutput("Game/HubActive", cls.hubActive())
+                Logger.recordOutput("Game/ShouldGoToHub", cls.shouldGoToHub())
+                Logger.recordOutput("Game/ShouldGoToFeed", cls.shouldGoToFeed())
+                Logger.recordOutput("Game/HubDistance", cls.distanceToHub())
 
-        if kRobotMode == RobotModes.SIMULATION:
-            Logger.recordOutput("Robot/SimPose", cls.getSimPose())
-            Logger.recordOutput("Robot/SimTurretPose", cls.getSimTurretPose())
+                Logger.recordOutput("Robot/Overrides/Turret", cls.turretOverriden)
+                Logger.recordOutput("Robot/Overrides/Flywheel", cls.flywheelOverriden)
+                Logger.recordOutput("Robot/Overrides/Hood", cls.hoodOverriden)
 
-        cls.brownoutFlag = (
-            cls.brownoutFlag
-            or DriverStation.getBatteryVoltage()
-            < 7.0  # brownout threshold is around 6.5V, add some buffer
-        )
+                if kRobotMode == RobotModes.SIMULATION:
+                    Logger.recordOutput("Robot/SimPose", cls.getSimPose())
+                    Logger.recordOutput("Robot/SimTurretPose", cls.getSimTurretPose())
 
-        LogTracer.recordTotal()
+            cls.brownoutFlag = (
+                cls.brownoutFlag
+                or DriverStation.getBatteryVoltage()
+                < 7.0  # brownout threshold is around 6.5V, add some buffer
+            )
+
 
     @classmethod
     def getFieldPose(cls) -> Pose2d:

@@ -22,6 +22,8 @@ import constants
 from robotcontainer import RobotContainer
 from util import elasticlib
 from util.phoenixutil import PhoenixUtil
+from util.logtracer import LogTracer
+
 
 
 class Orion(LoggedRobot):
@@ -136,11 +138,13 @@ class Orion(LoggedRobot):
         elasticlib.select_tab("PREFLIGHT")
 
     def robotPeriodic(self) -> None:
+        LogTracer.resetCycle()
         periodicStart = wpilib.RobotController.getFPGATime()
         PhoenixUtil.updateSignals()
         phoenixUpdate = wpilib.RobotController.getFPGATime()
         self.container.robotPeriodic()
         robotPeriodic = wpilib.RobotController.getFPGATime()
+
         commands2.CommandScheduler.getInstance().run()
         schedulerUpdate = wpilib.RobotController.getFPGATime()
         Logger.recordOutput(

@@ -48,16 +48,17 @@ class VisionSubsystem(Subsystem):
 
     # pylint:disable-next=too-many-locals, too-many-statements, too-many-branches
     def periodic(self) -> None:
-        LogTracer.resetOuter("VisionSubsystem")
-        for idx, (i, inp) in enumerate(zip(self.io, self.inputs)):
-            i.updateInputs(inp)
-            Logger.processInputs(f"Vision/Camera{idx}", self.inputs[idx])
-        LogTracer.record("All Cameras UpdateInputs")
+        with LogTracer.trace("VisionSubsystemPeriodic"):
+            with LogTracer.trace("AllCamerasUpdateInputs"):
+                for idx, (i, inp) in enumerate(zip(self.io, self.inputs)):
+                    i.updateInputs(inp)
+                    Logger.processInputs(f"Vision/Camera{idx}", self.inputs[idx])
 
-        allTagPoses = []
-        allRobotPoses = []
-        allRobotPosesAccepted = []
-        allRobotPosesRejected = []
+            allTagPoses = []
+            allRobotPoses = []
+            allRobotPosesAccepted = []
+            allRobotPosesRejected = []
+
 
         allTurretedTransforms = []
         allTurretedTransformsRejected = []
@@ -206,7 +207,6 @@ class VisionSubsystem(Subsystem):
             allTurretedTransforms.extend(turretedTransforms)
             allTurretedTransformsAccepted.extend(turretedTransformsAccepted)
             allTurretedTransformsRejected.extend(turretedTransformsRejected)
-        LogTracer.record("All Cameras ProcessObservations")
 
         # Only log summary data when there are observations
         if len(allTagPoses) > 0:
@@ -231,4 +231,3 @@ class VisionSubsystem(Subsystem):
                 "Vision/Summary/TurretedTransformsAccepted",
                 allTurretedTransformsAccepted,
             )
-        LogTracer.recordTotal()

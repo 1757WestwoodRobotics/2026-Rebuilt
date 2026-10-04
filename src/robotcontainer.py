@@ -101,6 +101,8 @@ from constants import RobotModes, kRobotMode
 from util.fliputil import FlipUtil
 from util.helpfultriggerwrappers import NetworkTableButton
 from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
+from util.logtracer import LogTracer
+
 
 if kRobotMode == RobotModes.SIMULATION:  # required since opencv can't go on rio
     # pylint:disable-next=ungrouped-imports
@@ -423,25 +425,28 @@ class RobotContainer:
         self.preflight.update()
 
     def robotPeriodic(self) -> None:
-        RobotState.periodic(
-            self.drive.getRawRotation(),
-            wpilib.RobotController.getFPGATime() / 1e6,
-            self.drive.getAngularVelocity(),
-            self.drive.getFieldRelativeSpeeds(),
-            self.drive.getModulePositions(),
-            self.turret.position,
-            self.intake.position,
-        )
-        LoggedTunableNumber.updateAll()
-        AutoUpdateGroup.updateAll()
-        self.updateAlerts()
-        Logger.recordOutput(
-            "Component Poses",
-            RobotMechanism.getPoses(
+        with LogTracer.trace("RobotStatePeriodic"):
+            RobotState.periodic(
+                self.drive.getRawRotation(),
+                wpilib.RobotController.getFPGATime() / 1e6,
+                self.drive.getAngularVelocity(),
+                self.drive.getFieldRelativeSpeeds(),
+                self.drive.getModulePositions(),
                 self.turret.position,
                 self.intake.position,
-            ),
-        )
+            )
+        with LogTracer.trace("TelemetryUpdate"):
+            LoggedTunableNumber.updateAll()
+            AutoUpdateGroup.updateAll()
+            self.updateAlerts()
+            Logger.recordOutput(
+                "Component Poses",
+                RobotMechanism.getPoses(
+                    self.turret.position,
+                    self.intake.position,
+                ),
+            )
+
 
     def configureButtonBindings(self) -> None:
         """

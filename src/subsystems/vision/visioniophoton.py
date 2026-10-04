@@ -9,7 +9,7 @@ from subsystems.vision.visionio import (
 )
 
 from constants.vision import kApriltagFieldLayout
-from util.logtracer import LogTracer
+
 
 
 class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
@@ -152,7 +152,7 @@ class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
                                 ObservationType.PHOTONVISION.value,
                             )
                         )
-        LogTracer.record(f"Camera{self.name} ProcessResults")
+
         inputs.poseObservations = poseObservations
         inputs.tagIds = tagIds
         inputs.turretedObservations = turretedObservations
