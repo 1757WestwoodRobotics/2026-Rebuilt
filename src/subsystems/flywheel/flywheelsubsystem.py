@@ -54,7 +54,6 @@ class FlywheelSubsystem(Subsystem):
                 Logger.recordOutput("Flywheel/ClosedLoop", self.isClosedLoop)
                 Logger.recordOutput("Flywheel/State", self.state.name)
 
-
     def setClosedLoop(self, closedLoop: bool) -> None:
         """
         Sets whether the flywheel is in closed loop control or not

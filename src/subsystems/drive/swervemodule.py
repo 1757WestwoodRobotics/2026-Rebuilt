@@ -21,7 +21,6 @@ class SwerveModule:
             self.io.updateInputs(self.inputs)
             Logger.processInputs("Drive/Module" + self.name, self.inputs)
 
-
     def getSwerveAngle(self) -> Rotation2d:
         return Rotation2d(self.inputs.turn_position)
 

@@ -253,7 +253,9 @@ class RobotState:
         if rem < 0 or rem > 5 * kShiftDuration:
             return False
         mod = rem % kShiftDuration
-        return (kShiftDuration - 5.0) <= mod <= (kShiftDuration - 2.0) and not cls.hubActive()
+        return (kShiftDuration - 5.0) <= mod <= (
+            kShiftDuration - 2.0
+        ) and not cls.hubActive()
 
     @classmethod
     def hubAboutToChangeTrigger(cls) -> Trigger:
@@ -373,7 +375,9 @@ class RobotState:
             turretCos = turretRotOffset2d.cos()
             turretNorm = turretOffset2d.norm()
 
-            turretLocationTranslation = robotPose.translation() + turretOffset2d.rotateBy(robotPose.rotation())
+            turretLocationTranslation = (
+                robotPose.translation() + turretOffset2d.rotateBy(robotPose.rotation())
+            )
             objLoc = cls.objectiveLocation()
 
             targetRelativeToTurret = objLoc - turretLocationTranslation
@@ -386,10 +390,12 @@ class RobotState:
                 * turretNorm
             )
             turretFieldRefVel = turretRobotFrameVel.rotateBy(robotPose.rotation())
-            turretVelocity = ChassisSpeeds(  # the velocity the turret moves in field space
-                robotVelocity.vx + turretFieldRefVel.x,
-                robotVelocity.vy + turretFieldRefVel.y,
-                robotVelocity.omega,
+            turretVelocity = (
+                ChassisSpeeds(  # the velocity the turret moves in field space
+                    robotVelocity.vx + turretFieldRefVel.x,
+                    robotVelocity.vy + turretFieldRefVel.y,
+                    robotVelocity.omega,
+                )
             )
             # Compute turret heading error for confidence scoring
             turretHeadingError = 0.0
@@ -400,7 +406,8 @@ class RobotState:
                 turretHeadingError = (targetAngle - currentTurretAngle).radians()
 
             robotSpeed = math.sqrt(
-                robotVelocity.vx * robotVelocity.vx + robotVelocity.vy * robotVelocity.vy
+                robotVelocity.vx * robotVelocity.vx
+                + robotVelocity.vy * robotVelocity.vy
             )
 
             with LogTracer.trace("SOTMCalculations"):
@@ -420,10 +427,12 @@ class RobotState:
             with LogTracer.trace("Logging"):
                 Logger.recordOutput("Robot/ReadyToShoot", cls.readyToShoot())
                 Logger.recordOutput(
-                    "Robot/SOTM/EffectiveObjectiveLocation", cls.effectiveObjectiveLocation
+                    "Robot/SOTM/EffectiveObjectiveLocation",
+                    cls.effectiveObjectiveLocation,
                 )
                 Logger.recordOutput(
-                    "Robot/SOTM/EffectiveObjectiveDistance", cls.effectiveObjectiveDistance
+                    "Robot/SOTM/EffectiveObjectiveDistance",
+                    cls.effectiveObjectiveDistance,
                 )
                 Logger.recordOutput("Robot/SOTM/Confidence", cls.sotmConfidence)
                 Logger.recordOutput("Robot/Pose/Estimator/Pose", estimatedFieldPose)
@@ -445,7 +454,9 @@ class RobotState:
                 Logger.recordOutput("Robot/Objective", cls.objective.name)
                 Logger.recordOutput("Robot/ObjectiveLocation", objLoc)
 
-                autoPositionDelta = estimatedFieldPose - cls.targetAutonomousStartingLocation
+                autoPositionDelta = (
+                    estimatedFieldPose - cls.targetAutonomousStartingLocation
+                )
                 Logger.recordOutput("Auto/PositionOffset", autoPositionDelta)
                 Logger.recordOutput(
                     "Auto/PositionCorrect",
@@ -453,9 +464,12 @@ class RobotState:
                 )
                 Logger.recordOutput(
                     "Auto/RotationCorrect",
-                    abs(autoPositionDelta.rotation().radians()) < kAutoRotationTolerance,
+                    abs(autoPositionDelta.rotation().radians())
+                    < kAutoRotationTolerance,
                 )
-                Logger.recordOutput("Auto/StartingPose", cls.targetAutonomousStartingLocation)
+                Logger.recordOutput(
+                    "Auto/StartingPose", cls.targetAutonomousStartingLocation
+                )
                 Logger.recordOutput("Game/WonAuto", cls.didWinAuto())
                 Logger.recordOutput("Game/HubAboutToChange", cls.hubAboutToChange())
                 Logger.recordOutput("Game/HubActive", cls.hubActive())
@@ -476,7 +490,6 @@ class RobotState:
                 or DriverStation.getBatteryVoltage()
                 < 7.0  # brownout threshold is around 6.5V, add some buffer
             )
-
 
     @classmethod
     def getFieldPose(cls) -> Pose2d:
@@ -499,15 +512,24 @@ class RobotState:
         Returns the distance from the robot to the hub in meters, based on the hub estimator
         """
         hubPose = cls.getHubPose()
-        turretTranslation = hubPose.translation() + kTurretLocation.translation().toTranslation2d().rotateBy(hubPose.rotation())
+        turretTranslation = (
+            hubPose.translation()
+            + kTurretLocation.translation()
+            .toTranslation2d()
+            .rotateBy(hubPose.rotation())
+        )
         return cls.hubLocation().distance(turretTranslation)
 
     @classmethod
     def distanceToObjective(cls) -> float:
         fieldPose = cls.getFieldPose()
-        turretTranslation = fieldPose.translation() + kTurretLocation.translation().toTranslation2d().rotateBy(fieldPose.rotation())
+        turretTranslation = (
+            fieldPose.translation()
+            + kTurretLocation.translation()
+            .toTranslation2d()
+            .rotateBy(fieldPose.rotation())
+        )
         return cls.objectiveLocation().distance(turretTranslation)
-
 
     @classmethod
     def getRotation(cls) -> Rotation2d:

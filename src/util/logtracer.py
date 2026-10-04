@@ -53,7 +53,6 @@ class LogTracer:
     enabled: bool = True
     stack: list[TraceScope] = []
 
-
     @classmethod
     def resetCycle(cls) -> None:
         """Reset the frame stack at the start of each robot periodic loop cycle."""
@@ -62,7 +61,6 @@ class LogTracer:
     @classmethod
     def setEnabled(cls, enabled: bool) -> None:
         cls.enabled = enabled
-
 
     @classmethod
     def currentPath(cls) -> str:

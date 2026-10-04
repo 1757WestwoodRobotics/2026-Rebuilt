@@ -50,7 +50,6 @@ def parse_wpilog(log_filepath: str) -> Dict[str, Dict[str, Any]]:
             if not ("LogTracer" in name or "Timing" in name):
                 continue
 
-
             # Read double / float records
             try:
                 if entry_info["type"] in ("double", "float"):
@@ -66,7 +65,6 @@ def parse_wpilog(log_filepath: str) -> Dict[str, Dict[str, Any]]:
                 topic_data[name].append(val_ms)
             except (ValueError, TypeError, AttributeError, IndexError) as _:
                 continue
-
 
     if not topic_data:
         print("Warning: No `LogTracer/*` or `Timing/*` records found in log file.")
@@ -119,7 +117,7 @@ def build_tree_from_stats(stats: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
                 clean_path = clean_path[len(prefix) :]
 
         if clean_path.endswith("/TotalMS"):
-            clean_path = clean_path[:-len("/TotalMS")]
+            clean_path = clean_path[: -len("/TotalMS")]
 
         # Place top-level categories (LogTracer, Timing) under RobotPeriodic root
         if clean_path.startswith("Timing/RobotPeriodic/TotalMS"):
@@ -165,7 +163,9 @@ def build_tree_from_stats(stats: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
     # Post-process: compute inclusive timing for non-leaf parent nodes from their children
     def compute_inclusive_timing(node: Dict[str, Any]) -> float:
         if node["children"]:
-            child_sums = sum(compute_inclusive_timing(child) for child in node["children"])
+            child_sums = sum(
+                compute_inclusive_timing(child) for child in node["children"]
+            )
             if node["avg_ms"] == 0.0 or node["avg_ms"] < child_sums:
                 node["avg_ms"] = child_sums
                 node["value"] = child_sums
@@ -173,7 +173,6 @@ def build_tree_from_stats(stats: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
 
     compute_inclusive_timing(root)
     return root
-
 
 
 def generate_html_flamegraph(
@@ -554,7 +553,6 @@ def generate_html_flamegraph(
 </html>
 """
     return html_template
-
 
 
 def main():

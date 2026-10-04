@@ -111,7 +111,8 @@ class IntakeSubsystem(Subsystem):
                 )
                 if (
                     abs(
-                        RobotState.turretRotation.radians() - kTurretStartingAngle.radians()
+                        RobotState.turretRotation.radians()
+                        - kTurretStartingAngle.radians()
                     )
                     > kTurretSafetyTolerance.radians()
                     and goalAngle.radians() > kPivotSafePosition.radians()
@@ -131,7 +132,6 @@ class IntakeSubsystem(Subsystem):
                 Logger.recordOutput("Intake/Roller Goal", self.rollerGoal.name)
                 Logger.recordOutput("Intake/Pivot Goal", self.pivotGoal.name)
                 Logger.recordOutput("Intake/Pivot/Fudge", self.pivotFudge)
-
 
     def bumpPivotFudge(self, bumpAmount: Rotation2d) -> None:
         self.pivotFudge += bumpAmount

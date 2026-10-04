@@ -11,7 +11,6 @@ from subsystems.vision.visionio import (
 from constants.vision import kApriltagFieldLayout
 
 
-
 class VisionSubsystemIOPhotonVision(VisionSubsystemIO):
     def __init__(
         self, name: str, robotToCamera: Transform3d, isTurreted: bool = False

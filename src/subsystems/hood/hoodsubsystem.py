@@ -55,7 +55,6 @@ class HoodSubsystem(Subsystem):
                 Logger.recordOutput("Hood/ClosedLoop", self.isClosedLoop)
                 RobotState.hoodAtAngle = self.atTarget()
 
-
     def bumpAngle(self, bumpAmount: Rotation2d) -> None:
         self.hoodFudge += bumpAmount
 

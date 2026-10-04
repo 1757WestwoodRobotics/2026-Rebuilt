@@ -1,9 +1,8 @@
 import time
 from typing import Callable
 from phoenix6 import BaseStatusSignal, CANBus, StatusSignal
-from wpilib import RobotBase
-
 from phoenix6.status_code import StatusCode
+from wpilib import RobotBase
 
 
 def tryUntilOk(attempts: int, command: Callable[[], StatusCode], label: str = ""):
@@ -30,17 +29,27 @@ class PhoenixUtil:
     registered_control_signals: dict[CANBus, list[StatusSignal]] = {}
     registered_diag_signals: dict[CANBus, list[StatusSignal]] = {}
     _diag_counter: int = 0
-    _diag_subsample_ratio: int = 5  # refresh diag signals every 5 cycles (10 Hz at 50 Hz main loop)
+    _diag_subsample_ratio: int = (
+        5  # refresh diag signals every 5 cycles (10 Hz at 50 Hz main loop)
+    )
 
     @classmethod
-    def registerSignal(cls, canbus: CANBus, signal: StatusSignal, is_diagnostic: bool = False):
-        target_dict = cls.registered_diag_signals if is_diagnostic else cls.registered_control_signals
+    def registerSignal(
+        cls, canbus: CANBus, signal: StatusSignal, is_diagnostic: bool = False
+    ):
+        target_dict = (
+            cls.registered_diag_signals
+            if is_diagnostic
+            else cls.registered_control_signals
+        )
         if canbus not in target_dict:
             target_dict[canbus] = []
         target_dict[canbus].append(signal)
 
     @classmethod
-    def registerSignals(cls, canbus: CANBus, *signals: StatusSignal, is_diagnostic: bool = False):
+    def registerSignals(
+        cls, canbus: CANBus, *signals: StatusSignal, is_diagnostic: bool = False
+    ):
         for signal in signals:
             cls.registerSignal(canbus, signal, is_diagnostic=is_diagnostic)
 
@@ -51,11 +60,10 @@ class PhoenixUtil:
         # Always refresh control-critical signals
         for signals in cls.registered_control_signals.values():
             BaseStatusSignal.refresh_all(signals)
-        
+
         # Sub-sample diagnostic signals to reduce CAN bus IPC overhead
         cls._diag_counter += 1
         if cls._diag_counter >= cls._diag_subsample_ratio:
             cls._diag_counter = 0
             for signals in cls.registered_diag_signals.values():
                 BaseStatusSignal.refresh_all(signals)
-

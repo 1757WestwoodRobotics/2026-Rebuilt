@@ -25,7 +25,6 @@ from util.phoenixutil import PhoenixUtil
 from util.logtracer import LogTracer
 
 
-
 class Orion(LoggedRobot):
     """
     Our default robot class, pass it to wpilib.run

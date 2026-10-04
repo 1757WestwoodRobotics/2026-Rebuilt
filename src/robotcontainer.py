@@ -103,7 +103,6 @@ from util.helpfultriggerwrappers import NetworkTableButton
 from util.logtunablenumber import AutoUpdateGroup, LoggedTunableNumber
 from util.logtracer import LogTracer
 
-
 if kRobotMode == RobotModes.SIMULATION:  # required since opencv can't go on rio
     # pylint:disable-next=ungrouped-imports
     from subsystems.vision.visioniophotonsim import VisionSubsystemIOPhotonSim
@@ -446,7 +445,6 @@ class RobotContainer:
                     self.intake.position,
                 ),
             )
-
 
     def configureButtonBindings(self) -> None:
         """

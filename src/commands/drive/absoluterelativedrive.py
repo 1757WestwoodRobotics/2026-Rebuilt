@@ -48,18 +48,14 @@ class AbsoluteRelativeDrive(Command):
         optimizedDirection = optimizeAngle(
             currentRot, Rotation2d(targetRotation)
         ).radians()
-        return self.rotationPid.calculate(
-            currentRot.radians(), optimizedDirection
-        )
+        return self.rotationPid.calculate(currentRot.radians(), optimizedDirection)
 
     def execute(self) -> None:
         fwd = self.forward()
         side = self.sideways()
         rot = self.rotation()
         if (
-            abs(fwd) < 0.01
-            and abs(side) < 0.01
-            and abs(rot) < 0.01
+            abs(fwd) < 0.01 and abs(side) < 0.01 and abs(rot) < 0.01
         ):  # deadband should put to zero, put a delta errorbound for floats
             self.drive.defenseState()
         else:

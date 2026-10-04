@@ -79,14 +79,15 @@ class IndexerSubsystem(Subsystem):
             )
 
             with LogTracer.trace("Logging"):
-                Logger.recordOutput("Indexer/Goal/Subsystem Goal", self.subsystemGoal.name)
+                Logger.recordOutput(
+                    "Indexer/Goal/Subsystem Goal", self.subsystemGoal.name
+                )
                 Logger.recordOutput(
                     "Indexer/Goal/Spindexer Motor Goal", self.spindexerMotorGoal.value
                 )
                 Logger.recordOutput(
                     "Indexer/Goal/Kicker Motor Goal", self.kickerMotorGoal.value
                 )
-
 
     def setTarget(self, goal: IndexerSubsystemGoal) -> None:
         self.subsystemGoal = goal

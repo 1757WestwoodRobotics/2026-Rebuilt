@@ -59,7 +59,6 @@ class VisionSubsystem(Subsystem):
             allRobotPosesAccepted = []
             allRobotPosesRejected = []
 
-
         allTurretedTransforms = []
         allTurretedTransformsRejected = []
         allTurretedTransformsAccepted = []

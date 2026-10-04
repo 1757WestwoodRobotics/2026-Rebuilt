@@ -258,7 +258,6 @@ class DriveSubsystem(Subsystem):
         for module in self.modules:
             module.periodic()
 
-
     def arcadeDriveWithFactors(
         self,
         forwardSpeedFactor: float,

@@ -79,7 +79,6 @@ def trackTurretAtGoal(
             goalTurretVel,
         )  # ensure within possible rotations of the turret
 
-
     return cmd.run(trackFunc, turret).withName("TurretToGoal")
 
 
@@ -129,7 +128,10 @@ def trackedTurretBasedOnShooting(turret: TurretSubsystem) -> Command:
     def getTurretRelativeGoal() -> Translation2d:
         isShoot = RobotState.objective == RobotState.RobotMetaObjective.SHOOT
         robotPose = RobotState.getHubPose() if isShoot else RobotState.getFieldPose()
-        turretFieldTranslation = robotPose.translation() + _turretTranslationOffset.rotateBy(robotPose.rotation())
+        turretFieldTranslation = (
+            robotPose.translation()
+            + _turretTranslationOffset.rotateBy(robotPose.rotation())
+        )
         isShooting = RobotState.isShooting
         objectiveLocation = (
             RobotState.effectiveObjectiveLocation
@@ -141,7 +143,6 @@ def trackedTurretBasedOnShooting(turret: TurretSubsystem) -> Command:
     return trackTurretAtGoal(turret, getTurretRelativeGoal).withName(
         "TurretTrackingShooting"
     )
-
 
 
 def runToGoal(turret: TurretSubsystem, goal) -> Command:

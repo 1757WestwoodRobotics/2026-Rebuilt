@@ -57,4 +57,3 @@ class FlipUtil:
         if FlipUtil.shouldFlip():
             return rotation - _PI_ROTATION
         return rotation
-
