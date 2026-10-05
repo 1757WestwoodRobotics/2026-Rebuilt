@@ -9,6 +9,8 @@ import commands2
 import wpilib.simulation
 from pyfrc.test_support.controller import TestController
 
+from robot import Orion
+
 
 @pytest.mark.filterwarnings("ignore")
 def test_all_button_actions_and_commands(control: TestController):
@@ -18,7 +20,7 @@ def test_all_button_actions_and_commands(control: TestController):
     ensure no runtime crashes occur.
     """
     # pylint: disable=protected-access
-    robot_ref = control._robot
+    robot_ref: Orion = control._robot
     with control.run_robot():
         # Step timing disabled briefly
         control.step_timing(seconds=0.2, autonomous=False, enabled=False)
@@ -80,7 +82,7 @@ def test_all_autonomous_commands_executes_without_crash(control: TestController)
     enables autonomous mode, and runs each auto for 1 second in simulation.
     """
     # pylint: disable=protected-access
-    robot_ref = control._robot
+    robot_ref: Orion = control._robot
     with control.run_robot():
         container = robot_ref.container
         chooser = container.chooser

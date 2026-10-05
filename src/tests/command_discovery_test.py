@@ -15,6 +15,7 @@ import wpimath.geometry
 from pyfrc.test_support.controller import TestController
 
 import commands
+from robot import Orion
 
 
 def _zero_pose():
@@ -151,7 +152,7 @@ def test_all_discovered_commands_execute_without_crash(control: TestController):
     logging all verified commands and emitting warnings for any unverified commands.
     """
     # pylint: disable=protected-access
-    robot_ref = control._robot
+    robot_ref: Orion = control._robot
     with control.run_robot():
         control.step_timing(seconds=0.2, autonomous=False, enabled=True)
         container = robot_ref.container
