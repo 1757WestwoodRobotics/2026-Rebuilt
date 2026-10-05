@@ -58,11 +58,14 @@ class TurretSubsystem(Subsystem):
                 self.io.updateInputs(self.inputs)  # update state of motor
                 Logger.processInputs("Turret", self.inputs)
 
+            goalAngle = clampRotation(
+                self.turretGoal, kTurretMinAngle, kTurretMaxAngle
+            )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
+            goalVel = self.turretGoalVel
+            Logger.recordOutput("Turret/goal after clamp", goalAngle)
+            Logger.recordOutput("Turret/goalVel after clamp", goalVel)
+
             if self.isClosedLoop:
-                goalAngle = clampRotation(
-                    self.turretGoal, kTurretMinAngle, kTurretMaxAngle
-                )  # if isClosedLoop, move the motor to the turretGoal angle (if in allowable range)
-                goalVel = self.turretGoalVel
 
                 if (
                     RobotState.intakeRotation.radians()
@@ -79,8 +82,6 @@ class TurretSubsystem(Subsystem):
             else:
                 RobotState.turretAtAngle = self.atTarget()
 
-                Logger.recordOutput("Turret/goal after clamp", goalAngle)
-                Logger.recordOutput("Turret/goalVel after clamp", goalVel)
                 self.io.set_turret_angle(
                     Rotation2d(goalAngle.radians() + self.turretFudge.radians()),
                     goalVel,
