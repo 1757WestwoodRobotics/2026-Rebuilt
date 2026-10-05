@@ -52,4 +52,4 @@ kSimMode = (
 )
 kRobotMode = RobotModes.REAL if RobotBase.isReal() else kSimMode
 
-kTuningMode = False
+kTuningMode = True

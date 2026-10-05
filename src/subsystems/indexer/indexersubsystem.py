@@ -61,33 +61,33 @@ class IndexerSubsystem(Subsystem):
         self.subsystemGoal = IndexerSubsystemGoal.HOLD
 
     def periodic(self) -> None:
-        LogTracer.resetOuter("IndexerSubsystem Periodic")
-        self.io.updateInputs(self.inputs)
-        Logger.processInputs("Indexer", self.inputs)
-        LogTracer.record("UpdateInputs")
-        spindexerMotorGoal = self.spindexerMotorGoal.value
-        kickerMotorGoal = self.kickerMotorGoal.value
+        with LogTracer.trace("IndexerSubsystemPeriodic"):
+            with LogTracer.trace("UpdateInputs"):
+                self.io.updateInputs(self.inputs)
+                Logger.processInputs("Indexer", self.inputs)
 
-        if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
-            spindexerMotorGoal = SpindexerMotorGoal.NEUTRAL.value
-            kickerMotorGoal = KickerMotorGoal.NEUTRAL.value
+            spindexerGoalVal = self.spindexerMotorGoal.value
+            kickerGoalVal = self.kickerMotorGoal.value
 
-        self.io.setIndexerTarget(
-            spindexerMotorGoal,
-            kickerMotorGoal,
-        )
+            if RobotState.intakeRotation.radians() > kPivotDangerZoneStart.radians():
+                spindexerGoalVal = 0.0
+                kickerGoalVal = 0.0
 
-        LogTracer.record("SetIndexerTarget")
+            self.io.setIndexerTarget(
+                spindexerGoalVal,
+                kickerGoalVal,
+            )
 
-        Logger.recordOutput("Indexer/Goal/Subsystem Goal", self.subsystemGoal.name)
-        Logger.recordOutput(
-            "Indexer/Goal/Spindexer Motor Goal", self.spindexerMotorGoal.value
-        )
-        Logger.recordOutput(
-            "Indexer/Goal/Kicker Motor Goal", self.kickerMotorGoal.value
-        )
-
-        LogTracer.recordTotal()
+            with LogTracer.trace("Logging"):
+                Logger.recordOutput(
+                    "Indexer/Goal/Subsystem Goal", self.subsystemGoal.name
+                )
+                Logger.recordOutput(
+                    "Indexer/Goal/Spindexer Motor Goal", self.spindexerMotorGoal.value
+                )
+                Logger.recordOutput(
+                    "Indexer/Goal/Kicker Motor Goal", self.kickerMotorGoal.value
+                )
 
     def setTarget(self, goal: IndexerSubsystemGoal) -> None:
         self.subsystemGoal = goal

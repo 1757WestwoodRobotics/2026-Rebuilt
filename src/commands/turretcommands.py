@@ -24,14 +24,18 @@ def trackTurretAtGoal(
     the vector from the turret to the target in field space.
     """
 
+    _kTurretMinRad = kTurretMinAngle.radians()
+    _kTurretMaxRad = kTurretMaxAngle.radians()
+    _kTurretMidAngle = Rotation2d((_kTurretMinRad + _kTurretMaxRad) / 2)
+    _kTurretRotSin = kTurretLocation.rotation().toRotation2d().sin()
+    _kTurretRotCos = kTurretLocation.rotation().toRotation2d().cos()
+    _kTurretTranslationNorm = kTurretLocation.translation().toTranslation2d().norm()
+
     def trackFunc():
         targetRelative = targetRelativeToTurret()
         turret.setClosedLoop(True)
-        robotPose = (
-            RobotState.getHubPose()
-            if RobotState.objective == RobotState.RobotMetaObjective.SHOOT
-            else RobotState.getFieldPose()
-        )
+        isShoot = RobotState.objective == RobotState.RobotMetaObjective.SHOOT
+        robotPose = RobotState.getHubPose() if isShoot else RobotState.getFieldPose()
         robotVelocity = RobotState.robotFieldVelocity
 
         targetAngle = targetRelative.angle()
@@ -41,11 +45,11 @@ def trackTurretAtGoal(
         targetRelativeDistance = targetRelative.norm()
         turretRobotFrameVel = (
             Translation2d(
-                -kTurretLocation.rotation().toRotation2d().sin(),
-                kTurretLocation.rotation().toRotation2d().cos(),
+                -_kTurretRotSin,
+                _kTurretRotCos,
             )
             * robotVelocity.omega
-            * kTurretLocation.translation().toTranslation2d().norm()
+            * _kTurretTranslationNorm
         )
         turretFieldRefVel = turretRobotFrameVel.rotateBy(robotPose.rotation())
         turretVelocity = ChassisSpeeds(  # the velocity the turret moves in field space
@@ -56,9 +60,7 @@ def trackTurretAtGoal(
         distSquared = targetRelativeDistance * targetRelativeDistance
 
         if distSquared < 1e-6:
-            goalTurretVel = (
-                -turretVelocity.omega
-            )  # if we're basically on top of the target, just cancel out robot rotation
+            goalTurretVel = -turretVelocity.omega
         else:
             goalTurretVel = (
                 -turretVelocity.omega
@@ -71,7 +73,7 @@ def trackTurretAtGoal(
 
         turret.setTurretGoalWithVel(
             optimizeAngle(
-                Rotation2d((kTurretMinAngle.radians() + kTurretMaxAngle.radians()) / 2),
+                _kTurretMidAngle,
                 turretAngle,
             ),
             goalTurretVel,
@@ -121,20 +123,22 @@ def trackedTurretBasedOnShooting(turret: TurretSubsystem) -> Command:
     if we're not shooting)
     """
 
+    _turretTranslationOffset = kTurretLocation.translation().toTranslation2d()
+
     def getTurretRelativeGoal() -> Translation2d:
-        robotPose = (
-            RobotState.getHubPose()
-            if RobotState.objective == RobotState.RobotMetaObjective.SHOOT
-            else RobotState.getFieldPose()
+        isShoot = RobotState.objective == RobotState.RobotMetaObjective.SHOOT
+        robotPose = RobotState.getHubPose() if isShoot else RobotState.getFieldPose()
+        turretFieldTranslation = (
+            robotPose.translation()
+            + _turretTranslationOffset.rotateBy(robotPose.rotation())
         )
-        turretLocation = (pose3dFrom2d(robotPose) + kTurretLocation).toPose2d()
         isShooting = RobotState.isShooting
         objectiveLocation = (
             RobotState.effectiveObjectiveLocation
             if isShooting
             else RobotState.objectiveLocation()
         )
-        return objectiveLocation - turretLocation.translation()
+        return objectiveLocation - turretFieldTranslation
 
     return trackTurretAtGoal(turret, getTurretRelativeGoal).withName(
         "TurretTrackingShooting"

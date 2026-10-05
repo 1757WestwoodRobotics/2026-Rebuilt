@@ -4,6 +4,8 @@ from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 
 from constants.field import kFieldWidth, kFieldLength
 
+_PI_ROTATION = Rotation2d(pi)
+
 
 class FlipUtil:
     """
@@ -53,5 +55,5 @@ class FlipUtil:
         :return: The flipped or original Rotation2d
         """
         if FlipUtil.shouldFlip():
-            return rotation - Rotation2d(pi)
+            return rotation - _PI_ROTATION
         return rotation

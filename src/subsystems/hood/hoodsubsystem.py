@@ -34,27 +34,26 @@ class HoodSubsystem(Subsystem):
         self.hoodFudge = Rotation2d()
 
     def periodic(self) -> None:
-        LogTracer.resetOuter("HoodSubsystem Periodic")
-        self.io.updateInputs(self.inputs)
-        Logger.processInputs("Hood", self.inputs)
-        LogTracer.record("UpdateInputs")
+        with LogTracer.trace("HoodSubsystemPeriodic"):
+            with LogTracer.trace("UpdateInputs"):
+                self.io.updateInputs(self.inputs)
+                Logger.processInputs("Hood", self.inputs)
 
-        if self.isClosedLoop:
-            self.io.set_hood_target(
-                Rotation2d(
-                    clamp(
-                        self.hoodGoal.radians() + self.hoodFudge.radians(),
-                        kHoodMinAngle.radians(),
-                        kHoodMaxAngle.radians(),
+            if self.isClosedLoop:
+                self.io.set_hood_target(
+                    Rotation2d(
+                        clamp(
+                            self.hoodGoal.radians() + self.hoodFudge.radians(),
+                            kHoodMinAngle.radians(),
+                            kHoodMaxAngle.radians(),
+                        )
                     )
                 )
-            )
 
-        LogTracer.record("Closed Loop Control")
-        Logger.recordOutput("Hood/goal", self.hoodGoal)
-        Logger.recordOutput("Hood/ClosedLoop", self.isClosedLoop)
-        RobotState.hoodAtAngle = self.atTarget()
-        LogTracer.recordTotal()
+            with LogTracer.trace("Logging"):
+                Logger.recordOutput("Hood/goal", self.hoodGoal)
+                Logger.recordOutput("Hood/ClosedLoop", self.isClosedLoop)
+                RobotState.hoodAtAngle = self.atTarget()
 
     def bumpAngle(self, bumpAmount: Rotation2d) -> None:
         self.hoodFudge += bumpAmount
